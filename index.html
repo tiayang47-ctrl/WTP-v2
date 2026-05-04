@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haleon x BCG | Innovation Workshop</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --h-green:#5C9E1A;--h-dark:#1A1A1A;--h-light:#F5F5F3;
+  --bcg-green:#00843D;--accent:#8DC63F;
+  --blue:#185FA5;--amber:#E8A020;--purple:#534AB7;
+  --border:#E0E0E0;--text:#1A1A1A;--muted:#666;
+}
+body{font-family:"Segoe UI",Arial,sans-serif;background:var(--h-light);color:var(--text);min-height:100vh}
+.header{background:var(--h-dark);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.logo-area{display:flex;align-items:center;gap:16px}
+.logo-haleon{font-size:16px;font-weight:900;letter-spacing:2px;color:#fff}
+.logo-sep{color:#555;font-size:18px}
+.logo-bcg{font-size:14px;font-weight:700;color:var(--accent);letter-spacing:1px}
+.header-sub{font-size:10px;color:#888;letter-spacing:.5px;text-transform:uppercase}
+.main-tabs{background:var(--h-dark);border-top:1px solid #333;display:flex;padding:0 32px}
+.main-tab{padding:12px 20px;font-size:12px;font-weight:600;color:#aaa;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;letter-spacing:.3px}
+.main-tab:hover{color:#fff}
+.main-tab.active{color:#fff;border-bottom-color:var(--accent)}
+.page{display:none;min-height:calc(100vh - 108px)}
+.page.active{display:block}
+
+/* LANDING */
+.landing{background:linear-gradient(135deg,var(--h-dark) 0%,#0d2a0d 100%);padding:60px 32px;text-align:center;color:#fff}
+.landing-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:800px;margin:0 auto}
+.landing-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:20px;cursor:pointer;transition:all .2s}
+.landing-card:hover{background:rgba(92,158,26,.15);border-color:var(--accent);transform:translateY(-2px)}
+.landing-card-num{font-size:28px;font-weight:900;color:var(--accent);margin-bottom:6px}
+.landing-card-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:4px}
+.landing-card-sub{font-size:10px;color:#888;line-height:1.4}
+
+/* TOP PLATFORMS */
+.platforms-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 108px)}
+.platform-nav{background:#fff;border-right:1px solid var(--border);padding:16px 0;position:sticky;top:108px;height:calc(100vh - 108px);overflow-y:auto}
+.platform-nav-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:0 16px 10px}
+.pnav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
+.pnav-item:hover{background:var(--h-light)}
+.pnav-item.active{background:#EAF3DE;border-left-color:var(--h-green)}
+.pnav-rank{width:22px;height:22px;border-radius:4px;background:var(--h-green);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pnav-rank.limited{background:#ccc}
+.pnav-name{font-size:11px;font-weight:500;line-height:1.3;color:var(--text)}
+.pnav-item.active .pnav-name{font-weight:700;color:var(--h-green)}
+.platform-content{padding:24px 32px}
+.platform-header{margin-bottom:20px}
+.platform-badge{display:inline-flex;align-items:center;gap:6px;background:var(--h-green);color:#fff;padding:4px 10px;border-radius:4px;font-size:10px;font-weight:700;margin-bottom:8px}
+.platform-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px}
+.platform-desc{font-size:12px;color:var(--muted);line-height:1.6;max-width:700px}
+.chapter-tabs{display:flex;gap:2px;margin-bottom:20px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:4px;width:fit-content;flex-wrap:wrap}
+.chapter-tab{padding:6px 12px;font-size:10.5px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:4px;transition:all .15s;white-space:nowrap}
+.chapter-tab:hover{background:var(--h-light);color:var(--text)}
+.chapter-tab.active{background:var(--h-green);color:#fff}
+.chapter-content{display:none}
+.chapter-content.active{display:block}
+.section-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:14px}
+.section-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--h-green)}
+.section-body{font-size:11.5px;color:#333;line-height:1.7}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.stat-box{background:var(--h-light);border-radius:6px;padding:12px;text-align:center}
+.stat-num{font-size:20px;font-weight:700;color:var(--h-green)}
+.stat-lbl{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.3}
+.bullet-list{list-style:none;padding:0;margin-top:8px}
+.bullet-list li{padding:5px 0 5px 14px;position:relative;font-size:11.5px;line-height:1.5;border-bottom:1px solid #f5f5f5;color:#333}
+.bullet-list li::before{content:"›";position:absolute;left:0;color:var(--h-green);font-weight:700}
+.bullet-list li:last-child{border-bottom:none}
+.tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;margin:2px}
+.tag-green{background:#e2f0d0;color:#173404}
+.tag-amber{background:#faeeda;color:#412402}
+.tag-red{background:#fce4e4;color:#501313}
+.tag-blue{background:#dceefb;color:#042c53}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.exec-highlight{background:linear-gradient(135deg,#eaf3de,#f0f9e8);border:1px solid #aad87a;border-radius:8px;padding:16px;margin-bottom:14px}
+.exec-highlight .eh-title{font-size:11px;font-weight:700;color:var(--h-green);margin-bottom:6px}
+.exec-highlight .eh-text{font-size:12px;color:#1a3a08;line-height:1.6}
+.exec-only-banner{background:#f0f0ee;border:1px dashed #ccc;border-radius:6px;padding:12px 16px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:14px}
+
+/* DASHBOARD */
+.dashboard{padding:24px 32px}
+.dashboard-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.dashboard-sub{font-size:11px;color:var(--muted);margin-bottom:14px}
+
+/* Matrix */
+.matrix-wrap{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 16px 10px;margin-bottom:14px;position:relative}
+.matrix-title{font-size:12px;font-weight:700;margin-bottom:8px;color:var(--text);display:flex;align-items:center;justify-content:space-between}
+#bubble-chart{width:100%;height:500px;position:relative}
+.bubble-svg{width:100%;height:100%}
+.bubble-tooltip{position:absolute;background:rgba(26,26,26,.94);color:#fff;padding:9px 11px;border-radius:6px;font-size:10.5px;line-height:1.55;max-width:240px;pointer-events:none;z-index:50;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.matrix-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;align-items:center;padding-top:8px;border-top:1px solid #f0f0ee}
+.ml-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted)}
+.ml-circle{border-radius:50%;background:#888;opacity:.6;flex-shrink:0}
+
+/* Cluster filters — below matrix */
+.cluster-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:6px}
+.cf-label{font-size:9.5px;font-weight:700;color:var(--muted);margin-right:4px;align-self:center;flex-shrink:0}
+.cf-btn{padding:4px 9px;font-size:9.5px;font-weight:600;border-radius:3px;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--muted);transition:all .15s;white-space:nowrap}
+.cf-btn:hover{border-color:var(--h-green);color:var(--h-green)}
+.cf-btn.active{color:#fff;border-color:transparent}
+
+/* Cluster grouped cards */
+.cluster-section{margin-bottom:20px}
+.cluster-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 12px;border-radius:6px}
+.cluster-hdr-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cluster-hdr-name{font-size:12px;font-weight:700;color:#fff}
+.cluster-hdr-count{font-size:10px;color:rgba(255,255,255,.7);margin-left:auto}
+.platform-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pcard{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.pcard::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:3px 0 0 3px}
+.pcard:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.pcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+.pcard-id{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;color:#fff}
+.pcard-trl{font-size:9px;font-weight:700;color:var(--blue)}
+.pcard-name{font-size:10.5px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:5px}
+.pcard-stats{display:flex;gap:8px;margin-bottom:5px}
+.pcard-stat{font-size:9px;color:var(--muted)}
+.pcard-stat strong{color:var(--text)}
+.pcard-need{font-size:9px;color:var(--muted);line-height:1.35;font-style:italic}
+.pcard-edit-wrap{display:flex;align-items:center;gap:3px;margin-top:6px;padding-top:5px;border-top:1px solid #f5f5f3}
+.pcard-edit-lbl{font-size:8.5px;color:var(--muted)}
+.pcard-edit{width:52px;padding:2px 4px;font-size:9px;border:1px solid #ddd;border-radius:3px;color:var(--text);text-align:right}
+.pcard-edit:focus{outline:none;border-color:var(--h-green)}
+
+/* WORKSHOP */
+.workshop{padding:24px 32px;max-width:900px}
+.ws-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.ws-sub{font-size:11px;color:var(--muted);margin-bottom:20px}
+.platform-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.ps-item{background:#fff;border:2px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px}
+.ps-item:hover{border-color:var(--h-green)}
+.ps-item.selected{border-color:var(--h-green);background:#eaf3de}
+.ps-num{width:24px;height:24px;background:var(--h-green);color:#fff;border-radius:4px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ps-name{font-size:11px;font-weight:600;color:var(--text);line-height:1.3}
+.scoring-area{background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px;display:none}
+.scoring-area.visible{display:block}
+.scoring-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.scoring-rtw-tabs{display:flex;gap:4px;margin-bottom:16px}
+.rtw-tab{padding:7px 14px;font-size:11px;font-weight:600;border-radius:5px;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:#fff;transition:all .15s}
+.rtw-tab.active-tech{background:#dceefb;border-color:#b0d4f0;color:#042c53}
+.rtw-tab.active-comm{background:#faeeda;border-color:#f5c842;color:#412402}
+.rtw-tab.active-brand{background:#eceafd;border-color:#c2baf5;color:#26215c}
+.rtw-questions{display:none}
+.rtw-questions.active{display:block}
+.q-row{background:var(--h-light);border-radius:6px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px}
+.q-text{font-size:11.5px;color:var(--text);line-height:1.5;flex:1}
+.q-score{display:flex;gap:4px;flex-shrink:0}
+.score-btn{width:32px;height:28px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid;transition:all .15s}
+.score-btn.h{border-color:#aad87a;color:#27500a;background:#e2f0d0}
+.score-btn.m{border-color:#f5c842;color:#633806;background:#faeeda}
+.score-btn.l{border-color:#f09595;color:#791f1f;background:#fce4e4}
+.score-btn.selected-h{background:#27500a;color:#fff;border-color:#27500a}
+.score-btn.selected-m{background:#633806;color:#fff;border-color:#633806}
+.score-btn.selected-l{background:#791f1f;color:#fff;border-color:#791f1f}
+.action-result{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-top:12px;display:none}
+.action-result.visible{display:block}
+.ar-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);margin-bottom:4px}
+.ar-action{font-size:12px;font-weight:600;color:var(--text)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-area">
+    <div class="logo-haleon">HALEON</div>
+    <div class="logo-sep">×</div>
+    <div class="logo-bcg">BCG</div>
+    <div style="width:1px;height:28px;background:#333;margin-left:8px"></div>
+    <div class="header-sub">Innovation Strategy Workshop</div>
+  </div>
+  <div style="font-size:10px;color:#666">Where to play & who to partner with</div>
+</div>
+
+<div class="main-tabs">
+  <div class="main-tab active" onclick="showPage('landing')">Home</div>
+  <div class="main-tab" onclick="showPage('platforms')">1. Top Platforms</div>
+  <div class="main-tab" onclick="showPage('dashboard')">2. All Platforms</div>
+  <div class="main-tab" onclick="showPage('workshop')">3. Workshop #2</div>
+</div>
+
+<!-- LANDING -->
+<div class="page active" id="page-landing">
+  <div class="landing">
+    <div style="margin-bottom:24px">
+      <div style="font-size:42px;font-weight:900;letter-spacing:3px;color:#fff">HALEON <span style="color:var(--accent)">×</span> BCG</div>
+      <div style="font-size:14px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-top:4px">Innovation Strategy Workshop</div>
+      <div style="width:60px;height:3px;background:var(--accent);margin:16px auto"></div>
+      <div style="font-size:12px;color:#aaa;margin-top:8px">Where to play & who to partner with · Workshop #2</div>
+    </div>
+    <div class="landing-cards">
+      <div class="landing-card" onclick="showPage('platforms')">
+        <div class="landing-card-num">01</div>
+        <div class="landing-card-title">Top 10 Platforms</div>
+        <div class="landing-card-sub">Deep-dive into prioritised innovation platforms with consumer needs, market sizing, competitive landscape and regulatory pathways</div>
+      </div>
+      <div class="landing-card" onclick="showPage('dashboard')">
+        <div class="landing-card-num">02</div>
+        <div class="landing-card-title">All Platforms Dashboard</div>
+        <div class="landing-card-sub">Interactive bubble matrix + all 75 platforms grouped by cluster — edit TAM to update the chart live</div>
+      </div>
+      <div class="landing-card" onclick="showPage('workshop')">
+        <div class="landing-card-num">03</div>
+        <div class="landing-card-title">Workshop #2: Where to Play</div>
+        <div class="landing-card-sub">Interactive right-to-win scoring — select a platform and work through the assessment with your group</div>
+      </div>
+    </div>
+    <div style="margin-top:40px;font-size:10px;color:#555;letter-spacing:.5px">CONFIDENTIAL · HALEON × BCG · 2025</div>
+  </div>
+</div>
+
+<!-- TOP PLATFORMS -->
+<div class="page" id="page-platforms">
+  <div class="platforms-layout">
+    <div class="platform-nav">
+      <div class="platform-nav-title">Top 10 Platforms</div>
+      <div id="pnav-list"></div>
+    </div>
+    <div class="platform-content" id="platform-content-area"></div>
+  </div>
+</div>
+
+<!-- ALL PLATFORMS DASHBOARD -->
+<div class="page" id="page-dashboard">
+  <div class="dashboard">
+    <div class="dashboard-title">All Platforms — Dashboard</div>
+    <div class="dashboard-sub">Bubble size = 2025 TAM · X-axis = Tech Readiness (TRL 1–9) · Y-axis = Market attractiveness · Edit TAM on any card to update the chart instantly</div>
+
+    <!-- Matrix first -->
+    <div class="matrix-wrap">
+      <div class="matrix-title">
+        <span>Platform positioning map</span>
+        <span style="font-size:10px;font-weight:400;color:var(--muted)">Hover bubbles for detail · pink zone = short-term "Go-Explore" · blue zone = disruption</span>
+      </div>
+      <div id="bubble-chart">
+        <svg class="bubble-svg" id="matrix-svg" viewBox="0 0 920 460" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="bubble-tooltip" id="bubble-tooltip"></div>
+      </div>
+      <div class="matrix-legend">
+        <div style="font-size:10px;font-weight:700;color:var(--text);margin-right:4px">Bubble size = TAM:</div>
+        <div class="ml-item"><div class="ml-circle" style="width:7px;height:7px"></div>&lt;$1B</div>
+        <div class="ml-item"><div class="ml-circle" style="width:11px;height:11px"></div>$1–5B</div>
+        <div class="ml-item"><div class="ml-circle" style="width:16px;height:16px"></div>$5–15B</div>
+        <div class="ml-item"><div class="ml-circle" style="width:22px;height:22px"></div>&gt;$15B</div>
+        <div style="margin-left:8px;width:1px;height:14px;background:#ddd"></div>
+        <div class="ml-item"><div style="width:12px;height:12px;background:rgba(255,100,120,.25);border:1px dashed #E87080;border-radius:2px"></div>Short-term "Go-Explore" (TRL 6+, mid-high attractiveness)</div>
+      </div>
+    </div>
+
+    <!-- Cluster filters below matrix -->
+    <div class="cluster-filters" id="cluster-filters"></div>
+
+    <!-- Grouped platform cards -->
+    <div id="cluster-cards-area"></div>
+  </div>
+</div>
+
+<!-- WORKSHOP -->
+<div class="page" id="page-workshop">
+  <div class="workshop">
+    <div class="ws-title">Workshop #2 — Where to Play</div>
+    <div class="ws-sub">Select a platform and score each Right to Win dimension with your group</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">Select a platform to assess:</div>
+    <div class="platform-selector" id="ws-platform-selector"></div>
+    <div class="scoring-area" id="scoring-area">
+      <div class="scoring-header">
+        <div id="ws-selected-badge" class="platform-badge"></div>
+        <div id="ws-selected-title" style="font-size:14px;font-weight:700"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">Score each Right to Win dimension:</div>
+      <div class="scoring-rtw-tabs">
+        <div class="rtw-tab active-tech" onclick="showRTW('tech')">Tech RTW</div>
+        <div class="rtw-tab" onclick="showRTW('comm')">Commercial RTW</div>
+        <div class="rtw-tab" onclick="showRTW('brand')">Brand RTW</div>
+      </div>
+      <div class="rtw-questions active" id="rtw-tech">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:10px;font-style:italic">Does Haleon have the science and manufacturing to compete?</div>
+        <div class="q-row"><div class="q-text">Do we have existing R&D expertise in the underlying science?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'tech',0,'H')">H</button><button class="score-btn m" onclick="score(this,'tech',0,'M')">M</button><button class="score-btn l" onclick="score(this,'tech',0,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Does our manufacturing support the required format & delivery?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'tech',1,'H')">H</button><button class="score-btn m" onclick="score(this,'tech',1,'M')">M</button><button class="score-btn l" onclick="score(this,'tech',1,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Do we have clinical evidence or IP we can leverage?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'tech',2,'H')">H</button><button class="score-btn m" onclick="score(this,'tech',2,'M')">M</button><button class="score-btn l" onclick="score(this,'tech',2,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Can we access the capability within a viable timeframe?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'tech',3,'H')">H</button><button class="score-btn m" onclick="score(this,'tech',3,'M')">M</button><button class="score-btn l" onclick="score(this,'tech',3,'L')">L</button></div></div>
+        <div class="action-result" id="action-tech"><div class="ar-label">Recommended action</div><div class="ar-action" id="action-tech-text"></div></div>
+      </div>
+      <div class="rtw-questions" id="rtw-comm">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:10px;font-style:italic">Can we enter, compete and win in our priority markets?</div>
+        <div class="q-row"><div class="q-text">Can we enter this space in our core / priority markets?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'comm',0,'H')">H</button><button class="score-btn m" onclick="score(this,'comm',0,'M')">M</button><button class="score-btn l" onclick="score(this,'comm',0,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Do we have a clear competitive advantage vs. existing players?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'comm',1,'H')">H</button><button class="score-btn m" onclick="score(this,'comm',1,'M')">M</button><button class="score-btn l" onclick="score(this,'comm',1,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Can we realistically capture meaningful share or lead the category?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'comm',2,'H')">H</button><button class="score-btn m" onclick="score(this,'comm',2,'M')">M</button><button class="score-btn l" onclick="score(this,'comm',2,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Is the market large and growing enough to justify investment?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'comm',3,'H')">H</button><button class="score-btn m" onclick="score(this,'comm',3,'M')">M</button><button class="score-btn l" onclick="score(this,'comm',3,'L')">L</button></div></div>
+        <div class="action-result" id="action-comm"><div class="ar-label">Recommended action</div><div class="ar-action" id="action-comm-text"></div></div>
+      </div>
+      <div class="rtw-questions" id="rtw-brand">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:10px;font-style:italic">Do consumers trust us here, and does it fit who we are?</div>
+        <div class="q-row"><div class="q-text">Is there a Haleon brand consumers would naturally trust in this space?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'brand',0,'H')">H</button><button class="score-btn m" onclick="score(this,'brand',0,'M')">M</button><button class="score-btn l" onclick="score(this,'brand',0,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Does the platform reinforce our science-backed OTC positioning?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'brand',1,'H')">H</button><button class="score-btn m" onclick="score(this,'brand',1,'M')">M</button><button class="score-btn l" onclick="score(this,'brand',1,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Do we have a defensible brand differentiation story vs. competitors?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'brand',2,'H')">H</button><button class="score-btn m" onclick="score(this,'brand',2,'M')">M</button><button class="score-btn l" onclick="score(this,'brand',2,'L')">L</button></div></div>
+        <div class="q-row"><div class="q-text">Do we have existing loyalty or HCP endorsement in this category?</div><div class="q-score"><button class="score-btn h" onclick="score(this,'brand',3,'H')">H</button><button class="score-btn m" onclick="score(this,'brand',3,'M')">M</button><button class="score-btn l" onclick="score(this,'brand',3,'L')">L</button></div></div>
+        <div class="action-result" id="action-brand"><div class="ar-label">Recommended action</div><div class="ar-action" id="action-brand-text"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TOP 10 PLATFORM DATA ──
+const platforms = [
+  {rank:1,name:"Gut microbiome & pre-/pro-/post-/synbiotics",full:true,tags:["Microbiome","Gut health","Postbiotics"],desc:"OTC supplements, functional foods and testing solutions that maintain or restore gut microbial balance — spanning probiotics, prebiotics and postbiotics — to support digestion, immunity and systemic health.",
+  exec:`
+  <style>
+  .p1-grid{display:grid;grid-template-columns:220px 1fr;gap:16px;margin-bottom:16px}
+  .p1-left{display:flex;flex-direction:column;gap:10px}
+  .p1-box{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px;border-left:4px solid var(--h-green)}
+  .p1-box-title{font-size:10px;font-weight:700;color:var(--h-green);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+  .p1-box-body{font-size:11px;color:#333;line-height:1.5}
+  .p1-right{display:flex;flex-direction:column;gap:10px}
+  .p1-rtw-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .p1-section{background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px}
+  .p1-section-hdr{font-size:11px;font-weight:700;color:#fff;background:var(--h-green);padding:7px 12px;border-radius:4px;margin:-14px -14px 10px;display:flex;align-items:center;gap:6px}
+  .p1-bullets{list-style:none;padding:0}
+  .p1-bullets li{font-size:11px;padding:5px 0 5px 14px;position:relative;border-bottom:1px solid #f5f5f3;line-height:1.4;color:#333}
+  .p1-bullets li::before{content:"–";position:absolute;left:0;color:var(--h-green)}
+  .p1-bullets li:last-child{border-bottom:none}
+  .p1-attract{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:10px;color:var(--muted)}
+  .p1-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+  .confidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:0}
+  .conf-box{border-radius:6px;padding:12px}
+  .conf-pos{background:#1a1a1a;border:1px solid #333}
+  .conf-neg{background:#f7f7f7;border:1px solid #ddd}
+  .conf-hdr{font-size:11px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .conf-pos .conf-hdr{color:#fff}
+  .conf-neg .conf-hdr{color:var(--h-green)}
+  .conf-item{font-size:10.5px;padding:5px 0 5px 18px;position:relative;border-bottom:1px solid rgba(255,255,255,.08);line-height:1.4}
+  .conf-pos .conf-item{color:#ccc;border-color:rgba(255,255,255,.08)}
+  .conf-neg .conf-item{color:#444;border-color:#eee}
+  .conf-item:last-child{border-bottom:none}
+  .conf-num{position:absolute;left:0;width:15px;height:15px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;top:6px}
+  .conf-pos .conf-num{background:var(--h-green);color:#fff}
+  .conf-neg .conf-num{background:var(--h-green);color:#fff}
+  </style>
+  <div class="p1-grid">
+    <div class="p1-left">
+      <div class="p1-box">
+        <div class="p1-box-title">📋 Description</div>
+        <div class="p1-box-body">OTC supplements, functional foods and testing solutions that maintain or restore gut microbial balance (probiotics, prebiotics and postbiotics) to support digestion, immunity and systemic health.</div>
+      </div>
+      <div class="p1-box">
+        <div class="p1-box-title">📊 Market size '25</div>
+        <div class="p1-box-body"><strong>Total: ~$16Bn</strong><br>Consumer supplements: $14.4Bn<br>Therapeutics: $0.3B<br>DTC testing kits: $1.2B</div>
+      </div>
+      <div class="p1-box">
+        <div class="p1-box-title">📈 CAGR '25–'35</div>
+        <div class="p1-box-body"><strong>Overall CAGR: +10%</strong><br>Consumer supplements: +8.3%<br>Therapeutics: +31%<br>DTC testing kits: +8.3%</div>
+      </div>
+    </div>
+    <div class="p1-right">
+      <div class="p1-section">
+        <div class="p1-section-hdr">🛒 Consumer need & value proposition</div>
+        <ul class="p1-bullets">
+          <li><strong>Systemic degradation of gut microbiome diversity</strong>, driven by UPF diets, antibiotic overuse & ageing, creating unmet need for root cause solutions</li>
+          <li>Consumers need <strong>daily, condition-specific microbiome restoration</strong>; not standard solution in the market yet</li>
+        </ul>
+      </div>
+      <div class="p1-section">
+        <div class="p1-section-hdr">🏆 Competitive landscape</div>
+        <ul class="p1-bullets">
+          <li><strong>Scaled CPG players control distribution but lack strain IP</strong>: window exists to differentiate via new strain development</li>
+          <li><strong>Emerging DTC-native brands</strong> (Seed, Pendulum, ZOE) are building structural moats based on <strong>new business models</strong> involving personalisation and technology</li>
+        </ul>
+      </div>
+      <div class="p1-rtw-row">
+        <div class="p1-section">
+          <div class="p1-section-hdr">⚖️ Regulatory path</div>
+          <ul class="p1-bullets">
+            <li><strong>Claims risk in the EU</strong>, where EFSA has rejected 354 of 355 probiotic health claims; regulatory path for postbiotics still largely untested</li>
+            <li>US as leading indicator: FDA's approval of live biotherapeutics (Rebyota, Vowst) sets a precedent for OTC normalisation</li>
+          </ul>
+        </div>
+        <div class="p1-section">
+          <div class="p1-section-hdr" style="background:#1a1a1a">🎯 Haleon Right-to-Win</div>
+          <ul class="p1-bullets">
+            <li><strong>Brand-fit:</strong> Centrum already in supplements and probiotics (S. Korea, UK); natural extension</li>
+            <li><strong>Channel fit:</strong> Pharmacy, retail, grocery are Haleon's core; partial gap in DTC/e-commerce</li>
+            <li><strong>Capability gap:</strong> Limited vs CPG generics; gap to close vs leaders — no proprietary strains or clinical moat</li>
+          </ul>
+          <div class="p1-attract"><div class="p1-dot" style="background:#aaa"></div>Low<div class="p1-dot" style="background:var(--h-green);opacity:.6"></div>Medium<div class="p1-dot" style="background:var(--h-green)"></div>High attractiveness</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="confidence-grid">
+    <div class="conf-box conf-pos">
+      <div class="conf-hdr">👍 Things that drive confidence</div>
+      <div class="conf-item"><span class="conf-num">1</span><strong style="color:#8dc63f">$16B market growing at ~10% CAGR to ~$40B by 2035:</strong> driven by UPF diets, antibiotic overuse, ageing; systemic and non-cyclical</div>
+      <div class="conf-item"><span class="conf-num">2</span><strong style="color:#8dc63f">Consumer pull accelerating:</strong> #1 global F&B trend for 2026; "gut health" searches doubled in 3 years; 59% of consumers actively choosing probiotics</div>
+      <div class="conf-item"><span class="conf-num">3</span><strong style="color:#8dc63f">Strong channel overlap:</strong> pharmacy, retail, mass grocery are Haleon's core and still the dominant probiotic channels</div>
+      <div class="conf-item"><span class="conf-num">4</span><strong style="color:#8dc63f">Science and R&D momentum building:</strong> PubMed publications up 7× in a decade; patent filings at 21% CAGR; Haleon MOU with NTU-SCELSE and AMILI partnership active</div>
+    </div>
+    <div class="conf-box conf-neg">
+      <div class="conf-hdr" style="color:#C04060">❓ Things to get comfort on</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">1</span><strong>EU regulatory wall is real:</strong> EFSA rejected 354/355 probiotic claims; "probiotic" is unauthorised on-pack in EU; claims that work in Japan/US may be unusable in Europe</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">2</span><strong>High & accelerating competitive intensity:</strong> incumbents (Nestlé ~$2B+, Danone ~$1.5B+) plus DTC challengers (Seed 500%+ growth, Pendulum 17 patents, ZOE 100K+ subs)</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">3</span><strong>Category credibility risk:</strong> long tail of low-quality products; a major safety incident could trigger category-wide backlash</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">4</span><strong>Consumer differentiation:</strong> currently centred on DTC model; Haleon will need to develop strong product USPs for market capture</div>
+    </div>
+  </div>`,
+
+  consumer:`
+  <style>
+  .driver-flow{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;gap:0;margin-bottom:16px;align-items:stretch}
+  .driver-col{border-radius:6px;overflow:hidden}
+  .driver-hdr{padding:10px 14px;font-size:11px;font-weight:700;text-align:center;color:#fff}
+  .driver-hdr.green{background:#3a7d0a}
+  .driver-hdr.teal{background:#1A7A7A}
+  .driver-hdr.pink{background:#8B1A6B}
+  .driver-items{background:#f7f7f5}
+  .driver-item{padding:8px 12px;font-size:10.5px;color:#333;border-bottom:1px solid #eee;line-height:1.4;text-align:center}
+  .driver-item:last-child{border-bottom:none}
+  .driver-arrow{display:flex;align-items:center;justify-content:center;font-size:24px;color:#bbb;font-weight:300}
+  .whitespace-box{background:#fff;border:2px solid var(--h-green);border-radius:8px;padding:16px;margin-bottom:14px}
+  .ws-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px}
+  .ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ws-item{background:var(--h-light);border-radius:5px;padding:10px 12px;border-left:3px solid var(--h-green)}
+  .ws-letter{font-size:12px;font-weight:900;color:var(--h-green);margin-bottom:3px}
+  .ws-text{font-size:10.5px;color:#333;line-height:1.4}
+  .ws-sub{font-size:10px;color:var(--muted);padding-left:10px;margin-top:2px}
+  .emerging-box{background:#e8f5e9;border:1px solid #aad87a;border-radius:6px;padding:10px 14px;font-size:11px;color:#1a3a08;line-height:1.5}
+  .sentiment-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:0}
+  .sent-chart{background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px}
+  .sent-bars{display:flex;align-items:flex-end;gap:4px;height:120px;margin-bottom:6px;border-bottom:1px solid #f0f0ee;border-left:1px solid #f0f0ee;padding:8px 4px 0}
+  .sent-bar{flex:1;background:var(--h-green);border-radius:2px 2px 0 0;position:relative;min-height:4px}
+  .sent-bar-lbl{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:7px;color:#888;white-space:nowrap}
+  .sent-bar-val{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:7px;font-weight:700;color:#333;white-space:nowrap}
+  .sent-key{font-size:10px;color:var(--muted);margin-top:8px;text-align:center}
+  </style>
+  <div class="driver-flow">
+    <div class="driver-col">
+      <div class="driver-hdr green">Drivers</div>
+      <div class="driver-items">
+        <div class="driver-item">Ultra-processed foods accounting for 50–60% of western diets</div>
+        <div class="driver-item">Functional GI disorders impacting >40% of global population</div>
+        <div class="driver-item">Impaired metabolic function driven by gut dysbiosis</div>
+        <div class="driver-item">Antibiotic overuse depleting microbiomes</div>
+        <div class="driver-item">Ageing population accelerating IBD</div>
+        <div class="driver-item">Gut-brain axis mainstreaming into mental wellbeing</div>
+      </div>
+    </div>
+    <div class="driver-arrow">›</div>
+    <div class="driver-col">
+      <div class="driver-hdr teal">Effect</div>
+      <div class="driver-items">
+        <div class="driver-item">Degraded microbiome diversity drives bloating, constipation, diarrhoea, increased C. difficile susceptibility</div>
+        <div class="driver-item">Compromised gut barrier triggers chronic inflammation and insulin resistance, contributing to obesity and type 2 diabetes</div>
+        <div class="driver-item">Depleted microbiomes weaken immune response and are linked to anxiety, depression and cognitive impairment via the gut-brain axis</div>
+      </div>
+    </div>
+    <div class="driver-arrow">›</div>
+    <div class="driver-col">
+      <div class="driver-hdr pink">Consumer Pain points</div>
+      <div class="driver-items">
+        <div class="driver-item">Treatments address symptoms, but do not address the <strong>root cause</strong> in the gut ecosystem</div>
+        <div class="driver-item">Probiotic <strong>delivery</strong> does not work consistently; most are destroyed by stomach acid or antibiotics before reaching the colon</div>
+        <div class="driver-item">Probiotic solutions are <strong>generic</strong>, and do not address specific conditions</div>
+        <div class="driver-item"><strong>Antibiotics</strong> wipe out microbiome but no co-prescribed restoration exists</div>
+      </div>
+    </div>
+  </div>
+  <div class="emerging-box">🔬 <strong>Emerging: microbiome beyond GI</strong> — Preliminary evidence links gut microbiome to mood stabilisation and cognitive decline — early-stage but a significant potential expansion of the addressable space</div>
+  <div style="margin-top:14px">
+  <div class="whitespace-box">
+    <div class="ws-title">A gut health solution that is:</div>
+    <div class="ws-grid">
+      <div class="ws-item"><div class="ws-letter">A</div><div class="ws-text"><strong>Effective, with holistic impact</strong><div class="ws-sub">I. Able to deliver to the gut by surviving stomach acid & antibiotics<br>II. Addressing root cause by driving systemic impact<br>III. Personalised with strains diagnostic-linked and matched to individual needs</div></div></div>
+      <div class="ws-item"><div class="ws-letter">B</div><div class="ws-text"><strong>Proven, with a substantiated clinical claim</strong><div class="ws-sub">Clinical grade solution able to pass through EFSA, FDA, ANVISA inspection</div></div></div>
+      <div class="ws-item"><div class="ws-letter">C</div><div class="ws-text"><strong>From a reliable and known brand / player</strong><div class="ws-sub">Able to educate consumers and bring awareness</div></div></div>
+      <div class="ws-item"><div class="ws-letter">D</div><div class="ws-text"><strong>That is easily accessible</strong><div class="ws-sub">No prescription needed</div></div></div>
+    </div>
+  </div>
+  </div>
+  <div style="margin-top:14px"><div class="section-card"><div class="section-title">Right to win — what Haleon has vs. what needs to be unlocked</div>
+  <div style="display:grid;grid-template-columns:200px 1fr 1fr;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:10.5px">
+    <div style="background:#f5f5f3;padding:8px 10px;font-weight:700;border-bottom:1px solid var(--border)">Need</div><div style="background:#1a1a1a;color:#fff;padding:8px 10px;font-weight:700;border-bottom:1px solid #333;text-align:center">What Haleon has</div><div style="background:var(--h-green);color:#fff;padding:8px 10px;font-weight:700;border-bottom:1px solid #27500a;text-align:center">Unlock needed</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">A. Effective, holistic impact</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Centrum Multibiotics — 18 strains & ~18Bn CFUs · R&D partnerships NTU-SCELSE, PC Biome, CMI, AMILI</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)">No proprietary strains · R&D partnerships early-stage · No in-house probiotic manufacturing</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">B. Proven clinical claim</div><div colspan="2" style="padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;color:var(--muted);font-style:italic;grid-column:span 2">Haleon input needed to further detail</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">C. Reliable known brand</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Centrum global VMS brand recognition · Probiotics in S. Korea (2023) and UK · Tums & Eno in digestive portfolio</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)">No standalone gut health brand · Centrum associated with vitamins, not gut health</div>
+    <div style="padding:8px 10px;font-weight:600">D. Easily accessible</div><div style="padding:8px 10px;background:#f9f9f9">Core channels pharmacy/retail/grocery — ~57% of probiotic supplement sales · 170+ markets globally</div><div style="padding:8px 10px">No DTC subscription platform · Online/DTC is ~28% of supplement sales and fastest growing</div>
+  </div></div></div>
+  <div class="sentiment-grid">
+    <div class="sent-chart">
+      <div style="font-size:11px;font-weight:700;margin-bottom:8px;color:var(--text)">Gut microbiome mentions — social listening (# mentions, Q1'24–Q1'26)</div>
+      <div class="sent-bars">
+        ${[{q:'Q1\'24',v:137500},{q:'Q2\'24',v:153950},{q:'Q3\'24',v:206750},{q:'Q4\'24',v:253400},{q:'Q1\'25',v:274000},{q:'Q2\'25',v:290050},{q:'Q3\'25',v:300200},{q:'Q4\'25',v:282250},{q:'Q1\'26',v:318050}].map(d=>`<div class="sent-bar" style="height:${Math.round(d.v/318050*100)}%"><span class="sent-bar-val">${(d.v/1000).toFixed(0)}k</span><span class="sent-bar-lbl">${d.q}</span></div>`).join('')}
+      </div>
+      <div style="margin-top:22px;font-size:10px;color:var(--muted)">+11% trend · Based on ~2.2M gut health mentions since Jan 2024 · Source: Quid Monitor, BCG analysis</div>
+    </div>
+    <div class="sent-chart">
+      <div style="font-size:11px;font-weight:700;margin-bottom:8px">Key insights from social listening</div>
+      <ul class="bullet-list">
+        <li>Gut microbiome is <strong>widely perceived as a central regulator of overall health</strong>, with strong associations to immune function, inflammation and chronic disease prevention</li>
+        <li>Consumers actively use diet and targeted supplements to optimise microbiome balance, particularly through fibre-rich foods, probiotics and prebiotics</li>
+        <li><strong>Increasing awareness of the gut–brain axis</strong> is elevating the microbiome's role beyond digestion, linking it to mood, stress and cognitive performance</li>
+        <li>Microbiome imbalances are increasingly linked to metabolic and cardiovascular disorders, including obesity, diabetes and heart disease</li>
+        <li>The Q3'25 sentiment dip is driven by disease-risk narratives; <strong>key differentiator will be scientifically-proven positive impact</strong></li>
+      </ul>
+    </div>
+  </div>`,
+
+  market:`
+  <style>
+  .mkt-chart-wrap{background:#fff;border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:14px}
+  .mkt-bars-area{display:flex;align-items:flex-end;gap:6px;height:180px;border-bottom:2px solid #333;border-left:2px solid #333;padding:0 8px 0;margin-bottom:28px;position:relative}
+  .mkt-bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;position:relative}
+  .mkt-bar-stack{width:100%;position:relative;cursor:pointer}
+  .mkt-bar-total{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:700;color:#333;white-space:nowrap}
+  .mkt-bar-year{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:8px;color:#888;white-space:nowrap}
+  .mkt-legend{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+  .mkt-leg{display:flex;align-items:center;gap:5px;font-size:10px;color:#555}
+  .mkt-leg-dot{width:10px;height:10px;border-radius:2px}
+  .mkt-commentary{background:var(--h-light);border-radius:6px;padding:12px 14px}
+  .mkt-commentary-title{font-size:11px;font-weight:700;margin-bottom:8px}
+  .region-table{width:100%;border-collapse:collapse;font-size:11px}
+  .region-table th{background:var(--h-green);color:#fff;padding:7px 10px;text-align:left;font-size:10px}
+  .region-table td{padding:7px 10px;border-bottom:1px solid #f0f0ee}
+  .region-table tr:last-child td{border-bottom:none}
+  .region-table tr:hover td{background:#f7fcf2}
+  .mkt-rtw-box{background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px;margin-top:14px}
+  .rtw-waterfall{display:flex;align-items:flex-end;gap:3px;height:120px;padding:0 4px;border-bottom:1px solid #ddd;margin-bottom:20px}
+  .wf-bar{display:flex;flex-direction:column;align-items:center;flex:1;position:relative}
+  .wf-seg{width:100%;position:relative}
+  .wf-val{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:700;white-space:nowrap}
+  .wf-lbl{position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);font-size:8px;color:#888;white-space:nowrap;text-align:center;line-height:1.2;width:60px}
+  </style>
+  <div class="mkt-chart-wrap">
+    <div style="font-size:12px;font-weight:700;margin-bottom:10px">Gut microbiome market 2025–2035 (USD Bn)</div>
+    <div class="mkt-legend">
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#5C9E1A"></div>Consumer supplements</div>
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#B0D880"></div>Microbiome therapeutics</div>
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#D4EDA8"></div>DTC testing kits</div>
+    </div>
+    <div class="mkt-bars-area">
+      ${[{y:'2025',s:14.4,t:0.3,d:1.2,tot:16},{y:'2026',s:15.6,t:0.4,d:1.3,tot:17},{y:'2027',s:16.9,t:0.5,d:1.4,tot:19},{y:'2028',s:18.4,t:0.7,d:1.5,tot:21},{y:'2029',s:20.1,t:1.0,d:1.7,tot:23},{y:'2030',s:21.8,t:1.4,d:1.8,tot:25},{y:'2031',s:23.7,t:1.8,d:1.9,tot:27},{y:'2032',s:25.6,t:1.5,d:2.1,tot:29},{y:'2033',s:28.0,t:2.0,d:2.2,tot:32},{y:'2034',s:31.5,t:2.3,d:2.4,tot:36},{y:'2035',s:32,t:5.5,d:2.5,tot:40}].map(d=>`
+      <div class="mkt-bar-group">
+        <div style="width:100%;display:flex;flex-direction:column;align-items:center;position:relative">
+          <span class="mkt-bar-total">${d.tot}</span>
+          <div style="width:100%;background:#D4EDA8;height:${Math.round(d.d/40*160)}px"></div>
+          <div style="width:100%;background:#B0D880;height:${Math.round(d.t/40*160)}px"></div>
+          <div style="width:100%;background:#5C9E1A;height:${Math.round(d.s/40*160)}px"></div>
+        </div>
+        <span style="font-size:7.5px;color:#888;margin-top:4px;white-space:nowrap">${d.y}</span>
+      </div>`).join('')}
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:4px;font-size:10px">
+      <span style="background:#e2f0d0;padding:2px 6px;border-radius:3px;color:#173404;font-weight:700">Supplements 8.4%</span>
+      <span style="background:#dceefb;padding:2px 6px;border-radius:3px;color:#042c53;font-weight:700">Therapeutics 31%</span>
+      <span style="background:#f5f5f3;padding:2px 6px;border-radius:3px;color:#555;font-weight:700">DTC testing 8.3%</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div>
+      <div class="section-card"><div class="section-title">Regional breakdown 2035</div>
+      <table class="region-table"><thead><tr><th>Region</th><th>Share</th><th>2026 ($B)</th><th>2035 ($B)</th><th>CAGR</th></tr></thead><tbody>
+        <tr><td><strong>NAMR</strong></td><td>34%</td><td>5.5</td><td>14.2</td><td>~10%</td></tr>
+        <tr><td><strong>EU</strong></td><td>24%</td><td>3.9</td><td>9.8</td><td>~10%</td></tr>
+        <tr><td><strong>APAC</strong></td><td>32%</td><td>5.0</td><td>11.8</td><td>~9%</td></tr>
+        <tr><td><strong>ROW</strong></td><td>10%</td><td>1.6</td><td>3.6</td><td>~8%</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="mkt-commentary">
+      <div class="mkt-commentary-title">Commentary</div>
+      <ul class="bullet-list">
+        <li>Supplements ($14B → $32B, 8.4% CAGR) drive majority of value; shifting toward condition-specific and strain-specific formulations</li>
+        <li>Therapeutics (~30% CAGR) is fastest-growing but widest forecast range ($0.3–4.5B); contingent on FDA approval milestones</li>
+        <li>DTC testing kits ($1.2B → $2.7B) strategically important as entry point for test-then-supplement models</li>
+        <li>APAC is fastest-growing for supplements (~12% CAGR); competition in India expected as generics enter nutraceuticals</li>
+      </ul>
+    </div>
+  </div>
+  <div class="mkt-rtw-box">
+    <div style="font-size:12px;font-weight:700;margin-bottom:10px">Haleon SAM — Priority market of $20–28B (~50–70% of TAM) with immediate right to win</div>
+    <div style="display:flex;align-items:flex-end;gap:3px;height:100px;padding:0 8px;border-bottom:1px solid #ddd;margin-bottom:24px">
+      ${[{lbl:'Immediate RTW',v:24,col:'#5C9E1A',note:'$20–28B'},{lbl:'Non-core Geos',v:8,col:'#B8860B',note:'-$2–4B'},{lbl:'Therapeutics',v:12,col:'#B8860B',note:'-$4–5B'},{lbl:'Non-core Channels',v:18,col:'#C04020',note:'-$4–8B'},{lbl:'DTC Testing',v:7,col:'#C04020',note:'-$2–3B'},{lbl:'TAM',v:100,col:'#5C9E1A',note:'$40B'}].map(d=>`
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;position:relative">
+        <span style="font-size:8px;font-weight:700;color:${d.col};position:absolute;top:-14px">${d.note}</span>
+        <div style="width:100%;background:${d.col};height:${d.v}px;border-radius:2px 2px 0 0;opacity:${d.lbl==='TAM'?1:0.8}"></div>
+        <span style="font-size:7.5px;color:#888;position:absolute;bottom:-22px;text-align:center;line-height:1.2;width:62px">${d.lbl}</span>
+      </div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:10.5px">
+      <div style="background:#e2f0d0;border-radius:5px;padding:8px 10px"><strong style="color:#27500a">Immediate RTW</strong><br><span style="color:#333">Priority market $20–28Bn; pharmacy + retail + grocery</span></div>
+      <div style="background:#faeeda;border-radius:5px;padding:8px 10px"><strong style="color:#633806">Medium RTW</strong><br><span style="color:#333">Non-core geos (-$2–4B) · Therapeutics (-$4–5B)</span></div>
+      <div style="background:#fce4e4;border-radius:5px;padding:8px 10px"><strong style="color:#791f1f">Low RTW — unlock via new model</strong><br><span style="color:#333">Non-core channels (-$4–8B) · DTC testing (-$2–3B)</span></div>
+    </div>
+  </div>`,
+
+  competitive:`
+  <style>
+  /* positioning matrix */
+  .pos-matrix-wrap{background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
+  .pos-matrix{position:relative;width:100%;height:320px;border-left:2px solid #333;border-bottom:2px solid #333;background:linear-gradient(to right,rgba(200,220,200,.08),rgba(200,220,200,.18))}
+  .pos-axis-x{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#555}
+  .pos-axis-y{position:absolute;left:-28px;top:50%;transform:translateY(-50%) rotate(-90deg);font-size:10px;font-weight:700;color:#555;white-space:nowrap}
+  .pos-label-consumer{position:absolute;top:8px;left:8px;font-size:9px;font-weight:700;color:#555}
+  .pos-label-pharma{position:absolute;bottom:8px;left:8px;font-size:9px;font-weight:700;color:#555}
+  .pos-label-pre{position:absolute;bottom:8px;left:10px;font-size:9px;color:#888}
+  .pos-label-deep{position:absolute;bottom:8px;right:10px;font-size:9px;color:#888}
+  .pos-zone{position:absolute;border-radius:50%;border:1px dashed #ccc;display:flex;align-items:center;justify-content:center}
+  .pos-brand{position:absolute;transform:translate(-50%,-50%);text-align:center;cursor:pointer;transition:transform .15s}
+  .pos-brand:hover{transform:translate(-50%,-50%) scale(1.1);z-index:10}
+  .pos-brand-logo{width:44px;height:44px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff;margin:0 auto 2px}
+  .pos-brand-name{font-size:8px;color:#333;white-space:nowrap;font-weight:600;background:rgba(255,255,255,.85);padding:1px 3px;border-radius:2px}
+  /* lessons */
+  .comp-lessons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+  .lesson-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px;font-size:10.5px}
+  .lesson-brand{font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px}
+  .lesson-tagline{font-size:9.5px;color:var(--muted);font-style:italic;margin-bottom:8px}
+  .lesson-row{margin-bottom:4px;line-height:1.4}
+  .lesson-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.2px;margin-bottom:1px}
+  .lbl-what{color:#185FA5}.lbl-worked{color:#27500a}.lbl-didnt{color:#791f1f}.lbl-impl{color:#534AB7}
+  .comp-matrix{background:#fff;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:14px}
+  .comp-matrix-hdr{display:grid;grid-template-columns:120px 100px 1fr 1fr 1fr;background:var(--h-green);color:#fff;font-size:9.5px;font-weight:700;padding:7px 10px;gap:8px}
+  .comp-matrix-row{display:grid;grid-template-columns:120px 100px 1fr 1fr 1fr;padding:8px 10px;border-bottom:1px solid #f0f0ee;font-size:10.5px;gap:8px;align-items:start}
+  .comp-matrix-row:hover{background:#f7fcf2}
+  .comp-tag-pos{font-size:9px;background:#e2f0d0;color:#27500a;padding:1px 5px;border-radius:3px;margin:1px 0;display:inline-block}
+  .comp-tag-neg{font-size:9px;background:#fce4e4;color:#791f1f;padding:1px 5px;border-radius:3px;margin:1px 0;display:inline-block}
+  </style>
+  <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text)">Lessons from the market — Science wins, shortcuts don't, scale without depth stalls</div>
+  <div class="comp-lessons">
+    <div class="lesson-card"><div class="lesson-brand">Seed</div><div class="lesson-tagline">Science-first DTC done right</div><div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Rigour built trust; 3 yrs R&D before launch; premium pricing; 500%+ growth; profitable</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Single hero SKU; limited international</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Clinical DTC builds brands fast but needs larger platform to scale</div></div>
+    <div class="lesson-card"><div class="lesson-brand">BioGaia</div><div class="lesson-tagline">Deep science, slow scale</div><div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>35 yrs on one strain family; 250+ studies; deepest clinical moat in industry</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Never achieved mass consumer awareness</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Domain depth alone doesn't deliver scale — needs consumer brand reach</div></div>
+    <div class="lesson-card"><div class="lesson-brand">Align (P&G)</div><div class="lesson-tagline">Strong launch, dead end</div><div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Clear clinical story; strong retail execution; HCP marketing</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>One product, one strain, one market. No owned IP. No DTC</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Launch without platform investment = stagnation</div></div>
+    <div class="lesson-card"><div class="lesson-brand">BODi-OME</div><div class="lesson-tagline">Too much, too fast</div><div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Condition-specific probiotics concept</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>5 SKUs at launch. No clinical foundation. No HCP backing</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Cannot shortcut the evidence base. Multiple SKUs without hero dilutes everything</div></div>
+    <div class="lesson-card"><div class="lesson-brand">Kirin iMUSE</div><div class="lesson-tagline">Local stronghold, limiting footprint</div><div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>1st FCC approval; platformed the tech across categories; Shohei Ohtani ambassador 2025</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>No international expansion; FFC claims don't transfer to EU/US</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>1 strain / ingredient can be scaled into a platform business</div></div>
+    <div class="lesson-card"><div class="lesson-brand">菌小宝 (Junxiaobao)</div><div class="lesson-tagline">Quantity over quality</div><div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>CCTV credibility; academic partnerships; 100Bn CFU positioning</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Efficacy not proven; generic claims without true impact</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Tech breakthrough not per se focused on # of CFUs</div></div>
+  </div>
+  <div style="font-size:12px;font-weight:700;margin-bottom:8px">Incumbent players — scale and distribution but limited strain IP</div>
+  <div class="comp-matrix">
+    <div class="comp-matrix-hdr"><div>Company</div><div>Gut revenue (est.)</div><div>Key products</div><div>Strengths</div><div>Concerns</div></div>
+    <div class="comp-matrix-row"><div><strong>Nestlé</strong><br><span style="font-size:9px;color:var(--muted)">Switzerland</span></div><div>~$500–700M</div><div>Optifibre, Garden of Life, Pure Encapsulations</div><div><span class="comp-tag-pos">Deepest portfolio</span><span class="comp-tag-pos">Clinical credibility</span></div><div><span class="comp-tag-neg">Fragmented brands</span><span class="comp-tag-neg">Slow DTC</span></div></div>
+    <div class="comp-matrix-row"><div><strong>Danone</strong><br><span style="font-size:9px;color:var(--muted)">France</span></div><div>~$1.5–2.5B</div><div>Activia, Actimel, Aptamil</div><div><span class="comp-tag-pos">Strongest probiotic brand awareness</span></div><div><span class="comp-tag-neg">Over-indexed on dairy</span><span class="comp-tag-neg">Limited supplements</span></div></div>
+    <div class="comp-matrix-row"><div><strong>Bayer</strong><br><span style="font-size:9px;color:var(--muted)">Germany</span></div><div>~$300–500M</div><div>Phillips' Colon Health, MiraLAX</div><div><span class="comp-tag-pos">Pharmacy dominance</span><span class="comp-tag-pos">HCP trust</span></div><div><span class="comp-tag-neg">No strain differentiation</span></div></div>
+    <div class="comp-matrix-row"><div><strong>P&G</strong><br><span style="font-size:9px;color:var(--muted)">USA</span></div><div>~$400–600M</div><div>Align Probiotics, Metamucil</div><div><span class="comp-tag-pos">Top US probiotic (Align)</span><span class="comp-tag-pos">Strong retail</span></div><div><span class="comp-tag-neg">Limited international</span><span class="comp-tag-neg">No strain IP</span></div></div>
+    <div class="comp-matrix-row"><div><strong>Reckitt</strong><br><span style="font-size:9px;color:var(--muted)">UK</span></div><div>~$100–200M</div><div>Digestive Advantage, MegaRed</div><div><span class="comp-tag-pos">Strong retail/pharmacy</span></div><div><span class="comp-tag-neg">Smaller gut portfolio</span><span class="comp-tag-neg">Limited clinical diff.</span></div></div>
+  </div>
+  <div style="font-size:12px;font-weight:700;margin-bottom:8px">Emerging DTC players — building clinical moats and direct consumer relationships</div>
+  <div class="comp-matrix">
+    <div class="comp-matrix-hdr"><div>Company</div><div>Funding / Rev</div><div>Key differentiation</div><div>Strengths</div><div>Concerns</div></div>
+    <div class="comp-matrix-row"><div><strong>Seed</strong><br><span style="font-size:9px;color:var(--muted)">LA, US · 2015</span></div><div>~$200M rev; profitable; ~$1B sale explored</div><div>DS-01 synbiotic; 500%+ growth; top 5 Amazon; Sprouts + Target</div><div><span class="comp-tag-pos">Clinical rigour + DTC</span><span class="comp-tag-pos">Profitable</span></div><div><span class="comp-tag-neg">Single hero SKU</span><span class="comp-tag-neg">Limited international</span></div></div>
+    <div class="comp-matrix-row"><div><strong>BioGaia</strong><br><span style="font-size:9px;color:var(--muted)">Stockholm · 1990</span></div><div>$129M rev (2024)</div><div>Established global brand; trusted pediatric; strong strain IP</div><div><span class="comp-tag-pos">Deep clinical IP</span><span class="comp-tag-pos">Pediatric leader</span></div><div><span class="comp-tag-neg">Smaller scale</span></div></div>
+    <div class="comp-matrix-row"><div><strong>Pendulum</strong><br><span style="font-size:9px;color:var(--muted)">SF, US · 2012</span></div><div>$50–100M est.; $149–184M raised</div><div>First live Akkermansia; only probiotic proven to lower A1C; 17 patents</div><div><span class="comp-tag-pos">Deepest clinical moat</span><span class="comp-tag-pos">GLP-1 adjacency</span></div><div><span class="comp-tag-neg">Premium ~$70/mo</span><span class="comp-tag-neg">Niche</span></div></div>
+    <div class="comp-matrix-row"><div><strong>ZOE</strong><br><span style="font-size:9px;color:var(--muted)">London/Boston · 2017</span></div><div>$118–133M raised; 100K+ subscribers</div><div>At-home gut + blood + glucose test; personalised app; 60+ papers</div><div><span class="comp-tag-pos">Strongest publishing</span><span class="comp-tag-pos">High retention</span></div><div><span class="comp-tag-neg">Not yet profitable</span><span class="comp-tag-neg">Regulatory gaps</span></div></div>
+    <div class="comp-matrix-row"><div><strong>Viome</strong><br><span style="font-size:9px;color:var(--muted)">Bellevue · 2016</span></div><div>$302M raised; CVS deal</div><div>mRNA sequencing; AI supplement recs; Microsoft partnership</div><div><span class="comp-tag-pos">Most funded</span><span class="comp-tag-pos">Vertically integrated</span></div><div><span class="comp-tag-neg">High burn</span><span class="comp-tag-neg">Unit economics unclear</span></div></div>
+  </div>`,
+
+  patents:`
+  <style>
+  .tech-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+  .tech-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center}
+  .tech-card-num{width:24px;height:24px;background:var(--h-green);color:#fff;border-radius:4px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+  .tech-card-name{font-size:10px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.3}
+  .tech-card-desc{font-size:9.5px;color:var(--muted);line-height:1.35;margin-bottom:6px}
+  .tech-maturity{display:flex;justify-content:center;margin-bottom:4px}
+  .maturity-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid #ccc;margin:0 1px}
+  .maturity-dot.filled{background:var(--h-green);border-color:var(--h-green)}
+  .maturity-dot.half{background:linear-gradient(90deg,var(--h-green) 50%,#fff 50%);border-color:var(--h-green)}
+  .tech-patent{font-size:9px;background:#e2f0d0;color:#27500a;padding:2px 5px;border-radius:3px;display:inline-block}
+  .tech-example{font-size:9px;color:var(--muted);margin-top:3px;font-style:italic}
+  .need-matrix{background:#fff;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:14px}
+  .nm-hdr{display:grid;grid-template-columns:140px repeat(5,1fr);background:var(--h-green);color:#fff;font-size:9px;font-weight:700;padding:7px 10px;gap:4px;align-items:center}
+  .nm-row{display:grid;grid-template-columns:140px repeat(5,1fr);padding:8px 10px;border-bottom:1px solid #f0f0ee;gap:4px;align-items:center;font-size:10.5px}
+  .nm-row:last-child{border-bottom:none}
+  .nm-need{font-size:10px;color:var(--text);line-height:1.3}
+  .nm-cell{display:flex;align-items:center;justify-content:center}
+  .ic-yes{width:22px;height:22px;background:var(--h-green);border-radius:3px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700}
+  .ic-no{width:22px;height:22px;background:#555;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700}
+  .ic-maybe{width:22px;height:22px;background:#888;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700}
+  .ic-partial{width:22px;height:22px;background:#B0D880;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700}
+  .patent-table{width:100%;border-collapse:collapse;font-size:10.5px}
+  .patent-table th{background:#333;color:#fff;padding:7px 10px;text-align:left;font-size:9.5px}
+  .patent-table td{padding:7px 10px;border-bottom:1px solid #f0f0ee;vertical-align:top}
+  .pub-chart{display:flex;align-items:flex-end;gap:3px;height:80px;border-bottom:1px solid #ddd;border-left:1px solid #ddd;padding:4px 4px 0}
+  .pub-bar{flex:1;background:var(--h-green);opacity:.7;border-radius:1px 1px 0 0;position:relative}
+  .pub-lbl{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:6.5px;color:#888}
+  .pub-val{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:6.5px;font-weight:700;color:#333}
+  </style>
+  <div style="font-size:12px;font-weight:700;margin-bottom:10px">5 areas of scientific advancement in the gut microbiome space</div>
+  <div class="tech-cards">
+    <div class="tech-card"><div class="tech-card-num">1</div><div class="tech-card-name">Postbiotic & metabolite engineering</div><div class="tech-card-desc">Producing beneficial metabolites like butyrate and GLP-1 stimulators without live bacteria</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>0 patents</span></div><div class="tech-example">Resbiotic resM</div></div>
+    <div class="tech-card"><div class="tech-card-num">2</div><div class="tech-card-name">Synthetic microbial consortia</div><div class="tech-card-desc">Manually assembled communities of multiple strains replacing FMT with standardised products</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>500+ patents</span></div><div class="tech-example">Seres Vowst (FDA-approved)</div></div>
+    <div class="tech-card"><div class="tech-card-num">3</div><div class="tech-card-name">Precision delivery & microencapsulation</div><div class="tech-card-desc">Capsules protecting live strains through stomach acid; release at specific gut sites</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>141 patents</span></div><div class="tech-example">Seed DS-01 ViaCap</div></div>
+    <div class="tech-card"><div class="tech-card-num">4</div><div class="tech-card-name">Next-gen anaerobic strain cultivation</div><div class="tech-card-desc">Industrial-scale production of oxygen-sensitive bacteria previously impossible commercially</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>3 patents</span></div><div class="tech-example">Pendulum Akkermansia</div></div>
+    <div class="tech-card"><div class="tech-card-num">5</div><div class="tech-card-name">CRISPR-armed bacteriophage therapy</div><div class="tech-card-desc">Engineered viruses selectively eliminating harmful gut bacteria while preserving beneficial strains</div><div class="tech-maturity"><div class="maturity-dot half"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>25 patents</span></div><div class="tech-example">Eligo Bioscience</div></div>
+  </div>
+  <div class="need-matrix">
+    <div class="nm-hdr"><div>Consumer need</div><div style="text-align:center">1 Postbiotic</div><div style="text-align:center">2 Consortia</div><div style="text-align:center">3 Delivery</div><div style="text-align:center">4 Anaerobic</div><div style="text-align:center">5 Phage</div></div>
+    <div class="nm-row"><div class="nm-need"><strong>I.</strong> Deliver to gut — survive stomach acid & antibiotics</div><div class="nm-cell"><div class="ic-yes">✓</div></div><div class="nm-cell"><div class="ic-maybe">?</div></div><div class="nm-cell"><div class="ic-yes">✓</div></div><div class="nm-cell"><div class="ic-no">✗</div></div><div class="nm-cell"><div class="ic-partial">›</div></div></div>
+    <div class="nm-row"><div class="nm-need"><strong>II.</strong> Address root cause — systemic gut impact</div><div class="nm-cell"><div class="ic-yes">✓</div></div><div class="nm-cell"><div class="ic-yes">✓</div></div><div class="nm-cell"><div class="ic-partial">›</div></div><div class="nm-cell"><div class="ic-yes">✓</div></div><div class="nm-cell"><div class="ic-yes">✓</div></div></div>
+    <div class="nm-row"><div class="nm-need"><strong>III.</strong> Personalised — diagnostic-linked, condition-specific strains</div><div class="nm-cell"><div class="ic-partial">›</div></div><div class="nm-cell"><div class="ic-yes">✓</div></div><div class="nm-cell"><div class="ic-no">✗</div></div><div class="nm-cell"><div class="ic-maybe">?</div></div><div class="nm-cell"><div class="ic-maybe">?</div></div></div>
+  </div>
+  <div style="display:flex;gap:10px;font-size:9.5px;margin-bottom:14px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:4px"><div class="ic-yes" style="width:16px;height:16px;font-size:9px">✓</div>Addressing consumer need</div>
+    <div style="display:flex;align-items:center;gap:4px"><div class="ic-partial" style="width:16px;height:16px;font-size:9px">›</div>Potential knock-on effect</div>
+    <div style="display:flex;align-items:center;gap:4px"><div class="ic-maybe" style="width:16px;height:16px;font-size:9px">?</div>Not yet clear</div>
+    <div style="display:flex;align-items:center;gap:4px"><div class="ic-no" style="width:16px;height:16px;font-size:9px">✗</div>Not addressing</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div class="section-card"><div class="section-title">Publication momentum (PubMed — "gut microbiome")</div>
+      <div class="pub-chart">
+        ${[{y:'2016',v:2798},{y:'2017',v:3432},{y:'2018',v:4176},{y:'2019',v:5429},{y:'2020',v:6947},{y:'2021',v:8545},{y:'2022',v:9699},{y:'2023',v:9703},{y:'2024',v:11267},{y:'2025',v:15392}].map(d=>`<div class="pub-bar" style="height:${Math.round(d.v/15392*100)}%"><span class="pub-val">${(d.v/1000).toFixed(0)}k</span><span class="pub-lbl">${d.y}</span></div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:18px">+21% CAGR 2016–2025 · 7× increase in a decade</div>
+    </div>
+    <div class="section-card"><div class="section-title">Patent filing momentum (microbiome/probiotic)</div>
+      <div class="pub-chart">
+        ${[{y:'2018',v:154},{y:'2019',v:174},{y:'2020',v:212},{y:'2021',v:287},{y:'2022',v:383},{y:'2023',v:544},{y:'2024',v:622},{y:'2025',v:751}].map(d=>`<div class="pub-bar" style="height:${Math.round(d.v/751*100)}%;background:#185FA5;opacity:.7"><span class="pub-val" style="color:#185FA5">${d.v}</span><span class="pub-lbl">${d.y}</span></div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:18px">+26% CAGR vs avg. consumer health CAGR of 5–10% · Source: BCG analysis</div>
+    </div>
+  </div>`,
+
+  regulatory:`
+  <style>
+  .reg-table{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:14px}
+  .reg-table th{background:var(--h-green);color:#fff;padding:8px 10px;text-align:left;font-size:10px;font-weight:700}
+  .reg-table td{padding:8px 10px;border-bottom:1px solid #f0f0ee;vertical-align:top;line-height:1.45}
+  .reg-table tr:hover td{background:#f7fcf2}
+  .risk-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap}
+  .risk-low{background:#e2f0d0;color:#27500a;border:1px solid #aad87a}
+  .risk-med{background:#faeeda;color:#633806;border:1px solid #f5c842}
+  .risk-high{background:#fce4e4;color:#791f1f;border:1px solid #f09595}
+  .reg-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .reg-box{background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px}
+  .reg-box-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid var(--h-green)}
+  </style>
+  <div class="section-card" style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#791f1f;margin-bottom:6px">US workable for supplements — EU is the binding constraint: EFSA has rejected virtually all probiotic health claims</div>
+  <table class="reg-table">
+    <thead><tr><th>Market</th><th>Risk</th><th>What you can claim</th><th>Key constraint</th><th>Classification</th></tr></thead>
+    <tbody>
+      <tr><td><strong>US</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>Structure/function claims ("supports digestive health") with FDA disclaimer; no approved health claims for probiotics</td><td>FDA requires IND framework for clinical research even on GRAS probiotics</td><td>Dietary supplement (DSHEA)</td></tr>
+      <tr><td><strong>India</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>Health claims permitted with evidence; FSSAI approved probiotic strain list; no disease-cure claims</td><td>2022 Nutraceutical Regulations still being finalised; novel strain approval can be slow</td><td>Health supplement (FSSAI)</td></tr>
+      <tr><td><strong>China</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>"Blue hat" registration allows health function claims; probiotics on positive list can use simplified filing</td><td>Dual-track system is complex; foreign companies need local partners</td><td>Health food (SAMR)</td></tr>
+      <tr><td><strong>Brazil</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>ANVISA permits functional claims with clinical substantiation; specific strains have pre-approved claims</td><td>ANVISA registration can be lengthy; labelling requirements differ from US/EU</td><td>Functional food (ANVISA)</td></tr>
+      <tr><td><strong>UK</strong></td><td><span class="risk-badge risk-med">Medium risk</span></td><td>Aligned with EU retained law; potential to diverge post-Brexit</td><td>No divergence yet — UK signalling interest in innovation-friendly food policy</td><td>Food supplement</td></tr>
+      <tr><td><strong>EU</strong></td><td><span class="risk-badge risk-high">High risk</span></td><td>1 of 355 probiotic claims approved (yoghurt + lactose only); "probiotic" is an implied health claim in most member states</td><td>EFSA evidence bar is near-pharmaceutical; must show benefit in healthy populations</td><td>Food / food supplement</td></tr>
+      <tr><td><strong>Japan</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>FOSHU: "improves GI conditions" (pre-approval); FFC: broader claims via SR or RCT (notification only)</td><td>Most permissive major market; FFC system growing rapidly</td><td>FOSHU / FFC</td></tr>
+    </tbody>
+  </table></div>
+  <div class="reg-two">
+    <div class="reg-box"><div class="reg-box-title">Key regulatory trends</div><ul class="bullet-list"><li><strong>FDA normalising category:</strong> Rebyota (2022) and Vowst (2023) approved as live biotherapeutics — sets precedent for OTC normalisation</li><li><strong>Japan FFC expanding:</strong> fastest-growing functional food pathway globally; lower barrier than FOSHU or EFSA</li><li><strong>Postbiotics as simpler pathway:</strong> non-living microbial products may avoid live probiotic claims challenges</li><li><strong>USPTO open to AI-microbiome patents:</strong> could enable new IP strategies for personalised supplement claims</li></ul></div>
+    <div class="reg-box"><div class="reg-box-title" style="color:#791f1f;border-bottom-color:#C04060">High regulatory risk areas</div><ul class="bullet-list"><li><strong style="color:#791f1f">EU:</strong> EFSA has rejected 354 of 355 probiotic health claims — no sign of policy change</li><li><strong style="color:#791f1f">US clinical research:</strong> IND framework required for probiotic efficacy studies even on GRAS organisms</li><li><strong style="color:#791f1f">Cross-market fragmentation:</strong> a claims strategy that works in Japan may be unusable in the EU</li></ul>
+    <div style="margin-top:10px;background:#f5f5f3;border-radius:4px;padding:8px 10px;font-size:10.5px;color:#444"><strong>Note:</strong> Haleon has already launched probiotic products under the Centrum brand in <strong>South Korea</strong></div></div>
+  </div>`,
+
+  inspiration:`
+  <style>
+  .inspo-intro{background:linear-gradient(135deg,#1a1a1a,#0d2a0d);border-radius:8px;padding:16px 20px;margin-bottom:16px;color:#fff}
+  .inspo-intro-title{font-size:14px;font-weight:700;margin-bottom:4px}
+  .inspo-intro-sub{font-size:11px;color:#aaa;line-height:1.5}
+  .inspo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .inspo-concept{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .inspo-concept-img{height:180px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .inspo-concept-body{padding:14px}
+  .inspo-concept-name{font-size:13px;font-weight:700;color:var(--h-green);font-style:italic;margin-bottom:4px}
+  .inspo-concept-tagline{font-size:11px;color:var(--text);font-style:italic;color:#555;margin-bottom:8px}
+  .inspo-concept-desc{font-size:11px;color:#444;line-height:1.5}
+  .inspo-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin-bottom:6px;background:#e2f0d0;color:#173404}
+  .platform-box{background:var(--h-light);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px}
+  .platform-box-title{font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text)}
+  .platform-three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .plat-col{border-radius:6px;padding:12px;border:2px dashed}
+  .plat-col.core{background:#eaf3de;border-color:var(--h-green)}
+  .plat-col.primary{background:#fff;border-color:var(--h-green);border-style:dashed}
+  .plat-col.secondary{background:#f7f7f7;border-color:#ccc}
+  .plat-col-title{font-size:11px;font-weight:700;margin-bottom:6px}
+  .plat-col.core .plat-col-title{color:var(--h-green)}
+  .plat-col.primary .plat-col-title{color:var(--h-green)}
+  .plat-col.secondary .plat-col-title{color:#666}
+  </style>
+  <div class="inspo-intro">
+    <div class="inspo-intro-title">💡 Brainstorm — some ideas to get you started...</div>
+    <div class="inspo-intro-sub">These are illustrative product concepts based on the platform technologies and consumer needs identified in this deep-dive. They are starting points, not final recommendations — use them to provoke discussion and push thinking further.</div>
+  </div>
+  <div class="inspo-grid">
+    <div class="inspo-concept">
+      <div class="inspo-concept-img" style="background:linear-gradient(135deg,#1a3a08,#3a7d0a);position:relative">
+        <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&q=80" alt="meta-biotic product" style="width:100%;height:100%;object-fit:cover;opacity:0.35;position:absolute;top:0;left:0"/>
+        <div style="text-align:center;color:#fff;padding:16px;position:relative;z-index:1">
+          <div style="font-size:28px;font-weight:900;letter-spacing:-1px">meta<span style="color:#8dc63f">·</span>biotic</div>
+          <div style="font-size:11px;color:#aad87a;letter-spacing:1px;margin-top:4px">ORAL CARE + METABOLITE SUPPORT</div>
+          <div style="font-size:10px;color:#ccc;margin-top:8px;line-height:1.4">Science-backed oral care that supports your microbiome and metabolic health</div>
+          <div style="margin-top:10px;display:flex;justify-content:center;gap:8px;font-size:9px;color:#8dc63f;flex-wrap:wrap">
+            <span>🦠 Oral Microbiome Balance</span>
+            <span>⚡ Beneficial Metabolites</span>
+            <span>🌿 Whole Body Benefits</span>
+          </div>
+        </div>
+      </div>
+      <div class="inspo-concept-body">
+        <div class="inspo-badge">New brand · Postbiotic technology</div>
+        <div class="inspo-concept-name">meta-biotic</div>
+        <div class="inspo-concept-tagline">Postbiotic metabolite engineering integrated in your daily oral care routine</div>
+        <div class="inspo-concept-desc">A HALEON oral care brand that uses postbiotic technology to simultaneously support the oral microbiome, produce beneficial metabolites like butyrate, and support GLP-1 pathway activation. Positions Sensodyne science in the metabolic health space via the oral-gut axis.</div>
+      </div>
+    </div>
+    <div class="inspo-concept">
+      <div class="inspo-concept-img" style="background:linear-gradient(135deg,#042c53,#185FA5);position:relative">
+        <img src="https://images.unsplash.com/photo-1550572017-edd951b55104?w=600&q=80" alt="Centrum Multibiotics" style="width:100%;height:100%;object-fit:cover;opacity:0.2;position:absolute;top:0;left:0"/>
+        <div style="text-align:center;color:#fff;padding:16px;position:relative;z-index:1">
+          <div style="font-size:14px;color:#aad87a;font-weight:700;letter-spacing:1px;margin-bottom:4px">Centrum</div>
+          <div style="font-size:26px;font-weight:900">multibiotics</div>
+          <div style="font-size:9px;color:#B0D4F0;letter-spacing:.5px;margin-top:4px">PRECISION RELEASE VIA MICROENCAPSULATION</div>
+          <div style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:9px">
+            <div style="background:rgba(255,255,255,.1);border-radius:4px;padding:5px"><span style="color:#8dc63f;font-weight:700">PROTECTS</span><br>Microencapsulation shields bacteria from acid</div>
+            <div style="background:rgba(255,255,255,.1);border-radius:4px;padding:5px"><span style="color:#8dc63f;font-weight:700">DELIVERS</span><br>Precision release in the intestine</div>
+            <div style="background:rgba(255,255,255,.1);border-radius:4px;padding:5px"><span style="color:#8dc63f;font-weight:700">SUPPORTS</span><br>Gut & immune health</div>
+          </div>
+          <div style="margin-top:8px;background:rgba(141,198,63,.2);border-radius:4px;padding:6px;font-size:10px;font-weight:700;color:#8dc63f">SURVIVES THE STOMACH. DELIVERS IN THE INTESTINE.</div>
+        </div>
+      </div>
+      <div class="inspo-concept-body">
+        <div class="inspo-badge">Existing brand · Precision delivery technology</div>
+        <div class="inspo-concept-name">Centrum Multibiotics Precision line</div>
+        <div class="inspo-concept-tagline">Centrum probiotics with precision release via microencapsulation</div>
+        <div class="inspo-concept-desc">An evolution of Centrum Multibiotics that uses microencapsulation technology to guarantee delivery to the colon. The key differentiator vs current Multibiotics is the verifiable, measurable delivery claim — "Survives the Stomach. Delivers in the Intestine." Directly addresses the #1 consumer pain point about probiotic efficacy.</div>
+      </div>
+    </div>
+  </div>
+  <div class="platform-box">
+    <div class="platform-box-title">Platform hypothesis — 3 core technology bets for Haleon's entry into gut microbiome</div>
+    <div class="platform-three">
+      <div class="plat-col core"><div class="plat-col-title">Core bet</div><div style="font-size:10.5px;color:#1a3a08;line-height:1.5">Clinically validated, condition-specific microbiome products at mass-market price and distribution — filling the gap between generic probiotics and premium DTC</div></div>
+      <div class="plat-col primary"><div class="plat-col-title">Primary R&D bets</div><ul class="bullet-list" style="margin:0"><li>Postbiotic and metabolite engineering</li><li>Precision delivery & microencapsulation</li><li>Synthetic microbial consortia (consumer-grade)</li></ul><div style="font-size:9.5px;color:var(--h-green);margin-top:6px;font-weight:600">+ Potential platform: Oral microbiome (Sensodyne), skin microbiome, immune postbiotics, respiratory barrier</div></div>
+      <div class="plat-col secondary"><div class="plat-col-title">Secondary R&D bets</div><ul class="bullet-list" style="margin:0"><li>CRISPR-armed bacteriophage therapy</li><li>Next-generation anaerobic strain cultivation</li><li>AI-personalisation (test-then-supplement)</li><li>DTC testing kits</li></ul></div>
+    </div>
+  </div>
+  <div class="section-card"><div class="section-title">Right to win — what Haleon has vs. what needs to be unlocked</div>
+  <div style="display:grid;grid-template-columns:200px 1fr 1fr;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:10.5px">
+    <div style="background:#f5f5f3;padding:8px 10px;font-weight:700;border-bottom:1px solid var(--border)">Need</div><div style="background:#1a1a1a;color:#fff;padding:8px 10px;font-weight:700;border-bottom:1px solid #333;text-align:center">What Haleon has</div><div style="background:var(--h-green);color:#fff;padding:8px 10px;font-weight:700;border-bottom:1px solid #27500a;text-align:center">Unlock needed</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">A. Effective, holistic impact</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Centrum Multibiotics launched with 18 strains & ~18Bn CFUs · R&D partnerships NTU-SCELSE, PC Biome, CMI, AMILI</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)">No proprietary strains · R&D partnerships early-stage with no published outputs · No in-house probiotic manufacturing</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">B. Proven clinical claim</div><td colspan="2" style="padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;color:var(--muted);font-style:italic">Haleon input needed to further detail</td>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">C. Reliable known brand</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Centrum global VMS brand recognition · Probiotics launched in S. Korea (2023) and UK · Tums & Eno in digestive portfolio</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)">No standalone gut health brand · Centrum associated with vitamins, not gut health</div>
+    <div style="padding:8px 10px;font-weight:600">D. Easily accessible</div><div style="padding:8px 10px;background:#f9f9f9">Core channels pharmacy/retail/grocery — ~57% of probiotic supplement sales · 170+ markets globally</div><div style="padding:8px 10px">No DTC subscription platform · Online/DTC is ~28% of supplement sales and fastest growing</div>
+  </div></div>`},
+  {rank:2,name:"Perimenopause management",full:true,tags:["Women's health","Hormonal"],desc:"Consumer health solutions addressing perimenopause — spanning non-hormonal symptom management, bone health and life-stage nutrition.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Why this matters</div><div class="eh-text">Women drive ~70% of global consumer health spend. $5B VC invested in femtech since 2019. Haleon's Centrum Women and Caltrate give a direct entry point. PhytoSERMs: first non-hormonal OTC with receptor-level activity — a mechanism that doesn't exist in OTC today.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$14B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$36B</div><div class="stat-lbl">TAM 2035 (10% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 7</div><div class="stat-lbl">Siberian rhubarb estrogen receptor agonist</div></div></div></div>`,
+  consumer:`<div class="section-card"><div class="section-title">Consumer pain points</div><ul class="bullet-list"><li>Night sweats destroying sleep and daily energy</li><li>Severe mood swings affecting relationships</li><li>Refusal of HRT due to cancer risk — no effective OTC alternative</li><li>Bone density loss accelerating post-menopause — widely underestimated</li></ul></div>`,
+  market:`<div class="section-card"><div class="section-title">Market size</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$13.8B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$35.8B</div><div class="stat-lbl">TAM 2035</div></div><div class="stat-box"><div class="stat-num">10%</div><div class="stat-lbl">CAGR</div></div></div></div>`,
+  competitive:`<div class="section-card"><div class="section-title">Competitive landscape</div><ul class="bullet-list"><li><strong>Bonafide Health</strong> — leading DTC non-hormonal brand. Acquired by P&G 2023.</li><li><strong>Estroven</strong> — mass-market black cohosh. Limited clinical differentiation.</li><li><strong>Wile</strong> — adaptogen + phytoestrogen DTC brand.</li></ul></div>`,
+  patents:`<div class="section-card"><div class="section-title">Key technologies</div><ul class="bullet-list"><li><strong>PhytoSERMs / Siberian rhubarb (TRL 7)</strong> — 109/112-person RCTs; 96-week safety data</li><li><strong>S-equol (TRL 6)</strong> — soy-derived estrogen receptor beta agonist; 40:1 myo-inositol</li><li><strong>Adaptogens (TRL 6)</strong> — ashwagandha for cortisol and hot flash management</li></ul></div>`,
+  regulatory:`<div class="section-card"><div class="section-title">Regulatory pathway</div><ul class="bullet-list"><li><span class="tag tag-green">US</span> Structure/function claims for bone health, mood and energy under DSHEA</li><li><span class="tag tag-amber">EU</span> Botanical claims — some phytoestrogen claims approved (isoflavones)</li></ul></div>`},
+  {rank:3,name:"GLP-1 side-effect management",full:true,tags:["GLP-1","Metabolic"],desc:"OTC companion products addressing nutritional gaps, side effects and discontinuation risks from GLP-1 receptor agonist adoption.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Why this matters</div><div class="eh-text">28% of GLP-1 users discontinue due to side effects. An OTC companion directly addresses the #1 adherence barrier in the fastest-growing drug class in history. Haleon's Centrum, Eno and anti-nausea portfolio give an immediate right to play.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$6.8B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$21.4B</div><div class="stat-lbl">TAM 2035 (12.2% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 7</div><div class="stat-lbl">Ginger + B6 antiemetic combo</div></div></div></div>`,
+  consumer:`<div class="section-card"><div class="section-title">Consumer needs</div><ul class="bullet-list"><li>Daily nausea threatening GLP-1 adherence</li><li>Nutritional depletion — eating 30–40% less creates B12, iron, calcium deficiency</li><li>Muscle wastage — 25–40% of tirzepatide weight loss is lean muscle mass</li><li>Post-discontinuation maintenance — majority will eventually discontinue</li></ul></div>`,
+  market:`<div class="section-card"><div class="section-title">Market size</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$6.8B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$21.4B</div><div class="stat-lbl">TAM 2035</div></div><div class="stat-box"><div class="stat-num">30M+</div><div class="stat-lbl">Projected US users by 2030</div></div></div></div>`,
+  competitive:`<div class="section-card"><div class="section-title">Competitive landscape</div><ul class="bullet-list"><li><strong>Hims & Hers</strong> — GLP-1 companion bundles. DTC model. Growing rapidly.</li><li><strong>Abbott Ensure</strong> — repositioning protein nutrition for GLP-1 users.</li><li><strong>Persona Nutrition</strong> — AI-driven supplement recommendations for GLP-1 users.</li></ul></div>`,
+  patents:`<div class="section-card"><div class="section-title">Technology</div><ul class="bullet-list"><li><strong>Ginger + B6 antiemetic (TRL 7)</strong> — RCT-supported; OTC monograph ingredients</li><li><strong>High-bioavailability protein formats (TRL 7)</strong> — leucine-enriched for reduced appetite</li><li><strong>Natural GLP-1 stimulation (TRL 6)</strong> — prebiotics, resistant starch, Akkermansia postbiotics</li></ul></div>`,
+  regulatory:`<div class="section-card"><div class="section-title">Regulatory</div><ul class="bullet-list"><li><span class="tag tag-green">US</span> Supplement positioning workable under DSHEA — no drug claims needed</li><li>Key risk: avoid language implying the product treats or enhances GLP-1 drugs</li></ul></div>`},
+  {rank:4,name:"Oral whitening & enamel repair",full:true,tags:["Oral health","Whitening"],desc:"Science-backed OTC whitening and enamel remineralisation without peroxide-related sensitivity.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Why this matters</div><div class="eh-text">EU bans peroxide >0.1% OTC — opens PAP/HAp opportunity. Sensodyne's #1 global sensitivity position gives Haleon unique permission to own "whitens without hurting."</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$4.2B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$9B</div><div class="stat-lbl">TAM 2035 (8% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 8</div><div class="stat-lbl">Nano-HAp + H2O2 dual-action</div></div></div></div>`,
+  consumer:`<div class="section-card"><div class="section-title">Consumer needs</div><ul class="bullet-list"><li>Whiter teeth without sensitivity — dominant barrier to adoption</li><li>Enamel protection alongside whitening</li><li>Clinically measurable results</li></ul></div>`,
+  market:`<div class="section-card"><div class="section-title">Market size</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$4.2B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$9B</div><div class="stat-lbl">TAM 2035</div></div><div class="stat-box"><div class="stat-num">8%</div><div class="stat-lbl">CAGR</div></div></div></div>`,
+  competitive:`<div class="section-card"><div class="section-title">Competitive landscape</div><ul class="bullet-list"><li><strong>Hismile</strong> — PAP+ DTC whitening leader. Global Gen Z brand.</li><li><strong>Colgate Optic White</strong> — mass market H2O2 leader.</li><li><strong>GC Tooth Mousse</strong> — CPP-ACP remineralisation, clinical positioning.</li></ul></div>`,
+  patents:`<div class="section-card"><div class="section-title">Technologies</div><ul class="bullet-list"><li><strong>PAP (TRL 8)</strong> — peroxide-free, EU-compliant, less sensitivity</li><li><strong>Nano-hydroxyapatite (TRL 8)</strong> — biomimetic enamel repair, growing RCT base</li><li><strong>CPP-ACP (TRL 7)</strong> — clinically validated overnight remineralisation</li></ul></div>`,
+  regulatory:`<div class="section-card"><div class="section-title">Regulatory</div><ul class="bullet-list"><li><span class="tag tag-red">EU constraint</span> Peroxide >0.1% banned in OTC — PAP/HAp opportunity by default</li><li><span class="tag tag-green">PAP route</span> Cosmetic classification — lower regulatory burden than drug</li></ul></div>`},
+  {rank:5,name:"Inflammaging intervention (incl. overnight solutions)",full:true,tags:["Anti-inflammatory","Longevity"],desc:"Interventions targeting chronic low-grade inflammation as root cause of ageing, pain and cognitive decline — including chronopharmacological overnight formats.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Why this matters</div><div class="eh-text">Inflammatory cytokines peak between 2–6am — overnight modified-release anti-inflammatory is a clinically superior proposition no OTC pain brand has brought to market. Voltaren and Advil give Haleon the anchor to build from.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$0.64B</div><div class="stat-lbl">Inflammaging TAM 2025</div></div><div class="stat-box"><div class="stat-num">$2B</div><div class="stat-lbl">TAM 2035 (12.1% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 5–7</div><div class="stat-lbl">SPMs + curcumin + overnight patch</div></div></div></div>`,
+  consumer:`<div class="section-card"><div class="section-title">Consumer needs</div><ul class="bullet-list"><li>Joint stiffness worst on waking — overnight anti-inflammatory addresses this directly</li><li>Chronic inflammation linked to fatigue, brain fog, metabolic dysfunction</li><li>Natural daily anti-inflammatory routine — curcumin, omega-3 gaining traction</li></ul></div>`,
+  market:`<div class="section-card"><div class="section-title">Market size</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$0.64B</div><div class="stat-lbl">Inflammaging TAM 2025</div></div><div class="stat-box"><div class="stat-num">$6.3B</div><div class="stat-lbl">Advanced topical pain relief TAM 2025</div></div><div class="stat-box"><div class="stat-num">8.5–12%</div><div class="stat-lbl">CAGR across sub-platforms</div></div></div></div>`,
+  competitive:`<div class="section-card"><div class="section-title">Competitive landscape</div><ul class="bullet-list"><li><strong>Voltaren / Advil (Haleon)</strong> — leading anti-inflammatory brands. Strong base.</li><li><strong>Thorne / Garden of Life</strong> — premium curcumin + omega-3 stacks DTC.</li><li><strong>Pharma biologics</strong> — Dupixent raising the bar on what treating inflammation means.</li></ul></div>`,
+  patents:`<div class="section-card"><div class="section-title">Technologies</div><ul class="bullet-list"><li><strong>Natural COX-2 modulators (TRL 7)</strong> — curcumin phytosome, boswellia, omega-3</li><li><strong>Overnight sustained-release patch (TRL 7)</strong> — diclofenac patch + tart cherry</li><li><strong>SPMs / resolvins (TRL 5)</strong> — pro-resolving mediators; manufacturing complex</li></ul></div>`,
+  regulatory:`<div class="section-card"><div class="section-title">Regulatory</div><ul class="bullet-list"><li><span class="tag tag-green">US</span> Supplement claims for "healthy inflammation response" workable</li><li><span class="tag tag-amber">EU</span> Modified-release Voltaren requires variation to existing MA</li></ul></div>`},
+  {rank:6,name:"Advanced bioavailability & delivery",full:true,tags:["Delivery tech","Platform"],desc:"Delivery technologies improving efficacy, onset speed and compliance across the Haleon portfolio — phytosome, liposomal, microneedle, sublingual and controlled-release formats.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Why this matters</div><div class="eh-text">Cyclodextrin solves taste, stability and bioavailability simultaneously across the entire Haleon portfolio. This is a platform technology that multiplies the value of every other innovation — the highest-leverage R&D investment on this list.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$11.8B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$28B</div><div class="stat-lbl">TAM 2035 (9% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 7</div><div class="stat-lbl">Phytosome / liposomal / nanoparticle</div></div></div></div>`,
+  consumer:`<div class="section-card"><div class="section-title">Consumer needs</div><ul class="bullet-list"><li>"Products I've tried don't seem to work" — delivery directly addresses efficacy</li><li>Compliance barriers — taste, swallowability, format inconvenience</li><li>Fast-acting results — sublingual and liposomal formats deliver faster onset</li></ul></div>`,
+  market:`<div class="section-card"><div class="section-title">Market size</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$11.8B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$28B</div><div class="stat-lbl">TAM 2035</div></div><div class="stat-box"><div class="stat-num">9%</div><div class="stat-lbl">CAGR</div></div></div></div>`,
+  competitive:`<div class="section-card"><div class="section-title">Key technology players</div><ul class="bullet-list"><li><strong>DSM-Firmenich</strong> — MTT microencapsulation, ~90% active delivery to colon</li><li><strong>Indena</strong> — Phytosome platform. Meriva curcumin 29x absorption enhancement</li><li><strong>Kaneka</strong> — Ubiquinol liposomal delivery. Portfolio-wide applicability.</li></ul></div>`,
+  patents:`<div class="section-card"><div class="section-title">Key technologies</div><ul class="bullet-list"><li><strong>Phytosome (TRL 8)</strong> — phospholipid-bound, 20–29x bioavailability lift</li><li><strong>Liposomal (TRL 7)</strong> — 3–5x for fat-soluble actives (D, CoQ10, curcumin)</li><li><strong>Sublingual/buccal (TRL 8)</strong> — bypasses first-pass; 60–90 sec onset</li><li><strong>Cyclodextrin (TRL 8)</strong> — taste masking + stability across portfolio</li></ul></div>`,
+  regulatory:`<div class="section-card"><div class="section-title">Regulatory</div><ul class="bullet-list"><li><span class="tag tag-green">Generally lower risk</span> Delivery format changes often qualify as minor variations</li><li><span class="tag tag-green">Platform advantage</span> Once approved in one product, leverageable across portfolio</li></ul></div>`},
+  {rank:7,name:"Cognitive performance",full:false,tags:["Cognition","Nootropics"],desc:"OTC supplements supporting cognitive performance, focus and neuroprotection — adaptogens, nootropics and omega-3 DHA.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Executive summary</div><div class="eh-text">Brain health supplement market growing at 8%+ CAGR. No scaled Haleon cognitive health product exists. Centrum's neuro-relevant micronutrients (B12, magnesium) provide a credible entry point for a mainstream adaptogen-based cognitive resilience range.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$14.9B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$34.1B</div><div class="stat-lbl">TAM 2035 (8.6% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 6</div><div class="stat-lbl">Citicoline + Bacopa monnieri</div></div></div></div>`},
+  {rank:8,name:"Sleep-onset acceleration",full:false,tags:["Sleep","Night solutions"],desc:"Fast-acting OTC sleep solutions targeting the onset window — sublingual GABA, magnesium glycinate and next-generation non-melatonin formats.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Executive summary</div><div class="eh-text">"Fall asleep faster" is the #1 consumer sleep complaint. Sublingual rapid-dissolve GABA provides a neurotransmitter-level mechanism with proven impact — novel format, no direct OTC competitor. Haleon has no dedicated sleep supplement today.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$5.4B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$11.6B</div><div class="stat-lbl">TAM 2035 (8% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 7</div><div class="stat-lbl">Prolonged-release melatonin sublingual</div></div></div></div>`},
+  {rank:9,name:"Overnight oral & dental care",full:false,tags:["Oral health","Night solutions"],desc:"Purpose-built oral care for the nocturnal window — remineralisation, microbiome protection, dry mouth and gum repair.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Executive summary</div><div class="eh-text">Saliva flow drops 80–90% during sleep. Haleon has Biotène and Sensodyne Repair & Protect. The gap: no unified overnight oral health routine product. First-mover opportunity with direct brand permission via Sensodyne and parodontax.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$1.4B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$2.7B</div><div class="stat-lbl">TAM 2035 (7% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 8</div><div class="stat-lbl">Nano-HAp overnight remineralisation</div></div></div></div>`},
+  {rank:10,name:"Oral care gum repair",full:false,tags:["Oral health","Periodontal"],desc:"Next-generation OTC gum solutions — quorum-sensing disruption, selective antimicrobials and HA gum regeneration.",
+  exec:`<div class="exec-highlight"><div class="eh-title">Executive summary</div><div class="eh-text">Gum recession affects 50%+ of adults over 30. Zero OTC regeneration claims exist today. parodontax is the world's leading gum health brand — direct right to win in the most underinvested major oral health category.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$3B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$6.2B</div><div class="stat-lbl">TAM 2035 (7.5% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 8</div><div class="stat-lbl">Stannous fluoride + arginine + K-nitrate</div></div></div></div>`}
+];
+
+const chapters = [
+  {id:'exec',label:'Executive summary'},
+  {id:'consumer',label:'Consumer needs'},
+  {id:'market',label:'Market size & growth'},
+  {id:'competitive',label:'Competitive landscape'},
+  {id:'patents',label:'Patents & tech'},
+  {id:'regulatory',label:'Regulatory pathway'},
+  {id:'inspiration',label:'💡 Inspiration'}
+];
+
+// ── ALL PLATFORM DATA ──
+const allPlatforms = [
+  {id:1,cluster:"Microbiome & Gut Health",name:"Gut micro. & postbiotics",tam25:16.14,tam35:40.00,cagr:9.5,trl:7,ma:8.5,need:"Persistent bloating with no lasting relief"},
+  {id:2,cluster:"Microbiome & Gut Health",name:"Oral micro. therapeutics",tam25:0.90,tam35:2.80,cagr:12.0,trl:6,ma:6.5,need:"Bleeding gums driving fear of tooth loss"},
+  {id:3,cluster:"Microbiome & Gut Health",name:"Oral-gut-brain systemic axis",tam25:0.38,tam35:1.40,cagr:13.9,trl:4,ma:5.0,need:"No product treats mouth, gut and mind together"},
+  {id:4,cluster:"Microbiome & Gut Health",name:"Engineered synbiotics",tam25:0.56,tam35:1.90,cagr:13.0,trl:5,ma:5.5,need:"Generic probiotics feel like a gamble"},
+  {id:5,cluster:"Microbiome & Gut Health",name:"Respiratory microbiome",tam25:0.25,tam35:1.00,cagr:14.9,trl:4,ma:4.0,need:"Worsening allergies with foggy antihistamines"},
+  {id:6,cluster:"Microbiome & Gut Health",name:"Gut-brain mood support",tam25:4.09,tam35:10.60,cagr:10.0,trl:5,ma:6.0,need:"Daily stress unresolved by coffee or apps"},
+  {id:7,cluster:"Microbiome & Gut Health",name:"Phage-based modulation",tam25:0.05,tam35:0.30,cagr:19.6,trl:3,ma:3.5,need:"Antibiotics wiping out the entire gut microbiome"},
+  {id:8,cluster:"Metabolic Health & GLP-1",name:"GLP-1 side-effect management",tam25:6.77,tam35:21.40,cagr:12.2,trl:7,ma:8.0,need:"Daily nausea on GLP-1 threatening adherence"},
+  {id:10,cluster:"Metabolic Health & GLP-1",name:"Insulin sensitivity support",tam25:2.69,tam35:7.30,cagr:10.5,trl:6,ma:7.0,need:"Pre-diabetic with no Rx; want to act now"},
+  {id:12,cluster:"Metabolic Health & GLP-1",name:"Post-weight-loss maintenance",tam25:2.20,tam35:5.70,cagr:10.0,trl:5,ma:6.5,need:"Lost 20kg but lost strength and shape"},
+  {id:13,cluster:"Metabolic Health & GLP-1",name:"GLP-1 transition protocols",tam25:0.40,tam35:2.10,cagr:18.0,trl:3,ma:5.0,need:"At goal weight but terrified of stopping"},
+  {id:14,cluster:"Metabolic Health & GLP-1",name:"Cardiometabolic daily wellness",tam25:9.97,tam35:23.60,cagr:9.0,trl:7,ma:7.5,need:"Borderline cholesterol, want to act before statins"},
+  {id:15,cluster:"Respiratory & Allergy",name:"Epithelial barrier science",tam25:2.13,tam35:4.60,cagr:8.0,trl:7,ma:7.0,need:"Spring allergies wrecked by drowsy antihistamines"},
+  {id:16,cluster:"Respiratory & Allergy",name:"Next-gen antihistamines",tam25:10.44,tam35:23.60,cagr:8.5,trl:7,ma:8.5,need:"Antihistamines cause daytime drowsiness"},
+  {id:17,cluster:"Respiratory & Allergy",name:"OTC allergy desensitisation",tam25:2.45,tam35:5.80,cagr:9.0,trl:5,ma:6.0,need:"Want allergies cured, not masked for decades"},
+  {id:18,cluster:"Respiratory & Allergy",name:"Advanced nasal drug delivery",tam25:3.52,tam35:7.60,cagr:8.0,trl:7,ma:7.0,need:"Nasal spray runs down throat unpleasantly"},
+  {id:19,cluster:"Respiratory & Allergy",name:"Pollution-triggered respiratory",tam25:1.13,tam35:3.20,cagr:11.0,trl:4,ma:4.5,need:"Tight chest from city air worsening yearly"},
+  {id:20,cluster:"Women's Health",name:"Perimenopause management",tam25:13.80,tam35:35.80,cagr:10.0,trl:7,ma:9.0,need:"Night sweats destroying sleep and daily energy"},
+  {id:21,cluster:"Women's Health",name:"Non-hormonal menopause care",tam25:3.59,tam35:8.90,cagr:9.5,trl:6,ma:7.0,need:"Hormone-contraindicated with unbearable hot flashes"},
+  {id:22,cluster:"Women's Health",name:"Cycle health & PMS",tam25:4.56,tam35:10.80,cagr:9.0,trl:6,ma:7.0,need:"Losing a full week monthly to PMS symptoms"},
+  {id:23,cluster:"Women's Health",name:"Fertility & preconception",tam25:4.32,tam35:11.20,cagr:10.0,trl:5,ma:6.0,need:"Year of trying with rising fear and uncertainty"},
+  {id:24,cluster:"Women's Health",name:"Postnatal recovery",tam25:1.77,tam35:4.20,cagr:9.0,trl:6,ma:6.5,need:"Postnatal depletion ignored by attention on baby"},
+  {id:25,cluster:"Women's Health",name:"Ovarian health",tam25:0.84,tam35:2.60,cagr:12.0,trl:4,ma:5.0,need:"PCOS without an actionable non-Rx plan"},
+  {id:26,cluster:"Women's Health",name:"Vaginal health & dryness",tam25:2.70,tam35:6.10,cagr:8.5,trl:7,ma:7.5,need:"Painful sex leading to intimacy avoidance"},
+  {id:27,cluster:"Night & Sleep",name:"Sleep-onset acceleration",tam25:5.37,tam35:11.60,cagr:8.0,trl:7,ma:7.5,need:"Lying awake an hour nightly watching the clock"},
+  {id:28,cluster:"Night & Sleep",name:"Advanced sleep formulations",tam25:2.87,tam35:6.80,cagr:9.0,trl:6,ma:7.0,need:"3am awakenings with inability to return to sleep"},
+  {id:29,cluster:"Night & Sleep",name:"Overnight oral & dental care",tam25:1.37,tam35:2.70,cagr:7.0,trl:8,ma:6.5,need:"Nighttime grinding causing jaw soreness"},
+  {id:30,cluster:"Night & Sleep",name:"Nocturnal restlessness & cramps",tam25:0.79,tam35:1.70,cagr:8.0,trl:7,ma:6.0,need:"Nightly restless legs causing exhausted dawns"},
+  {id:31,cluster:"Energy Management",name:"Iron & oxygen transport",tam25:3.81,tam35:7.50,cagr:7.0,trl:8,ma:7.5,need:"Iron deficiency with stomach-wrecking supplements"},
+  {id:32,cluster:"Energy Management",name:"Recovery & performance peptides",tam25:2.23,tam35:6.00,cagr:10.4,trl:4,ma:5.0,need:"Multi-day soreness barely helped by standard recovery"},
+  {id:33,cluster:"Energy Management",name:"Sustained physical energy",tam25:6.94,tam35:15.70,cagr:8.5,trl:7,ma:7.5,need:"Afternoon crashes worsened by anxious coffee"},
+  {id:34,cluster:"Energy Management",name:"Post-illness fatigue recovery",tam25:1.43,tam35:3.70,cagr:10.0,trl:5,ma:5.5,need:"Months of post-COVID fatigue at half power"},
+  {id:35,cluster:"Energy Management",name:"Mitochondrial performance",tam25:1.06,tam35:3.00,cagr:11.0,trl:6,ma:6.0,need:"Slower physical recovery in 40s"},
+  {id:36,cluster:"Energy Management",name:"Adrenal fatigue support",tam25:0.39,tam35:1.00,cagr:9.9,trl:4,ma:4.5,need:"Persistent burnout untouched by coffee"},
+  {id:38,cluster:"Cognition & Stress",name:"Cognitive performance",tam25:14.94,tam35:34.10,cagr:8.6,trl:6,ma:8.5,need:"Slipping mental sharpness multivitamins don't address"},
+  {id:39,cluster:"Cognition & Stress",name:"Cognitive acuity peptides",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,ma:5.5,need:"Memory and word recall slipping"},
+  {id:40,cluster:"Cognition & Stress",name:"Stress & cortisol management",tam25:5.24,tam35:12.40,cagr:9.0,trl:7,ma:7.5,need:"Chronic stress with no remedy moving the needle"},
+  {id:43,cluster:"Longevity",name:"UV-protection",tam25:9.46,tam35:22.40,cagr:9.0,trl:6,ma:8.0,need:"Forgetting sunscreen accelerating skin ageing"},
+  {id:44,cluster:"Longevity",name:"NAD+ restoration",tam25:1.30,tam35:4.90,cagr:14.2,trl:7,ma:7.0,need:"Want to invest in healthy ageing now"},
+  {id:45,cluster:"Longevity",name:"Longevity peptides",tam25:0.62,tam35:2.50,cagr:15.0,trl:3,ma:4.0,need:"Want to slow biological ageing at cellular level"},
+  {id:46,cluster:"Longevity",name:"Immune aging reversal",tam25:2.01,tam35:5.70,cagr:11.0,trl:5,ma:6.5,need:"Catching every infection with slower recovery"},
+  {id:47,cluster:"Longevity",name:"Autophagy activation",tam25:0.61,tam35:1.90,cagr:12.0,trl:5,ma:6.0,need:"Want fasting-like cellular cleanup"},
+  {id:48,cluster:"Longevity",name:"Sirtuin pathway activation",tam25:1.88,tam35:5.00,cagr:10.3,trl:5,ma:5.5,need:"Want to activate longevity genes"},
+  {id:49,cluster:"Cosmeceuticals",name:"Oral care gum repair",tam25:3.01,tam35:6.20,cagr:7.5,trl:8,ma:7.5,need:"Bleeding gums driving fear of surgery"},
+  {id:52,cluster:"Cosmeceuticals",name:"Oral whitening & enamel repair",tam25:4.17,tam35:9.00,cagr:8.0,trl:8,ma:7.5,need:"Whitening strips cause sensitivity"},
+  {id:53,cluster:"Cosmeceuticals",name:"Barrier repair therapeutics",tam25:3.80,tam35:9.00,cagr:9.0,trl:7,ma:7.0,need:"Dry cracked winter skin uncalmed by creams"},
+  {id:54,cluster:"Sexual Wellness",name:"Libido & arousal support",tam25:3.66,tam35:7.90,cagr:8.0,trl:5,ma:6.0,need:"Lost sex drive creating dread of intimacy"},
+  {id:55,cluster:"Sexual Wellness",name:"Natural erectile support",tam25:4.65,tam35:11.00,cagr:9.0,trl:6,ma:6.5,need:"Confidence loss without wanting to ask GP"},
+  {id:56,cluster:"Sexual Wellness",name:"Pelvic floor & continence",tam25:2.18,tam35:4.70,cagr:8.0,trl:7,ma:7.0,need:"Stress incontinence halting exercise"},
+  {id:57,cluster:"Sexual Wellness",name:"Sexual pain & dysfunction",tam25:1.44,tam35:3.40,cagr:9.0,trl:7,ma:6.5,need:"Chronic painful sex dismissed by physicians"},
+  {id:60,cluster:"Functional Nutrition",name:"Micronutrient gap solutions",tam25:13.67,tam35:26.90,cagr:7.0,trl:8,ma:8.5,need:"10 daily pills with unclear benefit"},
+  {id:61,cluster:"Functional Nutrition",name:"Bioactive proteins — precision fermentation",tam25:21.57,tam35:67.00,cagr:12.0,trl:7,ma:9.0,need:"Generic protein powders feel commodity"},
+  {id:62,cluster:"Functional Nutrition",name:"Performance & longevity nutrition",tam25:0.69,tam35:1.80,cagr:10.1,trl:5,ma:5.5,need:"Multivitamins fail to shift biological systems"},
+  {id:63,cluster:"Functional Nutrition",name:"Food fortification — access markets",tam25:3.56,tam35:7.00,cagr:7.0,trl:7,ma:6.0,need:"Children missing essential nutrients on affordable food"},
+  {id:64,cluster:"Pain MSK & Recovery",name:"Natural oral analgesics",tam25:1.95,tam35:4.20,cagr:8.0,trl:7,ma:7.0,need:"Daily ibuprofen risk to gut and kidneys"},
+  {id:65,cluster:"Pain MSK & Recovery",name:"Cartilage & connective tissue",tam25:4.56,tam35:9.40,cagr:7.5,trl:7,ma:7.5,need:"Knee pain on stairs limiting daily life"},
+  {id:66,cluster:"Pain MSK & Recovery",name:"Neuropathic nerve pain",tam25:2.15,tam35:5.10,cagr:9.0,trl:6,ma:6.5,need:"Burning feet untouched by OTC"},
+  {id:68,cluster:"Botanical Solutions",name:"Standardised botanicals",tam25:4.49,tam35:9.70,cagr:8.0,trl:7,ma:7.0,need:"Botanical aisle full but unclear which work"},
+  {id:70,cluster:"Botanical Solutions",name:"Natural oral care therapeutics",tam25:1.48,tam35:3.20,cagr:8.0,trl:7,ma:6.5,need:"Want fluoride-free without losing cavity protection"},
+  {id:71,cluster:"Botanical Solutions",name:"Ayurvedic 2.0 actives",tam25:3.24,tam35:7.00,cagr:8.0,trl:7,ma:7.0,need:"Curiosity about Ayurveda blocked by quality fears"},
+  {id:72,cluster:"Botanical Solutions",name:"Phase-based natural therapeutics",tam25:0.45,tam35:1.40,cagr:12.0,trl:5,ma:5.5,need:"Body changes through cycle, supplements don't"},
+  {id:82,cluster:"Digital Health",name:"Custom compounding",tam25:6.25,tam35:14.80,cagr:9.0,trl:7,ma:7.0,need:"8 morning pills consumer wishes were combined"},
+  {id:84,cluster:"Personalised & Targeted",name:"Biomarker & genetic dosing",tam25:2.12,tam35:5.50,cagr:10.0,trl:5,ma:6.0,need:"Multivitamins taken yet bloodwork shows deficiencies"},
+  {id:86,cluster:"Personalised & Targeted",name:"Life-stage targeted regimens",tam25:4.73,tam35:10.70,cagr:8.5,trl:7,ma:7.5,need:"Postpartum exhaustion with no clear regimen"},
+  {id:88,cluster:"Sensorial UX",name:"Advanced microencapsulation",tam25:12.46,tam35:29.50,cagr:9.0,trl:7,ma:8.5,need:"Probiotics destroyed by stomach acid"},
+  {id:89,cluster:"Sensorial UX",name:"Taste receptor modulation",tam25:1.39,tam35:3.60,cagr:10.0,trl:4,ma:5.0,need:"Adherence blocked by harsh medication taste"},
+  {id:90,cluster:"Sensorial UX",name:"Natural bitter blockers",tam25:0.66,tam35:1.70,cagr:9.9,trl:5,ma:5.0,need:"Bitter supplements impossible to take daily"},
+  {id:91,cluster:"Sensorial UX",name:"Swallowability & format compliance",tam25:2.13,tam35:4.60,cagr:8.0,trl:8,ma:7.0,need:"Inability to swallow large pills"},
+  {id:93,cluster:"Anti-inflammatory",name:"Advanced topical pain relief",tam25:6.32,tam35:14.30,cagr:8.5,trl:7,ma:8.0,need:"Oral anti-inflammatories damaging stomach"},
+  {id:94,cluster:"Anti-inflammatory",name:"Inflammaging intervention",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,ma:5.5,need:"Felt inflammation despite normal bloodwork"},
+  {id:95,cluster:"Anti-inflammatory",name:"Overnight anti-inflammatory",tam25:0.50,tam35:1.30,cagr:10.0,trl:7,ma:5.5,need:"Morning stiffness taking hours to resolve"},
+  {id:96,cluster:"Anti-inflammatory",name:"Anti-inflammation peptides",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,ma:5.5,need:"Daily ibuprofen damaging gut yet still needed"},
+  {id:98,cluster:"Delivery Innovation",name:"Dissolvable oral delivery",tam25:3.61,tam35:7.80,cagr:8.0,trl:8,ma:7.0,need:"On-the-go relief without water access"},
+  {id:99,cluster:"Delivery Innovation",name:"Controlled-release engineering",tam25:4.56,tam35:10.30,cagr:8.5,trl:7,ma:7.0,need:"4-hour painkiller wear-off creating clock-watching"},
+  {id:100,cluster:"Delivery Innovation",name:"Advanced bioavailability & delivery",tam25:11.83,tam35:28.00,cagr:9.0,trl:7,ma:8.0,need:"Most supplements are expensive urine"}
+];
+
+const clusterColors={
+  "Microbiome & Gut Health":"#5C9E1A","Metabolic Health & GLP-1":"#C87010",
+  "Respiratory & Allergy":"#185FA5","Women's Health":"#A02070",
+  "Night & Sleep":"#534AB7","Energy Management":"#C03020",
+  "Cognition & Stress":"#0878A0","Longevity":"#806010",
+  "Cosmeceuticals":"#108070","Sexual Wellness":"#B02858",
+  "Functional Nutrition":"#304880","Pain MSK & Recovery":"#802010",
+  "Botanical Solutions":"#407818","Digital Health":"#1A5878",
+  "Personalised & Targeted":"#6030A8","Sensorial UX":"#906818",
+  "Anti-inflammatory":"#982010","Delivery Innovation":"#186858"
+};
+
+const actions={
+  H:{tech:"Assign internal R&D lead and map existing IP for this platform",comm:"Define priority market entry sequence and set 3-year share target",brand:"Confirm which Haleon brand carries this platform and brief the brand team"},
+  M:{tech:"Identify 3–5 universities or technology licensors with relevant expertise and initiate contact within 4 weeks",comm:"Identify 2–3 commercial partners in priority markets and define what each side brings to a JDA",brand:"Commission quant + qual consumer research to test Haleon brand permission in this space"},
+  L:{tech:"Build M&A target longlist with required IP; brief BD&L to initiate screening memos for top 3 targets within 6 weeks",comm:"Identify potential JV partners with established commercial presence; define value split and deal structure",brand:"Build acquisition longlist of DTC/OTC brands with existing equity; define new brand incubation brief as fallback"}
+};
+
+let activeCluster='All';
+let platformData=allPlatforms.map(p=>({...p}));
+let currentPlatform=0, currentChapter='exec';
+let rtwScores={tech:[null,null,null,null],comm:[null,null,null,null],brand:[null,null,null,null]};
+
+// ── NAVIGATION ──
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.main-tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  const tabs=document.querySelectorAll('.main-tab');
+  ({landing:0,platforms:1,dashboard:2,workshop:3})[p]!==undefined && tabs[({landing:0,platforms:1,dashboard:2,workshop:3})[p]].classList.add('active');
+}
+
+// ── PLATFORM NAV ──
+function buildPlatformNav(){
+  document.getElementById('pnav-list').innerHTML=platforms.map((p,i)=>`
+    <div class="pnav-item${i===0?' active':''}" onclick="loadPlatform(${i})">
+      <div class="pnav-rank${p.full?'':' limited'}">${p.rank}</div>
+      <div class="pnav-name">${p.name}</div>
+    </div>`).join('');
+}
+
+function loadPlatform(idx){
+  currentPlatform=idx; currentChapter='exec';
+  document.querySelectorAll('.pnav-item').forEach((el,i)=>el.classList.toggle('active',i===idx));
+  renderPlatform();
+}
+
+function renderPlatform(){
+  const p=platforms[currentPlatform];
+  const isFull=p.full;
+  const tabsHTML=isFull?`<div class="chapter-tabs">${chapters.map(c=>`<div class="chapter-tab${c.id===currentChapter?' active':''}" onclick="loadChapter('${c.id}')">${c.label}</div>`).join('')}</div>`:
+    `<div class="exec-only-banner">📋 Executive summary only for platforms 7–10.</div>`;
+  const contentHTML=isFull?chapters.map(c=>`<div class="chapter-content${c.id===currentChapter?' active':''}" id="ch-${c.id}">${p[c.id]||''}</div>`).join(''):
+    `<div class="chapter-content active">${p.exec||''}</div>`;
+  document.getElementById('platform-content-area').innerHTML=`
+    <div class="platform-header">
+      <div class="platform-badge">Platform #${p.rank}</div>
+      <div class="platform-title">${p.name}</div>
+      <div class="platform-desc">${p.desc}</div>
+    </div>${tabsHTML}<div id="chapter-content-wrapper">${contentHTML}</div>`;
+}
+
+function loadChapter(id){
+  currentChapter=id;
+  document.querySelectorAll('.chapter-tab').forEach(el=>el.classList.toggle('active',el.textContent===chapters.find(c=>c.id===id).label));
+  document.querySelectorAll('.chapter-content').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById('ch-'+id);
+  if(el) el.classList.add('active');
+}
+
+// ── DASHBOARD ──
+function buildDashboard(){
+  buildClusterFilters();
+  buildMatrix();
+  buildClusterCards();
+}
+
+function buildClusterFilters(){
+  const clusters=['All',...new Set(allPlatforms.map(p=>p.cluster))];
+  document.getElementById('cluster-filters').innerHTML=
+    `<span class="cf-label">Filter by cluster:</span>`+
+    clusters.map(c=>{
+      const col=c==='All'?'#555':clusterColors[c];
+      return `<div class="cf-btn${c==='All'?' active':''}" onclick="filterCluster('${c}')" style="${c!=='All'?`border-color:${col}20`:''}">${c}</div>`;
+    }).join('');
+  // style active
+  styleFilterBtns();
+}
+
+function styleFilterBtns(){
+  document.querySelectorAll('.cf-btn').forEach(b=>{
+    const c=b.textContent;
+    if(b.classList.contains('active')){
+      const col=c==='All'?'#555':clusterColors[c]||'#555';
+      b.style.background=col; b.style.color='#fff'; b.style.borderColor=col;
+    } else {
+      b.style.background='#fff'; b.style.color=clusterColors[c]||'var(--muted)';
+      b.style.borderColor=clusterColors[c]?clusterColors[c]+'40':'var(--border)';
+    }
+  });
+}
+
+function filterCluster(c){
+  activeCluster=c;
+  document.querySelectorAll('.cf-btn').forEach(b=>b.classList.toggle('active',b.textContent===c));
+  styleFilterBtns();
+  buildMatrix();
+  buildClusterCards();
+}
+
+function bubbleR(t){return t<1?5:t<5?9:t<15?14:20;}
+
+function buildMatrix(){
+  const svg=document.getElementById('matrix-svg');
+  const W=920,H=460,pad={l:52,r:16,t:36,b:46};
+  const iW=W-pad.l-pad.r,iH=H-pad.t-pad.b;
+  const filtered=activeCluster==='All'?platformData:platformData.filter(p=>p.cluster===activeCluster);
+
+  // forced distribution: rank platforms by (ma + trl/9) and spread them evenly
+  const sorted=[...filtered].sort((a,b)=>(b.ma+b.trl/9)-(a.ma+a.trl/9));
+
+  let html='';
+  // Zone backgrounds
+  html+=`<rect x="${pad.l+iW*5/8}" y="${pad.t}" width="${iW*3/8}" height="${iH*0.62}" rx="3" fill="rgba(255,150,160,0.15)" stroke="#E87080" stroke-width="1" stroke-dasharray="4,3"/>`;
+  html+=`<text x="${pad.l+iW*5/8+6}" y="${pad.t+15}" font-size="9" font-weight="700" fill="#C04060" font-family="Segoe UI,Arial">Short-term "Go-Explore"</text>`;
+  html+=`<rect x="${pad.l}" y="${pad.t}" width="${iW*0.5}" height="${iH*0.32}" rx="3" fill="rgba(80,80,180,0.05)" stroke="#9090CC" stroke-width="0.5" stroke-dasharray="3,4"/>`;
+  html+=`<text x="${pad.l+6}" y="${pad.t+15}" font-size="9" font-weight="700" fill="#6060A0" font-family="Segoe UI,Arial">Disruption zone</text>`;
+
+  // Grid
+  for(let t=1;t<=9;t++){
+    const x=pad.l+(t-1)/8*iW;
+    html+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${pad.t+iH}" stroke="#f0f0ee" stroke-width="1"/>`;
+    html+=`<text x="${x}" y="${pad.t+iH+16}" text-anchor="middle" font-size="9" fill="#888" font-family="Segoe UI,Arial">${t}</text>`;
+  }
+  ['High','','Mid','','Low'].forEach((l,i)=>{
+    const y=pad.t+i/4*iH;
+    html+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+iW}" y2="${y}" stroke="#f0f0ee" stroke-width="1"/>`;
+    if(l) html+=`<text x="${pad.l-5}" y="${y+4}" text-anchor="end" font-size="9" fill="#888" font-family="Segoe UI,Arial">${l}</text>`;
+  });
+  html+=`<text x="${pad.l+iW/2}" y="${H-6}" text-anchor="middle" font-size="10" font-weight="700" fill="#888" font-family="Segoe UI,Arial">Tech readiness (TRL)</text>`;
+  html+=`<text x="13" y="${pad.t+iH/2}" text-anchor="middle" font-size="10" font-weight="700" fill="#888" font-family="Segoe UI,Arial" transform="rotate(-90,13,${pad.t+iH/2})">Market attractiveness</text>`;
+
+  // Forced distribution: spread bubbles evenly in a grid to avoid overlap
+  const n=sorted.length;
+  const cols=Math.ceil(Math.sqrt(n*1.6));
+  const rows=Math.ceil(n/cols);
+  const cellW=iW/cols, cellH=iH/rows;
+
+  sorted.forEach((p,i)=>{
+    // base position from data
+    const baseX=pad.l+(p.trl-1)/8*iW;
+    const baseY=pad.t+(1-(p.ma-1)/9)*iH;
+    // forced grid position
+    const col=i%cols, row=Math.floor(i/cols);
+    const gx=pad.l+col*cellW+cellW/2;
+    const gy=pad.t+row*cellH+cellH/2;
+    // blend: 60% data position, 40% forced grid
+    const x=baseX*0.65+gx*0.35;
+    const y=baseY*0.65+gy*0.35;
+    const r=bubbleR(p.tam25);
+    const col_=clusterColors[p.cluster]||'#5C9E1A';
+    html+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${col_}" opacity="0.78" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" style="cursor:pointer" onmouseenter="showTT(event,${p.id})" onmouseleave="hideTT()"/>`;
+    if(r>=11) html+=`<text x="${x}" y="${y+3.5}" text-anchor="middle" font-size="7" fill="#fff" font-weight="700" pointer-events="none">${p.id}</text>`;
+  });
+
+  svg.innerHTML=html;
+}
+
+function showTT(e,id){
+  const p=platformData.find(x=>x.id===id); if(!p) return;
+  const tt=document.getElementById('bubble-tooltip');
+  tt.innerHTML=`<strong>#${p.id} — ${p.name}</strong><div style="color:#aaa;font-size:9.5px;margin:2px 0">${p.cluster}</div>TAM 2025: <strong>$${p.tam25}B</strong> · TRL: <strong>${p.trl}</strong> · MA: <strong>${p.ma}</strong><br><em style="color:#ccc;font-size:9.5px">${p.need}</em>`;
+  tt.style.display='block';
+  const rect=document.getElementById('bubble-chart').getBoundingClientRect();
+  tt.style.left=Math.min(e.clientX-rect.left+12,rect.width-250)+'px';
+  tt.style.top=Math.max(e.clientY-rect.top-70,4)+'px';
+}
+function hideTT(){document.getElementById('bubble-tooltip').style.display='none';}
+
+function buildClusterCards(){
+  const clusters=[...new Set(allPlatforms.map(p=>p.cluster))];
+  const filtered=activeCluster==='All'?clusters:clusters.filter(c=>c===activeCluster);
+  const area=document.getElementById('cluster-cards-area');
+  area.innerHTML=filtered.map(cluster=>{
+    const ps=platformData.filter(p=>p.cluster===cluster);
+    const col=clusterColors[cluster]||'#5C9E1A';
+    const cards=ps.map(p=>`
+      <div class="pcard" style="--c:${col}" onmouseenter="this.style.borderColor='${col}'" onmouseleave="this.style.borderColor='var(--border)'">
+        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:${col};border-radius:3px 0 0 3px"></div>
+        <div class="pcard-top">
+          <span class="pcard-id" style="background:${col}">#${p.id}</span>
+          <span class="pcard-trl">TRL ${p.trl}</span>
+        </div>
+        <div class="pcard-name">${p.name}</div>
+        <div class="pcard-stats">
+          <span class="pcard-stat"><strong>$${p.tam25}B</strong> TAM</span>
+          <span class="pcard-stat"><strong>${p.cagr}%</strong> CAGR</span>
+        </div>
+        <div class="pcard-need">"${p.need}"</div>
+        <div class="pcard-edit-wrap">
+          <span class="pcard-edit-lbl">Edit 2025 TAM $</span>
+          <input class="pcard-edit" value="${p.tam25.toFixed(2)}" onchange="updateTAM(${p.id},this.value)"/>B
+        </div>
+      </div>`).join('');
+    return `<div class="cluster-section">
+      <div class="cluster-hdr" style="background:${col}">
+        <div class="cluster-hdr-dot" style="background:rgba(255,255,255,.5)"></div>
+        <div class="cluster-hdr-name">${cluster}</div>
+        <div class="cluster-hdr-count">${ps.length} platform${ps.length!==1?'s':''}</div>
+      </div>
+      <div class="platform-cards">${cards}</div>
+    </div>`;
+  }).join('');
+}
+
+function updateTAM(id,val){
+  const p=platformData.find(x=>x.id===id); if(!p) return;
+  const v=parseFloat(val);
+  if(!isNaN(v)&&v>=0){p.tam25=v; buildMatrix();}
+}
+
+// ── WORKSHOP ──
+function buildWSSelector(){
+  document.getElementById('ws-platform-selector').innerHTML=platforms.filter(p=>p.full).map((p,i)=>`
+    <div class="ps-item" id="ps-${i}" onclick="selectWSP(${i})">
+      <div class="ps-num">${p.rank}</div>
+      <div class="ps-name">${p.name}</div>
+    </div>`).join('');
+}
+
+function selectWSP(idx){
+  document.querySelectorAll('.ps-item').forEach(el=>el.classList.remove('selected'));
+  document.getElementById('ps-'+idx).classList.add('selected');
+  const p=platforms[idx];
+  document.getElementById('ws-selected-badge').textContent=`Platform #${p.rank}`;
+  document.getElementById('ws-selected-title').textContent=p.name;
+  document.getElementById('scoring-area').classList.add('visible');
+  rtwScores={tech:[null,null,null,null],comm:[null,null,null,null],brand:[null,null,null,null]};
+  document.querySelectorAll('.score-btn').forEach(b=>{b.className=b.className.replace(/selected-\w/g,'').trim();});
+  ['tech','comm','brand'].forEach(d=>document.getElementById('action-'+d).classList.remove('visible'));
+  showRTW('tech');
+}
+
+function showRTW(dim){
+  document.querySelectorAll('.rtw-tab').forEach(t=>t.classList.remove('active-tech','active-comm','active-brand'));
+  document.querySelectorAll('.rtw-tab')[{tech:0,comm:1,brand:2}[dim]].classList.add('active-'+dim);
+  document.querySelectorAll('.rtw-questions').forEach(q=>q.classList.remove('active'));
+  document.getElementById('rtw-'+dim).classList.add('active');
+}
+
+function score(btn,dim,qIdx,val){
+  rtwScores[dim][qIdx]=val;
+  btn.parentElement.querySelectorAll('.score-btn').forEach(b=>{b.className=b.className.replace(/selected-\w/g,'').trim();});
+  btn.classList.add('selected-'+val.toLowerCase());
+  const s=rtwScores[dim];
+  if(s.filter(x=>x!==null).length<4) return;
+  const lows=s.filter(x=>x==='L').length,highs=s.filter(x=>x==='H').length;
+  const overall=lows>=2?'L':highs>=3?'H':'M';
+  document.getElementById('action-'+dim+'-text').textContent=actions[overall][dim];
+  document.getElementById('action-'+dim).classList.add('visible');
+}
+
+// ── INIT ──
+function init(){
+  buildPlatformNav(); loadPlatform(0);
+  buildDashboard();
+  buildWSSelector();
+}
+init();
+</script>
+</body>
+</html>
