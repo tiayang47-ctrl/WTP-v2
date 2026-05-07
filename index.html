@@ -655,19 +655,21 @@ document.body.style.overflow = 'hidden';
       </div>
     </div>
 
-    <!-- ── STEP 2: Consumer Needs Ranking ── -->
+    <!-- ── STEP 2: Consumer Needs Trade-offs ── -->
     <div id="ws-panel-2" style="display:none">
-      <div style="font-size:18px;font-weight:700;margin-bottom:4px">Rank Consumer Needs</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:18px">Drag to rank the consumer needs in order of importance. The <strong style="color:var(--h-green)">#1 ranked need</strong> will automatically surface the best-matched technologies. Add your own needs if relevant.</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px">Consumer Needs — What matters most?</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:20px">For each pair below, choose which consumer need should take priority. There are no right answers — this is your group's view. Your choices will surface the 1–2 technologies best matched to what your consumers care about most.</div>
 
       <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start">
-        <!-- Left: drag-to-rank -->
+        <!-- Left: trade-off cards -->
         <div>
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-            <div style="font-size:11px;font-weight:700;color:var(--text)">Drag to rank — most important at the top:</div>
-            <div style="font-size:10px;color:var(--muted);font-style:italic">↕ drag to reorder</div>
+          <div id="tradeoff-progress" style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <div style="flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden">
+              <div id="tradeoff-bar" style="height:100%;background:var(--h-green);border-radius:3px;transition:width .3s;width:0%"></div>
+            </div>
+            <span id="tradeoff-count" style="font-size:10px;color:var(--muted);white-space:nowrap">0 / 0</span>
           </div>
-          <div id="needs-rank-list" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div id="tradeoff-area"></div>
 
           <!-- Add custom need -->
           <div style="background:#f7f7f5;border:1px dashed #ccc;border-radius:8px;padding:12px;margin-top:14px">
@@ -675,28 +677,29 @@ document.body.style.overflow = 'hidden';
             <div style="display:flex;gap:8px">
               <input id="custom-need-input" type="text" placeholder="e.g. Affordable daily format accessible in pharmacy..."
                 style="flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:inherit"
-                onkeydown="if(event.key='Enter') wsAddCustomNeed()"/>
+                onkeydown="if(event.key==='Enter') wsAddCustomNeed()"/>
               <button onclick="wsAddCustomNeed()" style="background:var(--h-green);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">Add</button>
             </div>
           </div>
         </div>
 
-        <!-- Right: live summary -->
-        <div>
+        <!-- Right: live results panel -->
+        <div style="position:sticky;top:16px">
           <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
-            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">Your current ranking:</div>
-            <div id="rank-summary" style="font-size:11px;color:var(--muted);font-style:italic">Drag needs to set your ranking...</div>
+            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">Priority emerging from your choices:</div>
+            <div id="tradeoff-summary" style="font-size:11px;color:var(--muted);font-style:italic">Complete some trade-offs to see results…</div>
           </div>
-          <div id="needs-agg-preview" style="display:none;background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px">
-            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">📊 Group votes so far — #1 need:</div>
-            <div id="needs-agg-bars"></div>
+          <div id="tradeoff-tech-rec" style="display:none;background:#eaf3de;border:1px solid #c5e0a0;border-radius:8px;padding:14px">
+            <div style="font-size:11px;font-weight:700;color:#1a3a08;margin-bottom:8px">🎯 Recommended technologies:</div>
+            <div id="tradeoff-tech-list" style="display:flex;flex-direction:column;gap:6px"></div>
           </div>
+          <div id="needs-agg-preview" style="display:none"></div>
         </div>
       </div>
 
       <div class="ws-nav-btns">
         <button class="ws-btn" onclick="wsGoStep(1)">← Back</button>
-        <button class="ws-btn primary" id="ws-next-2" onclick="wsSubmitNeeds()">Submit Ranking →</button>
+        <button class="ws-btn primary" id="ws-next-2" onclick="wsSubmitNeeds()" disabled>Submit & Continue →</button>
       </div>
     </div>
 
@@ -770,16 +773,16 @@ document.body.style.overflow = 'hidden';
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;padding:7px 12px;background:#f7f7f5;border-radius:5px;width:fit-content">
         <span style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Maturity:</span>
         <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:#333">
-          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot"></span><span class="maturity-dot"></span></span>Early
+          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot"></span><span class="maturity-dot"></span><span class="maturity-dot"></span></span>Low
         </span>
         <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:#333">
-          <span style="display:flex;gap:2px"><span class="maturity-dot half"></span><span class="maturity-dot"></span><span class="maturity-dot"></span></span>Emerging
+          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot"></span><span class="maturity-dot"></span></span>Emerging
         </span>
         <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:#333">
-          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot"></span></span>Developing
+          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot"></span></span>High
         </span>
         <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:#333">
-          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span></span>Mature
+          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span></span>Fully matured
         </span>
       </div>
       <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px">Available technologies — drag to select:</div>
@@ -1345,11 +1348,11 @@ const platforms = [
   
   <div style="font-size:12px;font-weight:700;margin-bottom:10px">5 areas of scientific advancement in the gut microbiome space</div>
   <div class="tech-cards">
-    <div class="tech-card"><div class="tech-card-num">1</div><div class="tech-card-name">Postbiotic & metabolite engineering</div><div class="tech-card-desc">Producing beneficial metabolites like butyrate and GLP-1 stimulators without live bacteria</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>0 patents</span></div><div class="tech-example"><a href="https://resbiotic.com/products/resm?srsltid=AfmBOorN7l2zbHJ0bxSL73HXhXFc1tCeY05EXEAvu69EW93gVCDy7tEe" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Resbiotic resM ↗</a></div></div>
-    <div class="tech-card"><div class="tech-card-num">2</div><div class="tech-card-name">Synthetic microbial consortia</div><div class="tech-card-desc">Manually assembled communities of multiple strains replacing FMT with standardised products</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>500+ patents</span></div><div class="tech-example"><a href="https://www.nestlehealthscience.com/newsroom/press-releases/vowst" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Seres Vowst (FDA-approved) ↗</a></div></div>
-    <div class="tech-card"><div class="tech-card-num">3</div><div class="tech-card-name">Precision delivery & microencapsulation</div><div class="tech-card-desc">Capsules protecting live strains through stomach acid; release at specific gut sites</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>141 patents</span></div><div class="tech-example"><a href="https://seed.com/daily-synbiotic?srsltid=AfmBOorzwVUiM4jxOjxU5z9Q6Dc11ItM16CtDW2s40zkzDnqbJ70P6D8" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Seed DS-01 ViaCap ↗</a></div></div>
-    <div class="tech-card"><div class="tech-card-num">4</div><div class="tech-card-name">Next-gen anaerobic strain cultivation</div><div class="tech-card-desc">Industrial-scale production of oxygen-sensitive bacteria previously impossible commercially</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>3 patents</span></div><div class="tech-example"><a href="https://pendulumlife.com/products/pendulum-akkermansia-probiotic-gut-health?srsltid=AfmBOopppTrsRSFxO5RNIy73l4eOsf0vdU4s0N5pgv_9FYaj1IscbMVx" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Pendulum Akkermansia ↗</a></div></div>
-    <div class="tech-card"><div class="tech-card-num">5</div><div class="tech-card-name">CRISPR-armed bacteriophage therapy</div><div class="tech-card-desc">Engineered viruses selectively eliminating harmful gut bacteria while preserving beneficial strains</div><div class="tech-maturity"><div class="maturity-dot half"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>25 patents</span></div><div class="tech-example"><a href="https://eligo.bio/" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Eligo Bioscience ↗</a></div></div>
+    <div class="tech-card"><div class="tech-card-num">1</div><div class="tech-card-name">Postbiotic & metabolite engineering</div><div class="tech-card-desc">Producing beneficial metabolites like butyrate and GLP-1 stimulators without live bacteria</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>0 patents</span></div><div class="tech-example"><a href="https://resbiotic.com/products/resm?srsltid=AfmBOorN7l2zbHJ0bxSL73HXhXFc1tCeY05EXEAvu69EW93gVCDy7tEe" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Resbiotic resM ↗</a></div></div>
+    <div class="tech-card"><div class="tech-card-num">2</div><div class="tech-card-name">Synthetic microbial consortia</div><div class="tech-card-desc">Manually assembled communities of multiple strains replacing FMT with standardised products</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>500+ patents</span></div><div class="tech-example"><a href="https://www.nestlehealthscience.com/newsroom/press-releases/vowst" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Seres Vowst (FDA-approved) ↗</a></div></div>
+    <div class="tech-card"><div class="tech-card-num">3</div><div class="tech-card-name">Precision delivery & microencapsulation</div><div class="tech-card-desc">Capsules protecting live strains through stomach acid; release at specific gut sites</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>141 patents</span></div><div class="tech-example"><a href="https://seed.com/daily-synbiotic?srsltid=AfmBOorzwVUiM4jxOjxU5z9Q6Dc11ItM16CtDW2s40zkzDnqbJ70P6D8" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Seed DS-01 ViaCap ↗</a></div></div>
+    <div class="tech-card"><div class="tech-card-num">4</div><div class="tech-card-name">Next-gen anaerobic strain cultivation</div><div class="tech-card-desc">Industrial-scale production of oxygen-sensitive bacteria previously impossible commercially</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>3 patents</span></div><div class="tech-example"><a href="https://pendulumlife.com/products/pendulum-akkermansia-probiotic-gut-health?srsltid=AfmBOopppTrsRSFxO5RNIy73l4eOsf0vdU4s0N5pgv_9FYaj1IscbMVx" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Pendulum Akkermansia ↗</a></div></div>
+    <div class="tech-card"><div class="tech-card-num">5</div><div class="tech-card-name">CRISPR-armed bacteriophage therapy</div><div class="tech-card-desc">Engineered viruses selectively eliminating harmful gut bacteria while preserving beneficial strains</div><div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div><div class="tech-patent"><span>25 patents</span></div><div class="tech-example"><a href="https://eligo.bio/" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline dotted">Eligo Bioscience ↗</a></div></div>
   </div>
   <div class="need-matrix">
     <div class="nm-hdr"><div>Consumer need</div><div style="text-align:center">1 Postbiotic</div><div style="text-align:center">2 Consortia</div><div style="text-align:center">3 Delivery</div><div style="text-align:center">4 Anaerobic</div><div style="text-align:center">5 Phage</div></div>
@@ -2129,11 +2132,11 @@ function updateTAM(id,val){
 
 // ── WORKSHOP v2 ──
 const techOptions = [
-  {id:1, label:'Postbiotic & metabolite engineering',      short:'Postbiotic',        color:'#5C9E1A', desc:'Producing beneficial metabolites like butyrate and GLP-1 stimulators without live bacteria',                                    maturity:[1,0,0], patents:'0 patents',    example:'Resbiotic resM',          exampleUrl:'https://resbiotic.com/products/resm?srsltid=AfmBOorN7l2zbHJ0bxSL73HXhXFc1tCeY05EXEAvu69EW93gVCDy7tEe'},
-  {id:2, label:'Synthetic microbial consortia',            short:'Consortia',         color:'#185FA5', desc:'Manually assembled communities of multiple strains replacing FMT with standardised products',                                  maturity:[1,1,0], patents:'500+ patents', example:'Seres Vowst (FDA-approved)',exampleUrl:'https://www.nestlehealthscience.com/newsroom/press-releases/vowst'},
-  {id:3, label:'Precision delivery & microencapsulation',  short:'Precision delivery',color:'#534AB7', desc:'Capsules protecting live strains through stomach acid; release at specific gut sites',                                         maturity:[1,1,0], patents:'141 patents',  example:'Seed DS-01 ViaCap',        exampleUrl:'https://seed.com/daily-synbiotic?srsltid=AfmBOorzwVUiM4jxOjxU5z9Q6Dc11ItM16CtDW2s40zkzDnqbJ70P6D8'},
-  {id:4, label:'Next-gen anaerobic strain cultivation',    short:'Anaerobic strains', color:'#E8A020', desc:'Industrial-scale production of oxygen-sensitive bacteria previously impossible commercially',                                  maturity:[1,0,0], patents:'3 patents',    example:'Pendulum Akkermansia',     exampleUrl:'https://pendulumlife.com/products/pendulum-akkermansia-probiotic-gut-health?srsltid=AfmBOopppTrsRSFxO5RNIy73l4eOsf0vdU4s0N5pgv_9FYaj1IscbMVx'},
-  {id:5, label:'CRISPR-armed bacteriophage therapy',       short:'Phage therapy',     color:'#C04060', desc:'Engineered viruses selectively eliminating harmful gut bacteria while preserving beneficial strains',                          maturity:[0.5,0,0], patents:'25 patents',  example:'Eligo Bioscience',        exampleUrl:'https://eligo.bio/'},
+  {id:1, label:'Postbiotic & metabolite engineering',      short:'Postbiotic',        color:'#5C9E1A', desc:'Producing beneficial metabolites like butyrate and GLP-1 stimulators without live bacteria',                                    maturity:[1,1,0,0], patents:'0 patents',    example:'Resbiotic resM',          exampleUrl:'https://resbiotic.com/products/resm?srsltid=AfmBOorN7l2zbHJ0bxSL73HXhXFc1tCeY05EXEAvu69EW93gVCDy7tEe'},
+  {id:2, label:'Synthetic microbial consortia',            short:'Consortia',         color:'#185FA5', desc:'Manually assembled communities of multiple strains replacing FMT with standardised products',                                  maturity:[1,1,1,0], patents:'500+ patents', example:'Seres Vowst (FDA-approved)',exampleUrl:'https://www.nestlehealthscience.com/newsroom/press-releases/vowst'},
+  {id:3, label:'Precision delivery & microencapsulation',  short:'Precision delivery',color:'#534AB7', desc:'Capsules protecting live strains through stomach acid; release at specific gut sites',                                         maturity:[1,1,1,0], patents:'141 patents',  example:'Seed DS-01 ViaCap',        exampleUrl:'https://seed.com/daily-synbiotic?srsltid=AfmBOorzwVUiM4jxOjxU5z9Q6Dc11ItM16CtDW2s40zkzDnqbJ70P6D8'},
+  {id:4, label:'Next-gen anaerobic strain cultivation',    short:'Anaerobic strains', color:'#E8A020', desc:'Industrial-scale production of oxygen-sensitive bacteria previously impossible commercially',                                  maturity:[1,1,0,0], patents:'3 patents',    example:'Pendulum Akkermansia',     exampleUrl:'https://pendulumlife.com/products/pendulum-akkermansia-probiotic-gut-health?srsltid=AfmBOopppTrsRSFxO5RNIy73l4eOsf0vdU4s0N5pgv_9FYaj1IscbMVx'},
+  {id:5, label:'CRISPR-armed bacteriophage therapy',       short:'Phage therapy',     color:'#C04060', desc:'Engineered viruses selectively eliminating harmful gut bacteria while preserving beneficial strains',                          maturity:[1,0,0,0], patents:'25 patents',  example:'Eligo Bioscience',        exampleUrl:'https://eligo.bio/'},
 ];
 
 // Consumer needs with which techs address them (tech ids, level: 'yes'|'partial'|'no'|'unclear')
@@ -2154,8 +2157,7 @@ const consumerNeeds = [
   {id:'N', roman:'N', label:'Easy to access (OTC, pharmacy, online)',                                  techs:{1:'partial', 2:'no',   3:'partial', 4:'no',      5:'no'}},
 ];
 
-let wsCustomNeeds = [];    // {id, label, rating}
-let wsNeedRatings = {};    // {needId: 1-5}
+let wsCustomNeeds = [];    // {id, label}
 
 const rtwDims = [
   {id:'tech',  label:'Tech RTW',               color:'#185FA5', overallQuestion:'Overall, how ready-to-win are we technically for this technology?', questions:['Do we have R&D expertise in the underlying science?','Does our manufacturing support the required format & delivery?','Do we have clinical evidence or IP to leverage?','Can we access this capability within a viable timeframe?']},
@@ -2206,7 +2208,10 @@ function wsSelectPlatform(idx){
   document.querySelectorAll('.ws-plat-card').forEach(el=>el.classList.remove('selected'));
   document.getElementById('wsp-'+idx).classList.add('selected');
   wsSelectedPlatform = idx;
-  wsNeedsOrder = [];  // reset so panel re-initialises for new platform
+  wsNeedsOrder = [];
+  toAnswers = {};
+  toScores = {};
+  toMatchups = [];
   document.getElementById('ws-next-1').disabled = false;
 }
 
@@ -2443,116 +2448,190 @@ function buildWSActionPlan(){
   el.innerHTML = html;
 }
 
-// ── Consumer Needs (drag-to-rank) ──
-let wsNeedsOrder = [];       // ordered list of need ids (index 0 = #1 ranked)
-let wsNeedsResponses = [];   // all submitted {needId, label, rank}
+// ── Consumer Needs — Pairwise Trade-offs ──
+let wsNeedsOrder = [];       // final ranked order (derived from wins)
+let wsNeedsResponses = [];   // all submitted {needId, label}
+let toMatchups = [];         // [{a, b}] — the pairs to compare
+let toAnswers  = {};         // {pairKey: winnerId}
+let toScores   = {};         // {needId: win count}
 
 function buildWSNeedsPanel(){
   const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
-  // Initialise order if first time
-  if(wsNeedsOrder.length === 0){
-    wsNeedsOrder = allNeeds.map(n => n.id);
-  } else {
-    // Add any new custom needs to end
-    allNeeds.forEach(n=>{ if(!wsNeedsOrder.includes(n.id)) wsNeedsOrder.push(n.id); });
-    // Remove deleted ones
-    wsNeedsOrder = wsNeedsOrder.filter(id => allNeeds.find(n=>n.id===id));
-  }
-  renderNeedsRankList();
-  updateRankSummary();
+  // Build a curated set of ~10 meaningful matchups covering key trade-offs
+  // Always regenerate when needs change (custom added/removed)
+  toMatchups = wsGenerateMatchups(allNeeds);
+  // Keep existing answers if IDs still valid
+  Object.keys(toAnswers).forEach(k=>{
+    const [a,b] = k.split('|');
+    if(!allNeeds.find(n=>n.id===a) || !allNeeds.find(n=>n.id===b)) delete toAnswers[k];
+  });
+  toScores = {};
+  allNeeds.forEach(n=>{ toScores[n.id]=0; });
+  Object.entries(toAnswers).forEach(([k,w])=>{ if(toScores[w]!==undefined) toScores[w]++; });
+  wsNeedsOrder = allNeeds.slice().sort((a,b)=>(toScores[b.id]||0)-(toScores[a.id]||0)).map(n=>n.id);
+  renderTradeoffArea();
+  renderTradeoffSummary();
   renderNeedsAggPreview();
 }
 
-function renderNeedsRankList(){
-  const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
-  const el = document.getElementById('needs-rank-list');
-  el.innerHTML = wsNeedsOrder.map((id, idx) => {
-    const n = allNeeds.find(x=>x.id===id);
-    if(!n) return '';
-    const isCustom = !['I','II','III'].includes(n.id);
-    const rankColors = ['#5C9E1A','#8DC63F','#B0D880','#ccc','#ccc'];
-    const rankColor = rankColors[idx] || '#eee';
-    const rankLabel = ['#1 — Most important','#2','#3','#4','#5'][idx] || `#${idx+1}`;
-    return `<div class="needs-rank-item" id="nri-${n.id}" draggable="true"
-      style="background:#fff;border:2px solid ${idx===0?'#5C9E1A':'var(--border)'};border-radius:8px;padding:12px 14px;cursor:grab;display:flex;align-items:center;gap:12px;transition:all .2s;${idx===0?'box-shadow:0 2px 8px rgba(92,158,26,.2)':''}"
-      ondragstart="wsNeedDragStart(event,'${n.id}')"
-      ondragover="wsNeedDragOver(event,'${n.id}')"
-      ondrop="wsNeedDrop(event,'${n.id}')"
-      ondragend="wsNeedDragEnd(event)"
-      ondragleave="wsNeedDragLeave(event)">
-      <div style="width:32px;height:32px;border-radius:6px;background:${rankColor};color:${idx<3?'#fff':'#aaa'};font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1.2;text-align:center">${idx===0?'#1':idx===1?'#2':idx===2?'#3':'#'+(idx+1)}</div>
-      <div style="flex:1">
-        <div style="font-size:11.5px;font-weight:${idx===0?'700':'500'};color:${idx===0?'var(--text)':'#555'};line-height:1.4">${n.label}</div>
-        ${idx===0 ? `<div style="font-size:10px;color:#5C9E1A;margin-top:3px;font-weight:600">★ Top need — will drive technology recommendations</div>` : ''}
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        ${isCustom ? `<button onclick="wsRemoveCustomNeed('${n.id}')" style="background:none;border:none;cursor:pointer;color:#ccc;font-size:18px;line-height:1;padding:2px 4px" title="Remove">×</button>` : ''}
-        <div style="color:#ccc;font-size:18px;cursor:grab">⠿</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// Drag-to-rank
-let nriDragging = null;
-
-function wsNeedDragStart(e, id){
-  nriDragging = id;
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/plain', id);
-  setTimeout(()=>{ const el=document.getElementById('nri-'+id); if(el){ el.style.opacity='.4'; el.style.cursor='grabbing'; }},0);
-}
-
-function wsNeedDragOver(e, targetId){
-  e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
-  if(targetId === nriDragging) return;
-  const el = document.getElementById('nri-'+targetId);
-  if(el) el.style.borderColor = '#5C9E1A';
-}
-
-function wsNeedDragLeave(e){
-  e.currentTarget.style.borderColor = '';
-}
-
-function wsNeedDrop(e, targetId){
-  e.preventDefault();
-  if(!nriDragging || targetId === nriDragging) return;
-  const fromIdx = wsNeedsOrder.indexOf(nriDragging);
-  const toIdx   = wsNeedsOrder.indexOf(targetId);
-  if(fromIdx === -1 || toIdx === -1) return;
-  wsNeedsOrder.splice(fromIdx, 1);
-  wsNeedsOrder.splice(toIdx, 0, nriDragging);
-  renderNeedsRankList();
-  updateRankSummary();
-}
-
-function wsNeedDragEnd(e){
-  nriDragging = null;
-  document.querySelectorAll('.needs-rank-item').forEach(el=>{
-    el.style.opacity = '1';
-    el.style.borderColor = '';
-    el.style.cursor = 'grab';
+function wsGenerateMatchups(needs){
+  // Curated key trade-off pairs (by id) + fill remaining with round-robin sample
+  const curated = [
+    ['H','B'],  // Affordable vs Solving underlying issue
+    ['A','B'],  // One product vs Root cause
+    ['B','E'],  // Root cause vs Perceptibly effective
+    ['F','B'],  // Simple regimen vs Root cause
+    ['C','A'],  // Condition-specific vs One product
+    ['M','B'],  // No side effects vs Root cause
+    ['K','E'],  // Science-backed vs Perceptibly effective
+    ['H','E'],  // Affordable vs Perceptibly effective
+    ['D','F'],  // Lasting gut health vs Simple regimen
+    ['G','C'],  // Safe for ongoing use vs Condition-specific
+    ['N','H'],  // Easy to access vs Affordable
+    ['J','G'],  // Compatible vs Safe for ongoing use
+  ];
+  const validIds = new Set(needs.map(n=>n.id));
+  // Include curated pairs where both IDs exist, then add custom needs vs top 3
+  const pairs = curated.filter(([a,b])=>validIds.has(a)&&validIds.has(b)).map(([a,b])=>({a,b}));
+  // Add custom needs paired against top needs
+  const customs = needs.filter(n=>String(n.id).startsWith('custom_'));
+  const anchors = ['B','A','E','H'];
+  customs.forEach(c=>{
+    anchors.forEach(aid=>{ if(validIds.has(aid)) pairs.push({a:c.id,b:aid}); });
   });
-  // Re-apply #1 border
-  renderNeedsRankList();
-  updateRankSummary();
+  return pairs;
 }
 
-function updateRankSummary(){
+function pairKey(a,b){ return a+'|'+b; }
+
+function toChoose(aId, bId, choice){
+  delete toAnswers[pairKey(aId,bId)];
+  delete toAnswers[pairKey(bId,aId)];
+  toAnswers[pairKey(aId,bId)] = choice === 'a' ? aId : choice === 'b' ? bId : choice; // 'both' or 'unsure'
   const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
-  const el = document.getElementById('rank-summary');
+  toScores = {};
+  allNeeds.forEach(n=>{ toScores[n.id]=0; });
+  Object.entries(toAnswers).forEach(function(entry){
+    var parts = entry[0].split('|'), aid = parts[0], bid = parts[1], w = entry[1];
+    if(w==='both'){
+      toScores[aid]=(toScores[aid]||0)+0.5;
+      toScores[bid]=(toScores[bid]||0)+0.5;
+    } else if(w==='unsure'){
+      // 0 points to either
+    } else {
+      if(toScores[w]!==undefined) toScores[w]++;
+    }
+  });
+  wsNeedsOrder = allNeeds.slice().sort(function(a,b){ return (toScores[b.id]||0)-(toScores[a.id]||0); }).map(function(n){ return n.id; });
+  renderTradeoffArea();
+  renderTradeoffSummary();
+  var next2 = document.getElementById('ws-next-2');
+  if(next2) next2.disabled = Object.keys(toAnswers).length < Math.ceil(toMatchups.length/2);
+}
+
+function renderTradeoffArea(){
+  var allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+  var el = document.getElementById('tradeoff-area');
   if(!el) return;
-  if(wsNeedsOrder.length === 0){ el.innerHTML='Drag needs to set your ranking...'; return; }
-  el.innerHTML = wsNeedsOrder.map((id,i)=>{
-    const n = allNeeds.find(x=>x.id===id);
-    const colors = ['#5C9E1A','#8DC63F','#B0D880'];
-    const c = colors[i]||'#ddd';
-    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-      <span style="background:${c};color:${i<3?'#fff':'#999'};border-radius:4px;padding:1px 6px;font-size:9px;font-weight:700;min-width:24px;text-align:center">#${i+1}</span>
-      <span style="font-size:10.5px;color:${i===0?'var(--text)':'#888'};font-weight:${i===0?600:400}">${n?n.label:id}</span>
+  var total = toMatchups.length;
+  var done  = Object.keys(toAnswers).length;
+  var bar = document.getElementById('tradeoff-bar');
+  var cnt = document.getElementById('tradeoff-count');
+  if(bar) bar.style.width = (total ? Math.round(done/total*100) : 0)+'%';
+  if(cnt) cnt.textContent = done+' / '+total+' trade-offs answered';
+  var html = '';
+  toMatchups.forEach(function(pair, i){
+    var a = pair.a, b = pair.b;
+    var na = allNeeds.find(function(n){ return n.id===a; });
+    var nb = allNeeds.find(function(n){ return n.id===b; });
+    if(!na||!nb) return;
+    var ans = toAnswers[pairKey(a,b)]!==undefined ? toAnswers[pairKey(a,b)] : toAnswers[pairKey(b,a)];
+    var pickedA      = ans===a;
+    var pickedB      = ans===b;
+    var pickedBoth   = ans==='both';
+    var pickedUnsure = ans==='unsure';
+    var answered     = ans!==undefined;
+    var base = 'border-radius:8px;padding:12px 14px;font-size:11px;font-weight:600;cursor:pointer;border:2px solid;transition:all .18s;text-align:left;line-height:1.45;font-family:inherit';
+    var sA = pickedA  ? base+';flex:1;background:#eaf3de;border-color:#5C9E1A;color:#1a3a08'
+           : answered ? base+';flex:1;background:#f9f9f9;border-color:#eee;color:#bbb'
+                      : base+';flex:1;background:#fff;border-color:var(--border);color:var(--text)';
+    var sB = pickedB  ? base+';flex:1;background:#eaf3de;border-color:#5C9E1A;color:#1a3a08'
+           : answered ? base+';flex:1;background:#f9f9f9;border-color:#eee;color:#bbb'
+                      : base+';flex:1;background:#fff;border-color:var(--border);color:var(--text)';
+    var sBoth = pickedBoth   ? base+';background:#e8f0fb;border-color:#534AB7;color:#2a2060;font-size:10px;white-space:nowrap'
+              : answered     ? base+';background:#f9f9f9;border-color:#eee;color:#bbb;font-size:10px;white-space:nowrap'
+                             : base+';background:#f7f7f5;border-color:#ddd;color:#888;font-size:10px;white-space:nowrap';
+    var sUnsure = pickedUnsure ? base+';background:#fef6e4;border-color:#E8A020;color:#7a4d00;font-size:10px;white-space:nowrap'
+                : answered     ? base+';background:#f9f9f9;border-color:#eee;color:#bbb;font-size:10px;white-space:nowrap'
+                               : base+';background:#f7f7f5;border-color:#ddd;color:#888;font-size:10px;white-space:nowrap';
+    html += '<div style="background:'+(answered?'#fcfcfa':'#fff')+';border:1px solid '+(answered?'#e0ead0':'var(--border)')+';border-radius:10px;padding:14px;margin-bottom:12px">';
+    html += '<div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">Trade-off '+(i+1)+' \u2014 Which matters more to consumers?</div>';
+    html += '<div style="display:flex;align-items:stretch;gap:8px">';
+    html += '<button style="'+sA+'" onclick="toChoose(\''+a+'\',\''+b+'\',\'a\')">'+(pickedA?'\u2713 ':'')+na.label+'</button>';
+    html += '<div style="display:flex;align-items:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0">vs</div>';
+    html += '<button style="'+sB+'" onclick="toChoose(\''+a+'\',\''+b+'\',\'b\')">'+(pickedB?'\u2713 ':'')+nb.label+'</button>';
+    html += '<button style="'+sBoth+'" onclick="toChoose(\''+a+'\',\''+b+'\',\'both\')">'+(pickedBoth?'\u2713 ':'')+'Both</button>';
+    html += '<button style="'+sUnsure+'" onclick="toChoose(\''+a+'\',\''+b+'\',\'unsure\')">'+(pickedUnsure?'\u2713 ':'')+'Unsure</button>';
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderTradeoffSummary(){
+  const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+  const el   = document.getElementById('tradeoff-summary');
+  const recEl = document.getElementById('tradeoff-tech-rec');
+  const listEl = document.getElementById('tradeoff-tech-list');
+  if(!el) return;
+
+  const answered = Object.keys(toAnswers).length;
+
+  if(answered === 0){
+    el.innerHTML='<span style="font-style:italic;color:var(--muted)">Complete some trade-offs to see results\u2026</span>';
+    if(recEl) recEl.style.display='none';
+    return;
+  }
+
+  // Top 3 needs by win score
+  const ranked = wsNeedsOrder.map(id=>({ n:allNeeds.find(x=>x.id===id), score:toScores[id]||0 })).filter(x=>x.n);
+  const maxScore = ranked[0].score;
+  el.innerHTML = ranked.slice(0,5).map(({n,score},i)=>{
+    const w = maxScore>0 ? Math.round(score/maxScore*100) : 0;
+    const colors = ['#5C9E1A','#8DC63F','#B0D880','#ddd','#ddd'];
+    return `<div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+        <span style="font-size:10.5px;color:${i===0?'var(--text)':'#888'};font-weight:${i===0?700:400}">${i===0?'★ ':''}${n.label}</span>
+        <span style="font-size:9px;font-weight:700;color:${colors[i]};white-space:nowrap;margin-left:6px">${score % 1 === 0 ? score : score.toFixed(1)} win${score!==1?'s':''}</span>
+      </div>
+      <div style="background:#eee;border-radius:3px;height:5px"><div style="background:${colors[i]};width:${w}%;height:100%;border-radius:3px;transition:width .4s"></div></div>
     </div>`;
   }).join('');
+
+  // Tech recommendations based on top 2 needs — only if there are actual points scored
+  const totalScore = Object.values(toScores).reduce(function(s,v){ return s+v; }, 0);
+  if(recEl && listEl && answered >= 3 && totalScore > 0){
+    const top2 = ranked.slice(0,2).map(x=>x.n).filter(n=>n&&n.techs);
+    const techScore = {};
+    techOptions.forEach(t=>{ techScore[t.id]=0; });
+    top2.forEach(need=>{
+      techOptions.forEach(t=>{
+        const v = need.techs[t.id]||'no';
+        if(v==='yes') techScore[t.id]+=2;
+        else if(v==='partial') techScore[t.id]+=1;
+      });
+    });
+    const ranked2 = techOptions.slice().sort((a,b)=>techScore[b.id]-techScore[a.id]).slice(0,3);
+    const maxTS = techScore[ranked2[0].id];
+    listEl.innerHTML = ranked2.filter(t=>techScore[t.id]>0).map((t,i)=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:${i===0?'rgba(255,255,255,.8)':'rgba(255,255,255,.4)'};border-radius:6px">
+        <span style="background:${t.color};color:#fff;border-radius:4px;padding:2px 7px;font-size:9px;font-weight:700;flex-shrink:0">${t.id}</span>
+        <span style="font-size:10.5px;color:#1a3a08;font-weight:${i===0?700:500}">${t.label}</span>
+        ${i===0?'<span style="margin-left:auto;font-size:9px;color:#5C9E1A;font-weight:700">Best match</span>':''}
+      </div>`).join('');
+    recEl.style.display = 'block';
+  } else if(recEl){
+    recEl.style.display = 'none';
+  }
 }
 
 function wsAddCustomNeed(){
@@ -2567,14 +2646,13 @@ function wsAddCustomNeed(){
 
 function wsRemoveCustomNeed(id){
   wsCustomNeeds = wsCustomNeeds.filter(n=>n.id!==id);
-  wsNeedsOrder = wsNeedsOrder.filter(x=>x!==id);
+  wsNeedsOrder  = wsNeedsOrder.filter(x=>x!==id);
   buildWSNeedsPanel();
 }
 
 function wsSubmitNeeds(){
-  // Store top-ranked need for this respondent
-  const topId = wsNeedsOrder[0];
   const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+  const topId = wsNeedsOrder[0];
   const topNeed = allNeeds.find(n=>n.id===topId);
   if(!topNeed) return;
   wsNeedsResponses.push({ needId: topNeed.id, label: topNeed.label, time: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
@@ -2587,7 +2665,6 @@ function renderNeedsAggPreview(){
   if(!el || !barsEl) return;
   if(wsNeedsResponses.length === 0){ el.style.display='none'; return; }
   el.style.display = 'block';
-  // Count votes for each need as #1
   const votes = {};
   wsNeedsResponses.forEach(r=>{ votes[r.label] = (votes[r.label]||0)+1; });
   const total = wsNeedsResponses.length;
@@ -2758,7 +2835,7 @@ function buildWSTechBank(){
   const cardsEl = document.getElementById('ws-tech-cards');
   if(cardsEl){
     cardsEl.innerHTML = techOptions.map(t => {
-      const dots = (t.maturity||[0,0,0]).map(v =>
+      const dots = (t.maturity||[0,0,0,0]).map(v =>
         '<div class="maturity-dot'+(v===1?' filled':v===0.5?' half':'')+'"></div>'
       ).join('');
       return '<div class="tech-card">'
