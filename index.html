@@ -185,16 +185,10 @@ body{font-family:"Segoe UI",Arial,sans-serif;background:var(--h-light);color:var
     box-shadow:0 24px 60px rgba(0,0,0,.5);
   ">
     <!-- Logos -->
-    <div style="display:flex;align-items:center;justify-content:center;margin-bottom:28px">
-      <div style="width:140px;display:flex;align-items:center;justify-content:flex-end">
-        <img src="" data-imgvar="_IMG1" style="height:72px;width:auto;object-fit:contain;mix-blend-mode:screen" alt="Haleon"/>
-      </div>
-      <div style="width:60px;display:flex;align-items:center;justify-content:center">
-        <span style="font-size:28px;font-weight:200;color:rgba(255,255,255,.4)">×</span>
-      </div>
-      <div style="width:140px;display:flex;align-items:center;justify-content:flex-start">
-        <img src="" data-imgvar="_IMG2" style="height:36px;width:auto;object-fit:contain;mix-blend-mode:screen" alt="BCG"/>
-      </div>
+    <div style="display:flex;align-items:center;justify-content:center;margin-bottom:28px;margin-right:40px">
+      <img src="" data-imgvar="_IMG1" style="height:72px;width:auto;object-fit:contain;mix-blend-mode:screen;margin-left:20px;margin-top:4px" alt="Haleon"/>
+      <span style="font-size:28px;font-weight:200;color:rgba(255,255,255,.4);margin:0 8px;margin-left:-14px">×</span>
+      <img src="" data-imgvar="_IMG2" style="height:36px;width:auto;object-fit:contain;mix-blend-mode:screen" alt="BCG"/>
     </div>
     <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;letter-spacing:.3px">Innovation Workshop</div>
     <div style="font-size:11px;color:#888;margin-bottom:28px">Enter your access code to continue</div>
@@ -270,8 +264,8 @@ document.body.style.overflow = 'hidden';
 <div class="header">
   <div class="logo-area">
     <!-- Haleon logo -->
-    <img src="" data-imgvar="_IMG1" style="height:40px;width:auto;object-fit:contain;mix-blend-mode:screen" alt="Haleon"/>
-    <div class="logo-sep">×</div>
+    <img src="" data-imgvar="_IMG1" style="height:40px;width:auto;object-fit:contain;mix-blend-mode:screen;margin-left:10px;margin-top:2px" alt="Haleon"/>
+    <div class="logo-sep" style="margin-left:-8px">×</div>
     <!-- BCG logo -->
     <img src="" data-imgvar="_IMG2" style="height:20px;width:auto;object-fit:contain;mix-blend-mode:screen" alt="BCG"/>
     <div style="width:1px;height:28px;background:#333;margin-left:8px"></div>
@@ -291,9 +285,9 @@ document.body.style.overflow = 'hidden';
 <div class="page active" id="page-landing">
   <div class="landing">
     <div style="margin-bottom:24px">
-      <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:0">
-        <img src="" data-imgvar="_IMG1" style="height:88px;width:auto;object-fit:contain;mix-blend-mode:screen" alt="Haleon"/>
-        <span style="font-size:36px;font-weight:200;color:rgba(255,255,255,.5);margin:0 8px">×</span>
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:0;margin-right:80px">
+        <img src="" data-imgvar="_IMG1" style="height:88px;width:auto;object-fit:contain;mix-blend-mode:screen;margin-left:40px;margin-top:8px" alt="Haleon"/>
+        <span style="font-size:36px;font-weight:200;color:rgba(255,255,255,.5);margin:0 8px;margin-left:-30px">×</span>
         <img src="" data-imgvar="_IMG2" style="height:44px;width:auto;object-fit:contain;mix-blend-mode:screen" alt="BCG"/>
       </div>
       <div style="font-size:14px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-top:4px">Innovation Strategy Workshop</div>
@@ -1452,13 +1446,480 @@ const platforms = [
       <div class="plat-col secondary"><div class="plat-col-title">Secondary R&D bets</div><ul class="bullet-list" style="margin:0"><li>CRISPR-armed bacteriophage therapy</li><li>Next-generation anaerobic strain cultivation</li><li>AI-personalisation (test-then-supplement)</li><li>DTC testing kits</li></ul></div>
     </div>
   </div>`},
-  {rank:2,name:"Perimenopause management",full:true,tags:["Women's health","Hormonal"],desc:"Consumer health solutions addressing perimenopause — spanning non-hormonal symptom management, bone health and life-stage nutrition.",
-  exec:`<div class="exec-highlight"><div class="eh-title">Why this matters</div><div class="eh-text">Women drive ~70% of global consumer health spend. $5B VC invested in femtech since 2019. Haleon's Centrum Women and Caltrate give a direct entry point. PhytoSERMs: first non-hormonal OTC with receptor-level activity — a mechanism that doesn't exist in OTC today.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$14B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$36B</div><div class="stat-lbl">TAM 2035 (10% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 7</div><div class="stat-lbl">Siberian rhubarb estrogen receptor agonist</div></div></div></div>`,
-  consumer:`<div class="section-card"><div class="section-title">Consumer pain points</div><ul class="bullet-list"><li>Night sweats destroying sleep and daily energy</li><li>Severe mood swings affecting relationships</li><li>Refusal of HRT due to cancer risk — no effective OTC alternative</li><li>Bone density loss accelerating post-menopause — widely underestimated</li></ul></div>`,
-  market:`<div class="section-card"><div class="section-title">Market size</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$13.8B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$35.8B</div><div class="stat-lbl">TAM 2035</div></div><div class="stat-box"><div class="stat-num">10%</div><div class="stat-lbl">CAGR</div></div></div></div>`,
-  competitive:`<div class="section-card"><div class="section-title">Competitive landscape</div><ul class="bullet-list"><li><strong>Bonafide Health</strong> — leading DTC non-hormonal brand. Acquired by P&G 2023.</li><li><strong>Estroven</strong> — mass-market black cohosh. Limited clinical differentiation.</li><li><strong>Wile</strong> — adaptogen + phytoestrogen DTC brand.</li></ul></div>`,
-  patents:`<div class="section-card"><div class="section-title">Key technologies</div><ul class="bullet-list"><li><strong>PhytoSERMs / Siberian rhubarb (TRL 7)</strong> — 109/112-person RCTs; 96-week safety data</li><li><strong>S-equol (TRL 6)</strong> — soy-derived estrogen receptor beta agonist; 40:1 myo-inositol</li><li><strong>Adaptogens (TRL 6)</strong> — ashwagandha for cortisol and hot flash management</li></ul></div>`,
-  regulatory:`<div class="section-card"><div class="section-title">Regulatory pathway</div><ul class="bullet-list"><li><span class="tag tag-green">US</span> Structure/function claims for bone health, mood and energy under DSHEA</li><li><span class="tag tag-amber">EU</span> Botanical claims — some phytoestrogen claims approved (isoflavones)</li></ul></div>`},
+  {rank:2,name:"Perimenopause management",full:true,tags:["Women's health","Hormonal","Perimenopause"],desc:"Drug-free, daily-use supplements for women in the peri-to-menopause transition, managing vasomotor, sleep, mood and cognitive symptoms.",
+  exec:`
+  <div class="p1-grid">
+    <div class="p1-left">
+      <div class="p1-box">
+        <div class="p1-box-title">📋 Description</div>
+        <div class="p1-box-body">Drug-free, daily-use supplements for women in the peri-to-menopause transition, managing vasomotor, sleep, mood and cognitive symptoms.</div>
+      </div>
+      <div class="p1-box">
+        <div class="p1-box-title">📊 Market size '25</div>
+        <div class="p1-box-body"><strong>Total: ~$9Bn</strong><br>Theoretical market ~$74B<br>Only 12% penetrated today<br>Awareness is the primary growth lever</div>
+      </div>
+      <div class="p1-box">
+        <div class="p1-box-title">📈 CAGR '25–'35</div>
+        <div class="p1-box-body"><strong>Overall CAGR: +12%</strong><br>2035 range: $27–39B<br>Fastest growth in clinical-grade actives and estrobolome probiotics</div>
+      </div>
+    </div>
+    <div class="p1-right">
+      <div class="p1-section">
+        <div class="p1-section-hdr">🛒 Consumer need & value proposition</div>
+        <ul class="p1-bullets">
+          <li><strong>500M women in peri-to-menopause transition</strong>; ~75% symptomatic, only ~50% raise it with a clinician</li>
+          <li>Consumers want <strong>hormone-free, evidence-backed daily relief</strong></li>
+          <li>Unmet needs extend well beyond hot flashes: brain fog, weight gain, joint pain and oral health are unaddressed by current category</li>
+        </ul>
+      </div>
+      <div class="p1-section">
+        <div class="p1-section-hdr">🏆 Competitive landscape</div>
+        <ul class="p1-bullets">
+          <li><strong>Crowded but undifferentiated:</strong> Estroven, Bonafide, Equelle, Amberen, HUM in mass retail; Bayer entered with dual OTC/Rx strategy (CanesMeno + Lynkuet)</li>
+          <li><strong>No scaled science leader:</strong> most rely on commodity actives (black cohosh, soy); first player to anchor on multi-RCT evidence owns "clinically proven" position</li>
+        </ul>
+      </div>
+      <div class="p1-rtw-row">
+        <div class="p1-section">
+          <div class="p1-section-hdr">⚖️ Regulatory path</div>
+          <ul class="p1-bullets">
+            <li><strong>Supplement classification (DSHEA US, food supplement EU)</strong> — no pre-market approval; 6–12 month time-to-shelf in US, Germany, Japan</li>
+            <li><strong>EU binding constraint:</strong> EFSA botanical health claims frozen since 2012; UK ASA enforcing against menopause supplement advertising claims</li>
+          </ul>
+        </div>
+        <div class="p1-section">
+          <div class="p1-section-hdr" style="background:#1a1a1a">🎯 Haleon Right-to-Win</div>
+          <ul class="p1-bullets">
+            <li><strong>Brand fit:</strong> Centrum is #1 recommended multivitamin in 70+ markets; Menopause Support line launched US Oct 2024</li>
+            <li><strong>Channel fit:</strong> Pharmacy, retail, grocery — 42% of category sales go through drug stores</li>
+            <li><strong>Capability gap:</strong> Expand anchor active portfolio: add ERr 731 alongside geniVida; layer estrobolome probiotics as evidence matures</li>
+          </ul>
+          <div class="p1-attract"><div class="p1-dot" style="background:#aaa"></div>Low<div class="p1-dot" style="background:var(--h-green);opacity:.6"></div>Medium<div class="p1-dot" style="background:var(--h-green)"></div>High attractiveness</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="confidence-grid">
+    <div class="conf-box conf-pos">
+      <div class="conf-hdr">👍 Things that drive confidence</div>
+      <div class="conf-item"><span class="conf-num">1</span><strong style="color:#8dc63f">~$9B market growing at ~12% CAGR to ~$27B by 2035:</strong> awareness-driven, structural, accelerating; 75% of theoretical market still untapped</div>
+      <div class="conf-item"><span class="conf-num">2</span><strong style="color:#8dc63f">Consumer pull is accelerating:</strong> "perimenopause" searches up 5× since 2022; category has no dominant brand despite growing demand</div>
+      <div class="conf-item"><span class="conf-num">3</span><strong style="color:#8dc63f">No scaled player owns the space:</strong> extremely fragmented, no hero brand; perimenopause-specific + mass-market quadrant is empty</div>
+      <div class="conf-item"><span class="conf-num">4</span><strong style="color:#8dc63f">Haleon has a unique structural advantage:</strong> Centrum trust + pharmacy distribution + cross-portfolio play (Voltarol) no competitor can replicate</div>
+    </div>
+    <div class="conf-box conf-neg">
+      <div class="conf-hdr" style="color:#C04060">❓ Things to get comfort on</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">1</span><strong>EU regulatory wall:</strong> menopause-specific health claims not permissible for any botanical in EU; EU market entry must rely on vitamin/mineral claims and transitional measures indefinitely</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">2</span><strong>Estrobolome science is early:</strong> evidence is "very observational"; one published human study; further validation needed before licensing commitment</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">3</span><strong>No dedicated women's health brand:</strong> Centrum is a multivitamin platform, not a perimenopause authority; competing against specialist brands requires building or acquiring a dedicated identity</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">4</span><strong>ERr 731 sourcing:</strong> Estroven already uses ERr 731; ChemLab is the sole manufacturer; exclusivity and supply security must be established</div>
+    </div>
+  </div>`,
+
+  consumer:`
+  <div class="sentiment-grid" style="margin-bottom:14px">
+    <div class="sent-chart" style="background:#fff;padding:14px">
+      <div style="font-size:11px;font-weight:700;margin-bottom:2px;color:var(--text)"><strong style="color:#A02070">Perimenopause</strong> search mentions — consumer search landscape</div>
+      <div style="font-size:9px;color:var(--muted);margin-bottom:6px">Source: Quid Monitor / BCG analysis · 2024–2026 · ~2M+ mentions</div>
+      <div id="pm-wc-tooltip" style="display:none;position:fixed;z-index:9999;background:#1a1a1a;color:#fff;border-radius:7px;padding:10px 13px;max-width:220px;font-size:11px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,0.35);pointer-events:none"></div>
+      <svg viewBox="0 0 700 580" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;font-family:'Segoe UI',Arial,sans-serif;cursor:default"
+        onmousemove="pmWcTT(event,event.target)" onmouseleave="pmWcHide()">
+        <title>Word Cloud — Perimenopause Search Mentions</title>
+        <defs><clipPath id="pmCircleClip"><circle cx="350" cy="295" r="275"/></clipPath></defs>
+        <circle cx="350" cy="295" r="275" fill="#fff" stroke="#e0e0e0" stroke-width="1.5"/>
+        <g clip-path="url(#pmCircleClip)">
+
+          <!-- Row 1 — top small terms -->
+          <text x="350" y="38" text-anchor="middle" font-size="11" fill="#16a34a" class="wc-word" data-tip="PMS symptoms are frequently co-searched with perimenopause — women search by symptom, not diagnosis.">pms symptoms</text>
+          <text x="510" y="50" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="PCOS pain overlaps heavily with perimenopause symptom searches — condition boundaries are blurred.">PCOS pain</text>
+
+          <!-- Row 2 -->
+          <text x="200" y="65" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="Pre-period symptoms are a gateway search for women who don't yet identify as perimenopausal.">Pre period</text>
+          <text x="350" y="72" text-anchor="middle" font-size="38" font-weight="900" fill="#A02070" class="wc-word" data-tip="'Menopause' is the dominant anchor term — women start here and discover perimenopause through education.">menopause</text>
+          <text x="560" y="68" text-anchor="middle" font-size="14" fill="#e53e3e" class="wc-word" data-tip="Ovary syndrome (PCOS) searches overlap significantly with perimenopause symptom queries.">Ovary syndrome</text>
+
+          <!-- Row 3 -->
+          <text x="110" y="100" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="PCO and PCOS terms frequently co-appear with perimenopause in symptom-led searches.">PCO</text>
+          <text x="230" y="105" text-anchor="middle" font-size="14" fill="#16a34a" class="wc-word" data-tip="Women menopause is a common search entry point before discovering perimenopause.">Women menopause</text>
+          <text x="440" y="102" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="Low estrogen symptoms is a diagnostic search reflecting women seeking root cause explanations.">Low estrogen symptoms</text>
+
+          <!-- Row 4 -->
+          <text x="80" y="130" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="'Change of life' is a traditional euphemism still used in search — reflects older demographics entering perimenopause.">Change of life</text>
+          <text x="310" y="130" text-anchor="middle" font-size="14" fill="#16a34a" class="wc-word" data-tip="Menopause in women is a broad anchor search term that leads users to perimenopause content.">Menopause in women</text>
+          <text x="520" y="126" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="Symptoms before period are searched by women who haven't yet connected them to perimenopause.">Symptoms before period</text>
+
+          <!-- Row 5 — PERIMENOPAUSE dominant -->
+          <text x="80" y="162" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="Early menopause searches reflect growing awareness that symptoms can start in the mid-30s.">Early menopause</text>
+          <text x="350" y="174" text-anchor="middle" font-size="48" font-weight="900" fill="#7B1FA2" class="wc-word" data-tip="'Perimenopause' is the fastest-growing women's health search term — up 5× since 2022. Women are learning the word.">Perimenopause</text>
+          <text x="590" y="162" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="Meta Balance (phytoestrogen supplement) appears in search — consumers already self-researching solutions.">meta balance</text>
+
+          <!-- Row 6 -->
+          <text x="68" y="202" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="PCOS period searches overlap with perimenopause — women with PCOS history face compounded hormonal confusion.">Pcos period</text>
+          <text x="580" y="198" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="Female testosterone searches are rising as women research androgen decline during perimenopause.">female testosterone</text>
+
+          <!-- Row 7 — Signs of menopause -->
+          <text x="100" y="232" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="Signs of menopause is a top diagnostic search — women seeking self-identification, not a product.">Signs of menopause</text>
+          <text x="350" y="234" text-anchor="middle" font-size="30" font-weight="700" fill="#A02070" class="wc-word" data-tip="'Hormonal' is the second most prominent topic — women are researching the oestrogen pathway.">hormonal</text>
+          <text x="570" y="228" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="Postmenopausal testosterone searches reflect women exploring hormone replacement and restoration.">postmenopausal testosterone in women</text>
+
+          <!-- Row 8 -->
+          <text x="95" y="264" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="Cramps but no period is a key confusion signal — women searching for explanations of cycle irregularity.">Cramps but no period</text>
+          <text x="350" y="262" text-anchor="middle" font-size="18" font-weight="600" fill="#e53e3e" class="wc-word" data-tip="Hot flush is the #1 symptom search — validates category focus on vasomotor symptoms.">Hot flush</text>
+          <text x="590" y="258" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="Menopause hot flashes specifically is searched as women move from awareness to solution-seeking.">menopause hot flashes</text>
+
+          <!-- Row 9 — Symptoms of menopause -->
+          <text x="68" y="294" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="After my period searches reflect perimenopausal cycle disruption and women's attempts to understand changes.">After my period</text>
+          <text x="350" y="296" text-anchor="middle" font-size="26" font-weight="700" fill="#A02070" class="wc-word" data-tip="Symptoms of menopause is a high-volume diagnostic search — women identifying their experience.">Symptoms of menopause</text>
+          <text x="600" y="290" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="Female age searches correlate with perimenopause — women connecting symptoms to their life stage.">Female age</text>
+
+          <!-- Row 10 -->
+          <text x="92" y="324" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="Period symptoms are searched in overlapping context with perimenopause — women can't distinguish.">Period symptoms</text>
+          <text x="350" y="326" text-anchor="middle" font-size="24" font-weight="700" fill="#16a34a" class="wc-word" data-tip="Menopause symptoms is a broad solution-seeking search — women looking for what to do about their experience.">menopause symptoms</text>
+          <text x="585" y="320" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="No cycle searches reflect the anxiety and confusion of irregular periods during perimenopause.">No cycle</text>
+
+          <!-- Row 11 -->
+          <text x="105" y="354" text-anchor="middle" font-size="14" fill="#16a34a" class="wc-word" data-tip="'Menopause for women' appears as users refine their searches — indicating low prior category awareness.">menopause for women</text>
+          <text x="350" y="358" text-anchor="middle" font-size="20" font-weight="600" fill="#e53e3e" class="wc-word" data-tip="Hormonal imbalance is a catch-all term women use to describe perimenopause before they know the word.">Hormonal imbalance</text>
+          <text x="568" y="350" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="Period delay searches reflect the irregular cycles characteristic of early perimenopause.">Period delay</text>
+
+          <!-- Row 12 -->
+          <text x="92" y="384" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="PMDD searches heavily overlap perimenopause — premenstrual dysphoric disorder shares hormonal drivers.">PMDD</text>
+          <text x="350" y="386" text-anchor="middle" font-size="18" font-weight="600" fill="#16a34a" class="wc-word" data-tip="Estrogen and progesterone are researched together — women are learning the hormonal mechanisms.">Estrogen and progesterone</text>
+          <text x="570" y="380" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="After menopause searches reflect women seeking understanding of post-menopausal life stage.">after menopause</text>
+
+          <!-- Row 13 -->
+          <text x="115" y="414" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="Menopause period is searched as women try to understand the relationship between cycles and menopause.">Menopause period</text>
+          <text x="350" y="416" text-anchor="middle" font-size="16" font-weight="600" fill="#e53e3e" class="wc-word" data-tip="Thyroid women searches overlap with perimenopause — thyroid disorders share symptoms and are commonly confused.">Thyroid women</text>
+          <text x="548" y="410" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="PCOS period searches highlight the intersection of reproductive health conditions with perimenopause.">Pcos period</text>
+
+          <!-- Row 14 -->
+          <text x="160" y="444" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="'Period is coming' reflects perimenopausal women anticipating unpredictable cycles.">Period is coming</text>
+          <text x="350" y="446" text-anchor="middle" font-size="22" font-weight="700" fill="#A02070" class="wc-word" data-tip="'Before period' is a frequent symptom-led entry to perimenopause awareness — women connect premenstrual changes to hormonal shifts.">Before period</text>
+          <text x="520" y="440" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="Menopause period searches reflect the confusion about when periods stop and menopause begins.">after menopause</text>
+
+          <!-- Row 15 -->
+          <text x="200" y="472" text-anchor="middle" font-size="13" fill="#e53e3e" class="wc-word" data-tip="'Men menopause' (andropause) co-appears — reflects broad hormonal curiosity across genders.">Men menopause</text>
+          <text x="390" y="474" text-anchor="middle" font-size="14" fill="#e53e3e" class="wc-word" data-tip="Effects of testosterone searches reflect growing consumer awareness of androgen's role in women's health.">Effects of testosterone</text>
+
+          <!-- Row 16 -->
+          <text x="280" y="502" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="'Old period' slang reflects women describing irregular, lighter or heavier periods in perimenopause.">old period</text>
+          <text x="420" y="500" text-anchor="middle" font-size="14" fill="#e53e3e" class="wc-word" data-tip="Early menopause is searched with growing frequency as awareness of perimenopause starting in mid-30s spreads.">Early menopause</text>
+
+          <!-- Row 17 — bottom -->
+          <text x="350" y="528" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="Period symptoms remains a bottom-of-funnel search — women still connecting symptoms to menstrual causes rather than perimenopause.">period symptoms</text>
+        </g>
+        <circle cx="350" cy="295" r="275" fill="none" stroke="#A02070" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="sent-chart">
+      <div style="font-size:11px;font-weight:700;margin-bottom:10px">Key insights from consumer search listening</div>
+      <ul class="bullet-list">
+        <li><strong style="color:#A02070">Searches cluster around multiple symptoms simultaneously</strong> — hot flashes, brain fog, anxiety, sleep and hormonal imbalance co-appear; consistent with perimenopause presenting as a syndrome</li>
+        <li><strong style="color:#A02070">Diagnostic searches outweigh product searches</strong> — "signs of menopause," "low estrogen symptoms," "hormonal imbalance" dominate over brand or product terms</li>
+        <li><strong style="color:#A02070">Condition boundaries are blurred</strong> — PMDD, PCOS, thyroid and period-related terms overlap heavily; women search by symptom, not by diagnosis</li>
+        <li><strong style="color:#e53e3e">Hormone-related queries are high but HRT-specific queries are not</strong> — women are researching the oestrogen pathway without converting to HRT search intent; non-hormonal alternatives are the unoccupied search territory</li>
+        <li><strong style="color:#e53e3e">No sign of plateauing</strong> — employer menopause benefits 4%→18% in two years; femtech funding $2.2B in 2024; Rx approvals pulling the condition into clinical vocabulary</li>
+        <li><strong style="color:#A02070">70% of women can't name the condition before symptoms start</strong> — the category is in a diagnostic awareness phase, not a product competition phase yet</li>
+      </ul>
+    </div>
+  </div>
+  <div class="driver-flow">
+    <div class="driver-col">
+      <div class="driver-hdr green">Drivers</div>
+      <div class="driver-items">
+        <div class="driver-item">~500M women aged 40–55 globally; cohort growing as Gen X and elder millennials enter the window</div>
+        <div class="driver-item"><strong>70% of women don't know what perimenopause is</strong>; 40% have never considered it as the cause of symptoms</div>
+        <div class="driver-item">One-third of symptomatic women refuse HRT — primarily driven by cancer concerns</div>
+        <div class="driver-item">Perimenopause-related US productivity losses estimated at $22B annually</div>
+        <div class="driver-item">Rx non-hormonal options target moderate-to-severe VMS only — no Rx addresses the broader syndrome</div>
+      </div>
+    </div>
+    <div class="driver-arrow">›</div>
+    <div class="driver-col">
+      <div class="driver-hdr teal">Effect</div>
+      <div class="driver-items">
+        <div class="driver-item">Oestrogen fluctuation disrupts <strong>thermoregulation, sleep architecture, serotonin synthesis, cognition, collagen production, bone metabolism and vaginal pH</strong></div>
+        <div class="driver-item">Symptoms typically start 4–8 years before the final period and are routinely misattributed to stress, ageing or depression</div>
+        <div class="driver-item">VMS is not even the most prevalent symptom: joint/muscle pain affects ~78%, fatigue ~78%, sleep disruption ~50%, cognitive change ~60%</div>
+      </div>
+    </div>
+    <div class="driver-arrow">›</div>
+    <div class="driver-col">
+      <div class="driver-hdr pink">Consumer Pain points</div>
+      <div class="driver-items">
+        <div class="driver-item">A wide spectrum of symptoms (30+) go undiagnosed and untreated. Hot flashes are the #1 consumer frustration, followed by brain fog, hair loss and weight gain</div>
+        <div class="driver-item">Current supplements overpromise and underdeliver — consumers have near-zero brand loyalty and switch immediately</div>
+        <div class="driver-item">Symptoms shift throughout the 4–8 year transition — no product acknowledges this evolution</div>
+      </div>
+    </div>
+  </div>
+  <div class="emerging-box">🔬 <strong>Perimenopause is a 34-symptom syndrome</strong> — yet the category treats it as a hot flash problem. The full symptom load includes brain fog, weight gain, joint pain, skin changes, and oral health — all under-served by current solutions.</div>
+  <div style="margin-top:14px">
+  <div style="background:#fff;border:1.5px solid var(--h-green);border-radius:8px;padding:16px 20px">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px">A perimenopause solution that is:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div style="font-size:9px;font-weight:700;color:var(--h-green);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Platform specific</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${[['A','One product that covers everything'],['B','Working like hormones without being hormones'],['C','With me from first symptoms to the other side'],['D','Something my doctor would recommend']].map(([l,t])=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#eaf3de;border-radius:6px;border-left:3px solid var(--h-green)"><span style="min-width:20px;height:20px;border-radius:50%;background:var(--h-green);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">${l}</span><span style="font-size:11px;color:#1a2a0a"><strong>${t}</strong></span></div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">And also</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          ${[['E','Perceptibly effective'],['F','Simple regimen'],['G','Safe for ongoing use'],['H','Affordable'],['I','Predictable onset'],['J','Compatible with existing treatments'],['K','Believable and verifiable'],['L','Easy to store'],['M','No side effects'],['N','Easy to access']].map(([l,t])=>`<div style="display:flex;align-items:flex-start;gap:6px;padding:6px 8px;background:#f7f7f5;border-radius:5px"><span style="min-width:18px;height:18px;border-radius:50%;background:#555;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${l}</span><span style="font-size:10.5px;color:#333;line-height:1.4">${t}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div style="margin-top:14px"><div class="section-card"><div class="section-title">Right to win — what Haleon has vs. what needs to be unlocked</div>
+  <div style="display:grid;grid-template-columns:200px 1fr 1fr;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:10.5px">
+    <div style="background:#f5f5f3;padding:8px 10px;font-weight:700;border-bottom:1px solid var(--border)">Need</div><div style="background:#1a1a1a;color:#fff;padding:8px 10px;font-weight:700;border-bottom:1px solid #333;text-align:center">What Haleon has</div><div style="background:var(--h-green);color:#fff;padding:8px 10px;font-weight:700;border-bottom:1px solid #27500a;text-align:center">Unlock needed</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">A. One product that covers everything</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Centrum Women covers broad nutritional needs; no product addressing VMS, sleep, mood, and cognition together</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)"><strong>Multi-symptom perimenopause formulation</strong> combining actives across the syndrome in a single regimen</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">B. Working like hormones without being hormones</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">No oestrogen-pathway active in the portfolio</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)"><strong>Proprietary non-hormonal active</strong> that works on the oestrogen receptor pathway (ERr 731 or equivalent)</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">C. With me from first symptoms to the other side</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Nothing positioned for perimenopause; Centrum Menopause exists but targets post-menopause</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)"><strong>Product and brand that owns the full perimenopause journey</strong> (5–10 years), not a single symptom stage</div>
+    <div style="padding:8px 10px;font-weight:600">D. Something my doctor would recommend</div><div style="padding:8px 10px;background:#f9f9f9">Strong HCP relationships through existing brands in other categories; no perimenopause HCP engagement</div><div style="padding:8px 10px"><strong>Clinical evidence package</strong> (RCT or equivalent) that gives GPs and pharmacists confidence to recommend</div>
+  </div></div></div>`,
+
+  market:`
+  <div class="mkt-chart-wrap">
+    <div style="font-size:12px;font-weight:700;margin-bottom:10px">Perimenopause OTC market 2025–2035 (USD Bn) — Actual TAM vs. awareness gap</div>
+    <div class="mkt-legend">
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#534AB7"></div>Actual TAM (penetrated)</div>
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#d4d0f5;border:1px solid #9b94e8"></div>Awareness gap (untapped theoretical)</div>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:8px">
+      <div class="mkt-bars-area" style="flex:1">
+        ${[{y:'2025',actual:9,gap:65,tot:74},{y:'2026',actual:10,gap:66,tot:76},{y:'2027',actual:12,gap:67,tot:79},{y:'2028',actual:13,gap:70,tot:83},{y:'2029',actual:15,gap:71,tot:86},{y:'2030',actual:17,gap:73,tot:90},{y:'2031',actual:19,gap:74,tot:93},{y:'2032',actual:20,gap:77,tot:97},{y:'2033',actual:22,gap:78,tot:100},{y:'2034',actual:25,gap:79,tot:104},{y:'2035',actual:27,gap:81,tot:108}].map(d=>`
+        <div class="mkt-bar-group">
+          <div style="width:100%;display:flex;flex-direction:column;align-items:center;position:relative">
+            <span class="mkt-bar-total">${d.actual}</span>
+            <div style="width:100%;background:#d4d0f5;border:1px solid #9b94e8;height:${Math.round(d.gap/108*160)}px"></div>
+            <div style="width:100%;background:#534AB7;height:${Math.round(d.actual/108*160)}px"></div>
+          </div>
+          <span style="font-size:7.5px;color:#888;margin-top:4px;white-space:nowrap">${d.y}</span>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;padding-bottom:22px;min-width:140px">
+        <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">CAGR 2025–2035</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;height:10px;border-radius:2px;background:#534AB7;flex-shrink:0"></div>
+          <span style="font-size:10px;color:#333">Actual TAM</span>
+          <span style="margin-left:auto;font-size:10px;font-weight:700;color:#534AB7">~12%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:10px;height:10px;border-radius:2px;background:#d4d0f5;border:1px solid #9b94e8;flex-shrink:0"></div>
+          <span style="font-size:10px;color:#333">Theoretical</span>
+          <span style="margin-left:auto;font-size:10px;font-weight:700;color:#9b94e8">~4%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="background:#eaf3de;border:1px solid #aad87a;border-radius:6px;padding:10px 14px;margin:10px 0;font-size:10.5px;color:#1a3a08"><strong>Key insight:</strong> Each percentage point of awareness gained ≈ $700M incremental TAM. 75% of the theoretical market remains untapped by 2035. Awareness, not demographics, is the growth lever.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px">
+    <div class="mkt-commentary">
+      <div class="mkt-commentary-title">Segment breakdown — TAM 2035 ($27B base case)</div>
+      <ul class="bullet-list">
+        <li><strong>Vasomotor supplements (~$10B)</strong> — Core battleground. Estroven leads. Share winnable through ERr 731 and clinical positioning</li>
+        <li><strong>Sleep & mood (~$7B)</strong> — Ashwagandha and saffron have perimenopause RCT data. Women self-assemble today — regimen play</li>
+        <li><strong>Cognitive & energy (~$3B)</strong> — #1 holy grail. Category barely exists. PhytoSERM, creatine in pipeline. First mover wins</li>
+        <li><strong>Devices, digital & GSM (~$2B)</strong> — Not Haleon's core model; partnership or licensing territory</li>
+        <li><strong>MSK, oral, skin, other (~$4B)</strong> — Cross-portfolio play unique to Haleon. Voltarol (joint), Sensodyne (oral) already have GenM MTick certification</li>
+      </ul>
+    </div>
+    <div class="mkt-commentary">
+      <div class="mkt-commentary-title">Growth decomposition CAGR</div>
+      <ul class="bullet-list">
+        <li><strong>Demographic expansion (+0.6pp)</strong> — Global 40–55 cohort growing ~0.6% p.a.; APAC ~60% of incremental growth</li>
+        <li><strong>Premiumisation (+3.0–3.5pp)</strong> — Clinical-grade actives (ERr 731, S-equol) command 50–100% premium vs commodity botanicals</li>
+        <li><strong>Symptom recognition (+0.5–1.0pp)</strong> — 34 symptoms now clinically documented vs 4 in 2020; each newly recognised symptom creates a new OTC pocket</li>
+        <li><strong>Awareness expansion (+6.0–8.0pp dominant lever)</strong> — celebrity advocacy, social media and Rx approvals driving recognition into mainstream</li>
+        <li><strong>OTC treatment rate (+2.0–2.5pp)</strong> — Rx penetration &lt;5% leaves most consumers OTC-bound</li>
+      </ul>
+    </div>
+  </div>`,
+
+  competitive:`
+  <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text)">No scaled player has built a perimenopause-specific proposition with proven efficacy — white space exists at mass-market + clinical depth intersection</div>
+  <div class="comp-lessons">
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#2e7d32;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">ESTRO</span></div>
+        <div><div class="lesson-brand">Estroven</div><div class="lesson-tagline">Market-leading VMS brand</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Strongest single-ingredient evidence base (ERr 731 meta-analysis, 4 RCTs); #1 US menopause brand; pharmacist-recommended</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Positioned for menopause broadly, not perimenopause; fragmented SKU range with mixed actives</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Clinical rigour wins — but perimenopause-specific positioning is still unclaimed</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#10384F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">BAYER</span></div>
+        <div><div class="lesson-brand">Bayer (CanesMeno + Lynkuet)</div><div class="lesson-tagline">Dual OTC/Rx strategy</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Only player with both OTC and Rx in menopause; Lynkuet is first dual NK1/NK3 antagonist; Canesten brand trust in pharmacy</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>CanesMeno uses commodity actives; Rx targets VMS only; no multi-symptom OTC play</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Dual strategy is smart but OTC side lacks clinical differentiation — gap to exploit</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#7B1FA2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">BON</span></div>
+        <div><div class="lesson-brand">Bonafide (Otsuka)</div><div class="lesson-tagline">DTC-to-retail with multi-SKU suite</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Fastest-growing US menopause brand; symptom-specific portfolio; strong digital marketing; Otsuka backing</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Evidence base thinner than Estroven; retail expansion still early; no cognitive or sleep SKU</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>DTC model builds loyalty fast but clinical gap limits HCP endorsement and long-term credibility</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#E91E63;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">H&H</span></div>
+        <div><div class="lesson-brand">Health & Her</div><div class="lesson-tagline">UK perimenopause specialist</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>UK market leader in menopause supplements; genuine perimenopause positioning; strong digital community</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>UK-centric; limited clinical differentiation; commodity multi-herb formulations</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Community and perimenopause identity matter — but science is needed to sustain loyalty</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#FF6F00;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">HUM</span></div>
+        <div><div class="lesson-brand">HUM Nutrition</div><div class="lesson-tagline">Premium DTC expanding into menopause</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Strong brand among millennial women; growing retail (Sephora, Target); menopause range launched 2023</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Menopause is a sub-line, not the core brand; limited clinical evidence; premium pricing limits mass reach</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Premium positioning builds aspirational appeal but limits scale — Haleon's distribution is the differentiator</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#1565C0;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">KVU</span></div>
+        <div><div class="lesson-brand">Kenvue</div><div class="lesson-tagline">Broad consumer health — absent from category</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Massive distribution and pharmacy relationships; strong brand trust across OTC categories</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>No visible perimenopause strategy; absent from the category entirely; risk of late entry</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Largest scaled competitor is asleep — window exists for Haleon to define the category</div></div>
+  </div>
+  <div style="font-size:12px;font-weight:700;margin-bottom:8px">Incumbent and specialist players — full competitive matrix</div>
+  <div class="comp-matrix">
+    <div class="comp-matrix-hdr" style="grid-template-columns:36px 130px 120px 1fr 1fr 1fr"><div></div><div>Company</div><div>Symptom coverage</div><div>Key PM products</div><div>Strengths</div><div>Concerns</div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 120px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#2e7d32;display:flex;align-items:center;justify-content:center"><span style="font-size:8px;font-weight:900;color:#fff">ESTRO</span></div></div><div><strong>Estroven</strong><br><span style="font-size:9px;color:var(--muted)">USA</span></div><div>VMS · Sleep</div><div>Estroven Complete (ERr 731), Estroven Sleep Cool &amp; Calm</div><div><span class="comp-tag-pos">Strongest ERr 731 evidence base</span><span class="comp-tag-pos">#1 US menopause brand</span></div><div><span class="comp-tag-neg">Not perimenopause-specific</span><span class="comp-tag-neg">Fragmented SKU range</span></div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 120px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#10384F;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#fff">BAYER</span></div></div><div><strong>Bayer</strong><br><span style="font-size:9px;color:var(--muted)">Germany</span></div><div>VMS</div><div>CanesMeno (OTC, UK Jan 2025), Lynkuet/elinzanetant (Rx, UK Jul 2025)</div><div><span class="comp-tag-pos">Only dual OTC + Rx player</span><span class="comp-tag-pos">Canesten pharmacy trust</span></div><div><span class="comp-tag-neg">CanesMeno: commodity actives</span><span class="comp-tag-neg">No multi-symptom OTC</span></div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 120px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#7B1FA2;display:flex;align-items:center;justify-content:center"><span style="font-size:8px;font-weight:900;color:#fff">BON</span></div></div><div><strong>Bonafide</strong><br><span style="font-size:9px;color:var(--muted)">USA</span></div><div>VMS · Mood · Vaginal · Sexual</div><div>Relizen (Swedish pollen), Ristela, Clairvee, Silvessa</div><div><span class="comp-tag-pos">Fastest-growing US brand</span><span class="comp-tag-pos">Symptom-specific portfolio</span></div><div><span class="comp-tag-neg">Thinner evidence vs Estroven</span><span class="comp-tag-neg">No cognitive/sleep SKU</span></div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 120px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#E91E63;display:flex;align-items:center;justify-content:center"><span style="font-size:8px;font-weight:900;color:#fff">H&H</span></div></div><div><strong>Health &amp; Her</strong><br><span style="font-size:9px;color:var(--muted)">UK</span></div><div>VMS · Mood · Sleep · Energy</div><div>Multi-herb blends (sage, ashwagandha, soy isoflavones), perimenopause-specific range</div><div><span class="comp-tag-pos">UK market leader</span><span class="comp-tag-pos">Genuine perimenopause positioning</span></div><div><span class="comp-tag-neg">UK-centric</span><span class="comp-tag-neg">Commodity multi-herb</span></div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 120px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#1565C0;display:flex;align-items:center;justify-content:center"><span style="font-size:8px;font-weight:900;color:#fff">KVU</span></div></div><div><strong>Kenvue</strong><br><span style="font-size:9px;color:var(--muted)">USA</span></div><div>General women's health</div><div>No dedicated perimenopause product; Motrin, Tylenol adjacent only</div><div><span class="comp-tag-pos">Massive distribution</span><span class="comp-tag-pos">Strong pharmacy trust</span></div><div><span class="comp-tag-neg">Absent from category</span><span class="comp-tag-neg">Risk of late entry</span></div></div>
+  </div>`,
+
+  patents:`
+  <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text)">Three primary R&D bets target the upstream systems driving perimenopause symptoms</div>
+  <div class="tech-cards">
+    <div class="tech-card">
+      <div class="tech-card-num">1</div>
+      <div class="tech-card-name">ERβ-selective receptor agonists</div>
+      <div class="tech-card-desc">Standardised plant extracts that selectively activate oestrogen receptor beta in the hypothalamus, stabilising thermoregulation without systemic oestrogen</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Medium maturity</div>
+      <div class="tech-example">ERr 731 (Estroven), S-equol (Equelle)</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-num">2</div>
+      <div class="tech-card-name">Serotonergic & GABAergic mood modulators</div>
+      <div class="tech-card-desc">Botanical extracts modulating serotonin, GABA and noradrenaline pathways disrupted by oestrogen fluctuation — targeting mood and anxiety at neurotransmitter level</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Medium maturity</div>
+      <div class="tech-example">Ashwagandha (KSM-66), Saffron/affron (Pharmactive)</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-num">3</div>
+      <div class="tech-card-name">Estrobolome-targeted probiotics</div>
+      <div class="tech-card-desc">Live bacterial strains with high β-glucuronidase activity restoring the gut's oestrogen recycling capacity via enterohepatic recirculation</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Low maturity</div>
+      <div class="tech-example">Kaneka KABP-052 (2025 NutraIngredients award)</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-num">4</div>
+      <div class="tech-card-name">Hydrolysed collagen peptides</div>
+      <div class="tech-card-desc">Type I and III collagen peptides addressing the ~30% collagen loss in first five postmenopausal years, targeting skin, joint and connective tissue</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Medium maturity</div>
+      <div class="tech-example">Verisol (Gelita), UC-II (Lonza)</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-num">5</div>
+      <div class="tech-card-name">Non-hormonal ERβ-active topicals</div>
+      <div class="tech-card-desc">Topical molecules activating skin oestrogen receptors locally without systemic hormonal effects, targeting oestrogen-deficient skin changes</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Low–medium maturity</div>
+      <div class="tech-example">Emepelle / MEP Technology (Biopelle)</div>
+    </div>
+  </div>
+  <div style="font-size:12px;font-weight:700;margin-bottom:8px;margin-top:14px">Technology vs. consumer needs — which techs address which needs</div>
+  <div class="need-matrix">
+    <div class="nm-hdr" style="grid-template-columns:140px repeat(5,1fr)"><div>Consumer need</div><div style="text-align:center">ERβ agonists</div><div style="text-align:center">Mood modulators</div><div style="text-align:center">Estrobolome probiotics</div><div style="text-align:center">Collagen peptides</div><div style="text-align:center">Topical ERβ</div></div>
+    ${[
+      {need:'A. Covers everything',        t1:'yes',  t2:'no',      t3:'partial', t4:'no',      t5:'no'},
+      {need:'B. Works like hormones',       t1:'yes',  t2:'no',      t3:'partial', t4:'no',      t5:'yes'},
+      {need:'C. From first to last symptom',t1:'yes',  t2:'partial', t3:'unclear', t4:'partial', t5:'no'},
+      {need:'D. Doctor recommended',        t1:'yes',  t2:'yes',     t3:'unclear', t4:'no',      t5:'unclear'},
+      {need:'E. Perceptibly effective',     t1:'yes',  t2:'yes',     t3:'unclear', t4:'partial', t5:'partial'},
+      {need:'F. Simple regimen',            t1:'yes',  t2:'yes',     t3:'partial', t4:'yes',     t5:'partial'},
+      {need:'G. Safe for ongoing use',      t1:'yes',  t2:'yes',     t3:'yes',     t4:'yes',     t5:'unclear'},
+      {need:'M. No side effects',           t1:'yes',  t2:'partial', t3:'yes',     t4:'yes',     t5:'unclear'},
+    ].map(r=>`<div class="nm-row" style="grid-template-columns:140px repeat(5,1fr)"><div class="nm-need">${r.need}</div>${[r.t1,r.t2,r.t3,r.t4,r.t5].map(v=>`<div class="nm-cell">${v==='yes'?'<div class="ic-yes">✓</div>':v==='no'?'<div class="ic-no">✗</div>':v==='partial'?'<div class="ic-partial">›</div>':'<div class="ic-maybe">?</div>'}</div>`).join('')}</div>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+    <div class="section-card"><div class="section-title">Publication momentum (PubMed — "perimenopause" + "non-hormonal")</div>
+      <div class="pub-chart">
+        ${[{y:'2016',v:2},{y:'2017',v:3},{y:'2018',v:2},{y:'2019',v:2},{y:'2020',v:4},{y:'2021',v:3},{y:'2022',v:1},{y:'2023',v:4},{y:'2024',v:4},{y:'2025',v:8}].map(d=>`<div class="pub-bar" style="height:${Math.round(d.v/8*100)}%"><span class="pub-val">${d.v}</span><span class="pub-lbl">${d.y}</span></div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:18px">+19% CAGR · Source: PubMed / BCG analysis</div>
+    </div>
+    <div class="section-card"><div class="section-title">Patent filing momentum ("perimenopause")</div>
+      <div class="pub-chart">
+        ${[{y:'2018',v:7},{y:'2019',v:7},{y:'2020',v:6},{y:'2021',v:9},{y:'2022',v:13},{y:'2023',v:16},{y:'2024',v:17},{y:'2025',v:20}].map(d=>`<div class="pub-bar" style="height:${Math.round(d.v/20*100)}%;background:#534AB7;opacity:.7"><span class="pub-val" style="color:#534AB7">${d.v}</span><span class="pub-lbl">${d.y}</span></div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:18px">+16% CAGR vs avg. consumer health CAGR of 5–10% · Source: Patentsight, BCG analysis</div>
+    </div>
+  </div>`,
+
+  regulatory:`
+  <div class="section-card" style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#791f1f;margin-bottom:6px">US, Germany and Japan offer clear paths for an ERr 731 perimenopause formulation — EU botanical claims remain blocked</div>
+  <table class="reg-table">
+    <thead><tr><th>Market</th><th>Risk</th><th>What you can claim</th><th>Key constraint</th><th>Classification</th></tr></thead>
+    <tbody>
+      <tr><td><strong>US</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>Structure/function claims ("helps reduce frequency of hot flashes"); ERr 731 and black cohosh already marketed with these claims</td><td>Cannot claim to treat, cure or prevent menopause; FDA monitoring supplement efficacy claims post-Prevagen litigation</td><td>Dietary supplement (DSHEA)</td></tr>
+      <tr><td><strong>Germany</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>ERr 731 (Remifemin) already approved and on shelf; traditional herbal medicinal product classification available</td><td>Traditional use registration pathway requires 30 years of use evidence; clinical data speeds approval</td><td>Traditional herbal medicinal product</td></tr>
+      <tr><td><strong>Japan</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>FFC: functional claims via self-certification with notification; FOSHU for broader claims via pre-approval</td><td>Fastest path for multi-ingredient formulation; ERr 731 meta-analysis could support clinical evidence requirement</td><td>FOSHU / FFC</td></tr>
+      <tr><td><strong>India</strong></td><td><span class="risk-badge risk-low">Low risk</span></td><td>Health claims permitted with evidence; ERr 731 already marketed as Estroease</td><td>Multi-ingredient formulation adds regulatory complexity; nutraceutical regulations still being finalised</td><td>Health supplement (FSSAI)</td></tr>
+      <tr><td><strong>UK</strong></td><td><span class="risk-badge risk-med">Medium risk</span></td><td>Traditional Herbal Registration possible for established botanicals; food supplement claims for vitamins/minerals</td><td>UK ASA enforced against three menopause supplement brands in 2026 for treatment-level claims; advertising compliance is the key risk</td><td>Food supplement</td></tr>
+      <tr><td><strong>EU</strong></td><td><span class="risk-badge risk-high">High risk</span></td><td>Approved vitamin/mineral claims only; botanical health claims authorisation frozen since 2012 (~1,548 on hold)</td><td>Cannot make menopause-specific botanical health claims; lean on ingredient-level approved claims and transitional measures (Art. 28.5)</td><td>Food / food supplement</td></tr>
+      <tr><td><strong>Australia</strong></td><td><span class="risk-badge risk-med">Medium risk</span></td><td>Listed medicine pathway for traditional/complementary medicines</td><td>TGA increasingly scrutinising menopause supplement advertising; established pathway but compliance risk</td><td>Listed medicine (TGA)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="reg-two">
+    <div class="reg-box"><div class="reg-box-title">Key regulatory trends</div><ul class="bullet-list"><li><strong>US, Germany and Japan are the clearest launch markets</strong> — ERr 731 already approved and on shelf in all three</li><li><strong>EU botanical claims freeze (unresolved since 2012)</strong> prevents menopause-specific health claims for any botanical ingredient indefinitely</li><li><strong>Estrobolome probiotics face novel ingredient classification</strong> in EU and UK — US is the viable first market</li><li><strong>Japan FFC expanding:</strong> fastest-growing functional food pathway globally; lower barrier than FOSHU or EFSA</li></ul></div>
+    <div class="reg-box"><div class="reg-box-title" style="color:#791f1f;border-bottom-color:#C04060">High regulatory risk areas</div><ul class="bullet-list"><li><strong style="color:#791f1f">EU:</strong> menopause-specific health claims not permissible for any botanical — no sign of policy change</li><li><strong style="color:#791f1f">UK ASA:</strong> enforced against Lunera, Minerva Wellness and Nova in 2026 for treatment-level menopause supplement claims — advertising is the constraint, not the product</li><li><strong style="color:#791f1f">China:</strong> requires 18–24 months pre-market approval per active ingredient — delays multi-ingredient formulations significantly</li></ul>
+    <div style="margin-top:10px;background:#f5f5f3;border-radius:4px;padding:8px 10px;font-size:10.5px;color:#444"><strong>Note:</strong> Haleon has already launched probiotic products under the Centrum brand in <strong>South Korea</strong></div></div>
+  </div>`,
+
+  inspiration:`
+  <div class="inspo-intro">
+    <div class="inspo-intro-title">💡 Brainstorm — some ideas to get you started...</div>
+    <div class="inspo-intro-sub">These are illustrative product concepts based on the platform technologies and consumer needs identified in this deep-dive. They are starting points, not final recommendations.</div>
+  </div>
+  <div class="inspo-grid">
+    <div class="inspo-concept">
+      <div class="inspo-concept-img" style="background:linear-gradient(135deg,#7B1FA2,#E91E63);display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center;color:#fff;padding:20px"><div style="font-size:28px;font-weight:900;font-style:italic;letter-spacing:-1px">Centrum<br>Equilibra</div><div style="font-size:12px;opacity:.8;margin-top:8px">ERβ-selective · Multi-symptom · Daily</div></div>
+      </div>
+      <div class="inspo-concept-body">
+        <div class="inspo-badge">Existing brand · ERβ-selective agonist · Multi-symptom</div>
+        <div class="inspo-concept-name">Centrum Equilibra</div>
+        <div class="inspo-concept-tagline">One daily capsule that stabilises the body's response to oestrogen fluctuation</div>
+        <div class="inspo-concept-desc">A Centrum perimenopause sub-line anchored on ERr 731 + ashwagandha KSM-66 + saffron affron. Targets the three most prevalent symptom clusters — VMS, mood, and sleep — in a single daily formulation. Positioned as "the clinically proven perimenopause solution from a brand your doctor knows." Leverages existing pharmacy distribution and HCP trust.</div>
+      </div>
+    </div>
+    <div class="inspo-concept">
+      <div class="inspo-concept-img" style="background:linear-gradient(135deg,#1a1a2e,#534AB7);display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center;color:#fff;padding:20px"><div style="font-size:26px;font-weight:900;font-style:italic">Cycl</div><div style="font-size:11px;opacity:.8;margin-top:6px">Perimenopause journey companion</div></div>
+      </div>
+      <div class="inspo-concept-body">
+        <div class="inspo-badge">New brand · Journey-based formulation · DTC + pharmacy</div>
+        <div class="inspo-concept-name">Cycl — by Haleon</div>
+        <div class="inspo-concept-tagline">With you from first symptoms to the other side</div>
+        <div class="inspo-concept-desc">A new women's health brand built around the perimenopause journey concept — three phase-specific formulations (early peri, peak peri, late peri/post) that evolve as symptoms change. Anchored on estrobolome probiotics + ERβ actives + collagen peptides. Addresses the key consumer insight that "no product acknowledges my symptoms are changing." DTC subscription with pharmacy presence.</div>
+      </div>
+    </div>
+  </div>
+  <div class="platform-box">
+    <div class="platform-box-title">Platform hypothesis — target the five systems oestrogen fluctuation disrupts, not the 34 symptoms they produce</div>
+    <div class="platform-three">
+      <div class="plat-col core"><div class="plat-col-title">Core bet</div><div style="font-size:10.5px;color:#1a3a08;line-height:1.5">A daily formulation that stabilises the body's response to oestrogen fluctuation across five disrupted systems: thermoregulation, mood signalling, cognitive function, gut-oestrogen recycling, and tissue integrity</div></div>
+      <div class="plat-col primary"><div class="plat-col-title">Primary R&D bets</div><ul class="bullet-list" style="margin:0"><li>ERβ-selective receptor agonists</li><li>Serotonergic and GABAergic mood modulators</li><li>Estrobolome-targeted probiotics</li></ul><div style="font-size:9.5px;color:var(--h-green);margin-top:6px;font-weight:600">+ Potential platform: Brain metabolism &amp; cognition · Metabolic &amp; weight regulation · Sleep architecture restoration</div></div>
+      <div class="plat-col secondary"><div class="plat-col-title">Secondary R&D bets</div><ul class="bullet-list" style="margin:0"><li>Hydrolysed collagen peptides (skin &amp; joint)</li><li>Non-hormonal ERβ-active topicals</li><li>Functional mushroom extracts (brain fog)</li><li>Calcium / vitamin D / K2 (bone density)</li><li>Magnesium glycinate (sleep)</li></ul></div>
+    </div>
+  </div>`},
   {rank:3,name:"GLP-1 side-effect management",full:true,tags:["GLP-1","GI","Metabolic"],desc:"OTC products for GI side-effect relief and preventive supplements (fibre, B12, electrolytes) purchased by GLP-1 users to improve adherence and sustain treatment outcomes.",
   exec:`
   <div class="p1-grid">
@@ -1803,13 +2264,465 @@ const platforms = [
   competitive:`<div class="section-card"><div class="section-title">Competitive landscape</div><ul class="bullet-list"><li><strong>Voltaren / Advil (Haleon)</strong> — leading anti-inflammatory brands. Strong base.</li><li><strong>Thorne / Garden of Life</strong> — premium curcumin + omega-3 stacks DTC.</li><li><strong>Pharma biologics</strong> — Dupixent raising the bar on what treating inflammation means.</li></ul></div>`,
   patents:`<div class="section-card"><div class="section-title">Technologies</div><ul class="bullet-list"><li><strong>Natural COX-2 modulators (TRL 7)</strong> — curcumin phytosome, boswellia, omega-3</li><li><strong>Overnight sustained-release patch (TRL 7)</strong> — diclofenac patch + tart cherry</li><li><strong>SPMs / resolvins (TRL 5)</strong> — pro-resolving mediators; manufacturing complex</li></ul></div>`,
   regulatory:`<div class="section-card"><div class="section-title">Regulatory</div><ul class="bullet-list"><li><span class="tag tag-green">US</span> Supplement claims for "healthy inflammation response" workable</li><li><span class="tag tag-amber">EU</span> Modified-release Voltaren requires variation to existing MA</li></ul></div>`},
-  {rank:5,name:"Advanced topical pain relief",full:true,tags:["Pain","MSK","Topical"],desc:"Next-generation OTC topical analgesics delivering faster onset, deeper tissue penetration and extended duration — spanning diclofenac nanoparticles, cannabidiol patches and ultra-deformable liposomes.",
-  exec:`<div class="exec-highlight"><div class="eh-title">Why this matters</div><div class="eh-text">Oral NSAIDs carry GI and cardiovascular risk — consumers are actively seeking effective topical alternatives. Voltaren is already the #1 topical NSAID globally, giving Haleon a direct right to lead the next generation of topical pain relief.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$6.3B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$14.3B</div><div class="stat-lbl">TAM 2035 (8.5% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 7</div><div class="stat-lbl">Nano-diclofenac + CBD patch</div></div></div></div>`,
-  consumer:`<div class="section-card"><div class="section-title">Consumer needs</div><ul class="bullet-list"><li>Effective pain relief without stomach damage — primary reason consumers switch from oral NSAIDs</li><li>Faster onset topicals — current gels feel slow vs tablets</li><li>Targeted local action — joint, muscle and back pain that OTC tablets can't reach</li><li>Natural alternatives — CBD and arnica attracting trial among pain-averse consumers</li></ul></div>`,
-  market:`<div class="section-card"><div class="section-title">Market size</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$6.3B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$14.3B</div><div class="stat-lbl">TAM 2035</div></div><div class="stat-box"><div class="stat-num">8.5%</div><div class="stat-lbl">CAGR</div></div></div></div>`,
-  competitive:`<div class="section-card"><div class="section-title">Competitive landscape</div><ul class="bullet-list"><li><strong>Voltaren (Haleon)</strong> — global #1 topical NSAID. $1B+ brand. Direct right to lead.</li><li><strong>Salonpas (Hisamitsu)</strong> — patch delivery, strong Asian presence, expanding globally.</li><li><strong>Biofreeze (Performix)</strong> — menthol-based, sports/PT channel dominance.</li><li><strong>CBD topicals</strong> — fragmented emerging category; no scaled OTC leader yet.</li></ul></div>`,
-  patents:`<div class="section-card"><div class="section-title">Technologies</div><ul class="bullet-list"><li><strong>Nano-diclofenac (TRL 7)</strong> — nanoparticle formulation, 3x deeper tissue penetration</li><li><strong>Ultra-deformable liposomes (TRL 6)</strong> — elastic carriers penetrating intact skin</li><li><strong>CBD transdermal patch (TRL 6)</strong> — sustained 24h release, consumer demand growing</li><li><strong>Iontophoresis (TRL 5)</strong> — electrically-assisted delivery; clinical-grade outcomes OTC</li></ul></div>`,
-  regulatory:`<div class="section-card"><div class="section-title">Regulatory</div><ul class="bullet-list"><li><span class="tag tag-green">US</span> Diclofenac sodium 1% OTC approved — strong precedent for next-gen formats</li><li><span class="tag tag-green">EU</span> Topical NSAIDs well-established; nanoformulations require new dossier</li><li><span class="tag tag-amber">CBD</span> Regulatory status varies by market — UK FSA novel food, US FDA evolving</li></ul></div>`},
+  {rank:5,name:"Advanced topical pain relief",full:true,tags:["Pain","MSK","Topical","Voltaren"],desc:"Advanced topical NSAID formulations delivering oral-equivalent anti-inflammatory efficacy through the skin — longer-lasting, deeper-penetrating, and designed for chronic daily use.",
+
+  exec:`
+  <div class="p1-grid">
+    <div class="p1-left">
+      <div class="p1-box">
+        <div class="p1-box-title">📋 Description</div>
+        <div class="p1-box-body">Advanced topical NSAID formulations delivering oral-equivalent anti-inflammatory efficacy through the skin — longer-lasting, deeper-penetrating, and designed for chronic daily use.</div>
+      </div>
+      <div class="p1-box">
+        <div class="p1-box-title">📊 Market size '25</div>
+        <div class="p1-box-body"><strong>Total: ~$9B</strong><br>Topical NSAIDs: ~$2.3B<br>Counterirritants: ~$3.2B<br>Lidocaine/anaesthetic: ~$1.8B<br>Traditional/herbal/other: ~$1.7B</div>
+      </div>
+      <div class="p1-box">
+        <div class="p1-box-title">📈 CAGR '25–'36</div>
+        <div class="p1-box-body"><strong>Overall CAGR: ~6%</strong><br>Driven by demographic growth, clinical guideline adoption, and format premiumisation<br>Oral NSAID switching is the key upside assumption</div>
+      </div>
+    </div>
+    <div class="p1-right">
+      <div class="p1-section">
+        <div class="p1-section-hdr">🛒 Consumer need & value proposition</div>
+        <ul class="p1-bullets">
+          <li><strong>607M Osteoarthritis (OA) patients globally</strong> and rising 60–100% by 2050; 1.7B with Musculoskeletal (MSK) disorders</li>
+          <li>Current topicals last 4–6 hours vs 8–12 for oral; <strong>insufficient for chronic daily use</strong></li>
+          <li>55% of consumers now prefer topical over oral; clinical guidelines recommend topical first-line</li>
+          <li><strong>No topical product delivers oral-equivalent efficacy</strong></li>
+        </ul>
+      </div>
+      <div class="p1-section">
+        <div class="p1-section-hdr">🏆 Competitive landscape</div>
+        <ul class="p1-bullets">
+          <li><strong>Haleon #1 globally (Voltaren);</strong> Hisamitsu #2 (Salonpas, 6.4%) with 47 patent filings in 2024 — a key competitor to watch</li>
+          <li>No player has combined oral-level efficacy with targeted topical delivery</li>
+          <li>NSAID incumbents (Pfizer/Advil, Bayer/Aleve) have limited topical innovation</li>
+        </ul>
+      </div>
+      <div class="p1-rtw-row">
+        <div class="p1-section">
+          <div class="p1-section-hdr">⚖️ Regulatory path</div>
+          <ul class="p1-bullets">
+            <li><strong>US:</strong> 505(b)(2) NDA → Rx-to-OTC switch pathway established by Voltaren; no OTC monograph shortcut for enhanced formulations</li>
+            <li><strong>EU/UK:</strong> Clinical superiority required; $50–100M Phase 3 investment required — one trial could serve US, EU, and UK simultaneously</li>
+          </ul>
+        </div>
+        <div class="p1-section">
+          <div class="p1-section-hdr" style="background:#1a1a1a">🎯 Haleon Right-to-Win</div>
+          <ul class="p1-bullets">
+            <li><strong>Voltaren is #1 topical NSAID globally;</strong> $1.3B sales; 50+ clinical studies; strongest brand permission</li>
+            <li><strong>Format expansion underway:</strong> 2.32% diclofenac gel and heat+drug patch in select markets</li>
+            <li><strong>Key gaps are closable:</strong> high-strength formulation, extended-release formats (24–72hr), engineered sensory experience</li>
+          </ul>
+          <div class="p1-attract"><div class="p1-dot" style="background:#aaa"></div>Low<div class="p1-dot" style="background:var(--h-green);opacity:.6"></div>Medium<div class="p1-dot" style="background:var(--h-green)"></div>High attractiveness</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="confidence-grid">
+    <div class="conf-box conf-pos">
+      <div class="conf-hdr">👍 Things we like</div>
+      <div class="conf-item"><span class="conf-num">1</span><strong style="color:#8dc63f">Haleon owns the category</strong> — $1.3B Voltaren, 14.1% share, trusted by clinicians and consumers globally</div>
+      <div class="conf-item"><span class="conf-num">2</span><strong style="color:#8dc63f">Clinical guidelines are doing the selling</strong> — ACR, NICE, EULAR all recommend topical NSAIDs as first-line; regulatory bodies elevating topical status</div>
+      <div class="conf-item"><span class="conf-num">3</span><strong style="color:#8dc63f">The oral-to-topical switch is structural</strong> — driven by safety concerns, not trends; 70–110bps share gain per year vs oral globally</div>
+      <div class="conf-item"><span class="conf-num">4</span><strong style="color:#8dc63f">The white space is genuinely empty</strong> — no competitor has commercialised a next-gen OTC topical NSAID with oral-equivalent efficacy yet</div>
+      <div class="conf-item"><span class="conf-num">5</span><strong style="color:#8dc63f">Multiple breakthrough technologies exist</strong> — across gels, patches, and combination formats; search interest up 10× in 12 months</div>
+    </div>
+    <div class="conf-box conf-neg">
+      <div class="conf-hdr" style="color:#C04060">❓ Things to get comfort on</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">1</span><strong>$50–100M Phase 3 investment required</strong> to unlock a next-gen efficacy claim — significant capital commitment</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">2</span><strong>None have completed a full OTC regulatory programme</strong> — multiple technologies proven in early trials but no next-gen topical NSAID has crossed the line</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">3</span><strong>Hisamitsu filed 47 transdermal patents in 2024</strong> — may be building toward the same white space; Haleon holds none in penetration enhancement</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">4</span><strong>Generic diclofenac gels compress pricing</strong> — premium positioning needs consumer willingness-to-pay validation</div>
+      <div class="conf-item" style="border-color:#eee"><span class="conf-num" style="background:#C04060">5</span><strong>Combination products add regulatory complexity</strong> that could slow time to market</div>
+    </div>
+  </div>`,
+
+  consumer:`
+  <div class="sentiment-grid" style="margin-bottom:14px">
+    <div class="sent-chart" style="background:#fff;padding:14px">
+      <div style="font-size:11px;font-weight:700;margin-bottom:2px;color:var(--text)">Topical pain relief search mentions — consumer search landscape</div>
+      <div style="font-size:9px;color:var(--muted);margin-bottom:6px">Source: Glimpse / Google search data · BCG analysis · 2022–2026</div>
+      <div id="tp-wc-tooltip" style="display:none;position:fixed;z-index:9999;background:#1a1a1a;color:#fff;border-radius:7px;padding:10px 13px;max-width:220px;font-size:11px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,0.35);pointer-events:none"></div>
+      <svg viewBox="0 0 700 580" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;font-family:'Segoe UI',Arial,sans-serif;cursor:default"
+        onmousemove="tpWcTT(event,event.target)" onmouseleave="tpWcHide()">
+        <title>Word Cloud — Topical Pain Relief Search Mentions</title>
+        <defs><clipPath id="tpCircleClip"><circle cx="350" cy="295" r="275"/></clipPath></defs>
+        <circle cx="350" cy="295" r="275" fill="#fff" stroke="#e0e0e0" stroke-width="1.5"/>
+        <g clip-path="url(#tpCircleClip)">
+          <text x="350" y="42"  text-anchor="middle" font-size="11" fill="#16a34a" class="wc-word" data-tip="Red balm is a traditional herbal topical — signals consumers exploring non-pharmacological alternatives.">red balm</text>
+          <text x="350" y="72"  text-anchor="middle" font-size="32" font-weight="900" fill="#16a34a" class="wc-word" data-tip="'Arthritis cream' is the #1 condition-specific search — consumers searching by pain type, not by ingredient or brand.">arthritis cream</text>
+          <text x="195" y="88"  text-anchor="middle" font-size="14" fill="#e53e3e" class="wc-word" data-tip="'NSAID gel' signals consumers doing clinical research — small volume but high intent.">nsaid gel</text>
+          <text x="510" y="84"  text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="Sciatica cream is searched by consumers with nerve pain — a large underserved segment.">sciatica cream</text>
+          <text x="120" y="110" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Pain gel' is a broad format search — consumers open to any gel format that works.">pain gel</text>
+          <text x="350" y="116" text-anchor="middle" font-size="28" font-weight="700" fill="#16a34a" class="wc-word" data-tip="'Body pain relief' captures the systemic pain consumer — the biggest OTC pain segment.">body pain relief</text>
+          <text x="560" y="108" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="'Red ointment' refers to traditional Asian topical remedies — signals consumer experimentation beyond established brands.">red ointment</text>
+          <text x="110" y="138" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="Pain patch is a growing format search — consumers interested in hands-free extended-release formats.">pain patch</text>
+          <text x="350" y="148" text-anchor="middle" font-size="26" font-weight="700" fill="#16a34a" class="wc-word" data-tip="'Nerve pain cream' reflects the neuropathic pain segment — growing in prominence as CBD is explored.">nerve pain cream</text>
+          <text x="575" y="136" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="Healing cream is searched by consumers seeking tissue repair as well as pain relief — emerging functional claim territory.">healing cream</text>
+          <text x="92"  y="168" text-anchor="middle" font-size="11" fill="#16a34a" class="wc-word" data-tip="Pain rub — format-agnostic search by consumers who know what they want but not which brand.">pain rub</text>
+          <text x="175" y="172" text-anchor="middle" font-size="14" fill="#16a34a" class="wc-word" data-tip="'Arthritis gel' is a high-intent condition-specific search — directly addressable by Voltaren with stronger clinical claims.">arthritis gel</text>
+          <text x="350" y="185" text-anchor="middle" font-size="38" font-weight="900" fill="#5C9E1A" class="wc-word" data-tip="'CBD lotion for pain' is the fastest-growing single term in topical pain — signals consumer dissatisfaction with current NSAID options and openness to alternatives.">cbd lotion for pain</text>
+          <text x="546" y="172" text-anchor="middle" font-size="14" fill="#e53e3e" class="wc-word" data-tip="'Arthritis hot' refers to heat-based arthritis products — the Thermacare/Wärmepflaster segment.">arthritis hot</text>
+          <text x="82"  y="202" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Pharmacy gel' signals the pharmacy channel remains dominant for topical pain consumers.">pharmacy gel</text>
+          <text x="585" y="196" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="'Anus cream' reflects the long tail of topical cream searches — unrelated but shows broad format relevance.">anus cream</text>
+          <text x="95"  y="232" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="'Pain ointment' is searched by older demographics who associate ointments with stronger efficacy than gels.">pain ointment</text>
+          <text x="350" y="228" text-anchor="middle" font-size="30" font-weight="900" fill="#16a34a" class="wc-word" data-tip="'Topical analgesic' is the clinical umbrella term — growing as consumer health literacy increases.">topical analgesic</text>
+          <text x="570" y="224" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Pain relief gel' is a broad intent search — the highest volume generic term after condition-specific terms.">pain relief gel</text>
+          <text x="68"  y="262" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Lip medicine' appears as an edge-case topical search — unrelated but reflects broad consumer topical appetite.">lip medicine</text>
+          <text x="350" y="264" text-anchor="middle" font-size="34" font-weight="900" fill="#16a34a" class="wc-word" data-tip="'Joint pain relief cream' is the second highest-volume condition search — directly in Voltaren's territory and the core battleground.">joint pain relief cream</text>
+          <text x="585" y="256" text-anchor="middle" font-size="14" fill="#e53e3e" class="wc-word" data-tip="'Heat cream' reflects the counterirritant category — consumers seeking sensory confirmation that something is working.">heat cream</text>
+          <text x="74"  y="294" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="'Wonder gel' is a consumer-coined term for breakthrough pain gels — reflects expectation of product innovation.">wonder gel</text>
+          <text x="350" y="298" text-anchor="middle" font-size="28" font-weight="700" fill="#e53e3e" class="wc-word" data-tip="'Herpes treatment cream' reflects the OTC topical crossover with antiviral creams — unrelated but shows the broad search universe.">herpes treatment cream</text>
+          <text x="582" y="288" text-anchor="middle" font-size="14" fill="#e53e3e" class="wc-word" data-tip="'CBD relief' signals the CBD-for-pain consumer segment — growing rapidly and directly competitive with NSAID topicals.">cbd relief</text>
+          <text x="72"  y="328" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Back aid' is searched by chronic back pain sufferers — the largest single pain condition after arthritis.">back aid</text>
+          <text x="195" y="334" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Green glow' is a niche topical brand — reflects the fragmented nature of the current market.">green glow</text>
+          <text x="370" y="332" text-anchor="middle" font-size="26" font-weight="700" fill="#16a34a" class="wc-word" data-tip="'Diclofenac sodium gel' appears but is NOT dominant — consumers use condition language not ingredient language. Clinical terms are secondary.">diclofenac sodium gel</text>
+          <text x="568" y="320" text-anchor="middle" font-size="14" fill="#16a34a" class="wc-word" data-tip="'Nerve relief' reflects the growing neuropathic pain search — an underserved segment in topical pain.">nerve relief</text>
+          <text x="82"  y="360" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Schmerzgel' (German for pain gel) reflects the European topical pain market — strong Voltaren territory.">schmerzgel</text>
+          <text x="350" y="362" text-anchor="middle" font-size="28" font-weight="700" fill="#e53e3e" class="wc-word" data-tip="'CBD cream for pain' is one of the fastest-growing topical pain terms globally — signals consumer dissatisfaction with existing NSAID options.">cbd cream for pain</text>
+          <text x="556" y="352" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="'Muscle balm' is searched by sports and active lifestyle consumers — a premium-positioned segment growing rapidly.">muscle balm</text>
+          <text x="95"  y="392" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Liniment' is a traditional format term — searched by older demographics and in Asian markets.">liniment</text>
+          <text x="185" y="398" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="'Pain relief rub' is a format-led search by consumers who know they want a rub-in product.">pain relief rub</text>
+          <text x="360" y="394" text-anchor="middle" font-size="26" font-weight="700" fill="#16a34a" class="wc-word" data-tip="'Pain relieving gel' is a high-volume generic search — the broadest intent term in the category.">pain relieving gel</text>
+          <text x="540" y="386" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="'CBD THC cream' reflects consumer exploration of cannabis-based topicals — regulatory grey area but growing demand.">cbd thc cream</text>
+          <text x="115" y="426" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Numbing gel' is searched by consumers seeking immediate sensory relief — validates the 'I can feel it working' consumer need.">numbing gel</text>
+          <text x="330" y="426" text-anchor="middle" font-size="24" font-weight="700" fill="#16a34a" class="wc-word" data-tip="'Topical ointment' is a broad format term used by consumers who prefer ointment texture over gel.">topical ointment</text>
+          <text x="522" y="416" text-anchor="middle" font-size="14" fill="#16a34a" class="wc-word" data-tip="'THC cream' reflects the cannabis topical segment — growing in legal US states and Canada.">thc cream</text>
+          <text x="100" y="458" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="'Flex cream' is a brand search — signals consumers already searching for named alternatives.">flex cream</text>
+          <text x="220" y="454" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="'CBD body' is a catch-all body-care CBD search — reflects the convergence of wellness and pain relief.">cbd body</text>
+          <text x="360" y="456" text-anchor="middle" font-size="22" font-weight="700" fill="#16a34a" class="wc-word" data-tip="'Neuropathy cream' is growing rapidly — nerve damage pain is highly underserved by current topical NSAID products.">neuropathy cream</text>
+          <text x="520" y="448" text-anchor="middle" font-size="13" fill="#16a34a" class="wc-word" data-tip="'OTC gel' is a channel-specific search — consumers specifically looking for over-the-counter options.">otc gel</text>
+          <text x="130" y="488" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Tiger cream' refers to Tiger Balm — a well-known traditional Asian competitor in the counterirritant space.">tiger cream</text>
+          <text x="330" y="486" text-anchor="middle" font-size="22" font-weight="700" fill="#16a34a" class="wc-word" data-tip="'Calcium cream' appears as a crossover with bone health topicals — an emerging consumer interest.">calcium cream</text>
+          <text x="490" y="480" text-anchor="middle" font-size="12" fill="#e53e3e" class="wc-word" data-tip="'CBD gel' is the most searched CBD topical format — directly competitive with NSAID gels in the consumer mindset.">cbd gel</text>
+          <text x="200" y="518" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="Pain balm is searched across all age groups — a format seen as natural and traditional.">pain balm</text>
+          <text x="350" y="516" text-anchor="middle" font-size="20" font-weight="700" fill="#16a34a" class="wc-word" data-tip="'Capsaicin cream' is searched by consumers with chronic pain exploring heat-based alternatives — signals the counterirritant-to-NSAID migration opportunity.">capsaicin cream</text>
+          <text x="484" y="510" text-anchor="middle" font-size="12" fill="#16a34a" class="wc-word" data-tip="'Freeze gel' is the cooling counterirritant segment — Biofreeze territory, but consumers here have underlying inflammatory pain.">freeze gel</text>
+          <text x="350" y="544" text-anchor="middle" font-size="14" fill="#16a34a" class="wc-word" data-tip="'Pain plaster' is the patch/plaster format search — a fast-growing segment driven by Salonpas and similar products.">pain plaster</text>
+        </g>
+        <circle cx="350" cy="295" r="275" fill="none" stroke="#5C9E1A" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="sent-chart">
+      <div style="font-size:11px;font-weight:700;margin-bottom:10px">Key insights from consumer search listening</div>
+      <ul class="bullet-list">
+        <li><strong style="color:#27500a">Searches span cream, gel, ointment, patch, balm, plaster</strong> — consumers are format-agnostic and looking for whatever works; no format loyalty</li>
+        <li><strong style="color:#27500a">Condition-specific terms dominate</strong> — "arthritis cream," "joint pain relief cream," "sciatica cream": consumers search by their pain, not by brand or ingredient</li>
+        <li><strong style="color:#e53e3e">CBD and THC terms appear prominently</strong> — consumers exploring non-traditional alternatives, signalling dissatisfaction with current NSAID topical options</li>
+        <li><strong style="color:#e53e3e">"Diclofenac sodium gel" and "NSAID gel" are not dominant</strong> — clinical terminology is secondary to consumer language; brand and format drive discovery</li>
+        <li><strong style="color:#27500a">Search interest inflected 10× in 12 months</strong> — flat at ~15–20K searches for three years, then exploded mid-2025 as oral NSAID safety awareness grew and guidelines shifted to topical first-line</li>
+        <li><strong style="color:#27500a">No single brand dominates the conversation</strong> — the category is wide open for a scaled, clinically credible player to own the topical pain narrative</li>
+      </ul>
+    </div>
+  </div>
+  <div class="driver-flow">
+    <div class="driver-col">
+      <div class="driver-hdr green">Drivers</div>
+      <div class="driver-items">
+        <div class="driver-item"><strong>Global OA prevalence at 607M</strong> and rising 60–100% by 2050</div>
+        <div class="driver-item">Ageing populations across all major markets (Japan 29% over 65, Europe and US following)</div>
+        <div class="driver-item">Rising sports participation and active lifestyle expectations at older ages</div>
+        <div class="driver-item">Chronic pain affecting 1.7B people with MSK disorders globally</div>
+        <div class="driver-item">Oral NSAID safety signals mounting — GI, cardiovascular, and renal harm with chronic use</div>
+      </div>
+    </div>
+    <div class="driver-arrow">›</div>
+    <div class="driver-col">
+      <div class="driver-hdr teal">Effect</div>
+      <div class="driver-items">
+        <div class="driver-item">Massive and growing population living with daily inflammatory joint/muscle pain</div>
+        <div class="driver-item">Clinicians and guidelines increasingly recommending topical NSAIDs as first-line (ACR, NICE, EULAR for knee OA in 75+)</div>
+        <div class="driver-item">Consumers actively seeking alternatives to oral pills — 55% now prefer topical for MSK pain</div>
+        <div class="driver-item">Regulatory bodies elevating topical to first-line status (FDA opioid-sparing guidance, CMS incentives)</div>
+      </div>
+    </div>
+    <div class="driver-arrow">›</div>
+    <div class="driver-col">
+      <div class="driver-hdr pink">Consumer Pain points</div>
+      <div class="driver-items">
+        <div class="driver-item">Patients told to stop oral NSAIDs have <strong>no topical alternative that provides equivalent pain relief</strong> — they either stay on pills or go undertreated</div>
+        <div class="driver-item">Standard topical formulations <strong>do not deliver sufficient depth, strength, or duration</strong> for moderate-to-severe inflammatory pain</div>
+        <div class="driver-item">Current topical formats typically last <strong>4–6 hours per application vs 8–12 hours for oral</strong> — poorly suited to chronic, lifelong conditions</div>
+      </div>
+    </div>
+  </div>
+  <div class="emerging-box">🔬 <strong>Search interest in topical pain solutions has exploded since mid-2025</strong> — flat at ~15–20K searches for three years, now approaching 200K (10× increase in 12 months). Growth is structural, not seasonal. Demand signal is clear; product supply has not kept up.</div>
+  <div style="margin-top:14px">
+  <div style="background:#fff;border:1.5px solid var(--h-green);border-radius:8px;padding:16px 20px">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px">A topical anti-inflammatory pain relief solution that is:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div style="font-size:9px;font-weight:700;color:var(--h-green);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Platform specific</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${[['A','Pain relief that matches my pills'],['B','One application that lasts all day'],['C','Reaches the joint, not just the skin surface'],['D','I can feel it working immediately']].map(([l,t])=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#eaf3de;border-radius:6px;border-left:3px solid var(--h-green)"><span style="min-width:20px;height:20px;border-radius:50%;background:var(--h-green);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">${l}</span><span style="font-size:11px;color:#1a2a0a"><strong>${t}</strong></span></div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">And also</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          ${[['E','Perceptibly effective'],['F','Simple regimen'],['G','Safe for ongoing use'],['H','Affordable'],['I','Predictable onset'],['J','Compatible with existing treatments'],['K','Believable and verifiable'],['L','Easy to store'],['M','No side effects'],['N','Easy to access']].map(([l,t])=>`<div style="display:flex;align-items:flex-start;gap:6px;padding:6px 8px;background:#f7f7f5;border-radius:5px"><span style="min-width:18px;height:18px;border-radius:50%;background:#555;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${l}</span><span style="font-size:10.5px;color:#333;line-height:1.4">${t}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div style="margin-top:14px"><div class="section-card"><div class="section-title">Right to win — what Haleon has vs. what needs to be unlocked</div>
+  <div style="display:grid;grid-template-columns:200px 1fr 1fr;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:10.5px">
+    <div style="background:#f5f5f3;padding:8px 10px;font-weight:700;border-bottom:1px solid var(--border)">Need</div><div style="background:#1a1a1a;color:#fff;padding:8px 10px;font-weight:700;border-bottom:1px solid #333;text-align:center">What Haleon has</div><div style="background:var(--h-green);color:#fff;padding:8px 10px;font-weight:700;border-bottom:1px solid #27500a;text-align:center">Unlock needed</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">A. Pain relief that matches my pills</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Voltaren is the #1 topical NSAID globally with 50+ clinical studies</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)"><strong>Phase 3 superiority trial vs oral NSAIDs</strong>, to credibly claim oral equivalence</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">B. One application that lasts all day</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Emulgel 12 Hour (select markets); Wärmepflaster (heat + diclofenac combination patch)</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)"><strong>Extended-release delivery platform (24–72hr)</strong> — microneedle, reservoir patch, or slow-release polymer</div>
+    <div style="padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600">C. Reaches the joint, not just the skin surface</div><div style="padding:8px 10px;border-bottom:1px solid var(--border);background:#f9f9f9">Established diclofenac penetration data; co-solvent system in current Emulgel formulation</div><div style="padding:8px 10px;border-bottom:1px solid var(--border)"><strong>Proprietary penetration-enhancement IP</strong> — Hisamitsu holds 47 patents here, Haleon holds none</div>
+    <div style="padding:8px 10px;font-weight:600">D. I can feel it working immediately</div><div style="padding:8px 10px;background:#f9f9f9">Heat sensation in Wärmepflaster; mild cooling from standard gel</div><div style="padding:8px 10px"><strong>Engineered multi-sensory format</strong> combining immediate onset signal with proven anti-inflammatory action</div>
+  </div></div></div>`,
+
+  market:`
+  <div class="mkt-chart-wrap">
+    <div style="font-size:12px;font-weight:700;margin-bottom:10px">Global topical pain relief market 2025–2036 (USD $B)</div>
+    <div class="mkt-legend">
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#1a5fa8"></div>Topical NSAIDs (anti-inflammatory)</div>
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#5ba3d9"></div>Counterirritants (menthol, methyl salicylate)</div>
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#8DC63F"></div>Lidocaine / anaesthetic</div>
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#C8A820"></div>Traditional / herbal / other</div>
+      <div class="mkt-leg"><div class="mkt-leg-dot" style="background:#E8A020"></div>Oral NSAID switching (from 2028)</div>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:8px">
+      <div class="mkt-bars-area" style="flex:1">
+        ${[{y:'2025',nsaid:2.3,ci:3.2,lido:1.8,herb:1.7,oral:0,tot:9.0},{y:'2026',nsaid:2.5,ci:3.3,lido:1.9,herb:1.7,oral:0,tot:9.4},{y:'2027',nsaid:2.7,ci:3.4,lido:2.0,herb:1.8,oral:0,tot:9.9},{y:'2028',nsaid:2.9,ci:3.5,lido:2.1,herb:1.8,oral:0.2,tot:10.5},{y:'2029',nsaid:3.1,ci:3.6,lido:2.2,herb:1.9,oral:0.4,tot:11.2},{y:'2030',nsaid:3.4,ci:3.7,lido:2.3,herb:1.9,oral:0.5,tot:11.8},{y:'2031',nsaid:3.7,ci:3.8,lido:2.4,herb:2.0,oral:0.6,tot:12.5},{y:'2032',nsaid:4.0,ci:3.8,lido:2.5,herb:2.0,oral:1.0,tot:13.3},{y:'2033',nsaid:4.4,ci:3.9,lido:2.6,herb:2.0,oral:1.1,tot:14.0},{y:'2034',nsaid:4.8,ci:4.0,lido:2.7,herb:2.0,oral:1.4,tot:14.9},{y:'2035',nsaid:5.1,ci:4.1,lido:2.8,herb:2.1,oral:1.6,tot:15.7},{y:'2036',nsaid:5.5,ci:4.2,lido:2.9,herb:2.1,oral:1.9,tot:16.6}].map(d=>`
+        <div class="mkt-bar-group">
+          <div style="width:100%;display:flex;flex-direction:column;align-items:center;position:relative">
+            <span class="mkt-bar-total">${d.tot.toFixed(1)}</span>
+            <div style="width:100%;background:#E8A020;height:${Math.round(d.oral/16.6*160)}px"></div>
+            <div style="width:100%;background:#C8A820;height:${Math.round(d.herb/16.6*160)}px"></div>
+            <div style="width:100%;background:#8DC63F;height:${Math.round(d.lido/16.6*160)}px"></div>
+            <div style="width:100%;background:#5ba3d9;height:${Math.round(d.ci/16.6*160)}px"></div>
+            <div style="width:100%;background:#1a5fa8;height:${Math.round(d.nsaid/16.6*160)}px"></div>
+          </div>
+          <span style="font-size:7.5px;color:#888;margin-top:4px;white-space:nowrap">${d.y}</span>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;padding-bottom:22px;min-width:130px">
+        <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">CAGR 2025–2036</div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#1a5fa8;flex-shrink:0"></div><span style="font-size:10px;color:#333">NSAID topicals</span><span style="margin-left:auto;font-size:10px;font-weight:700;color:#1a5fa8">8.5%</span></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#5ba3d9;flex-shrink:0"></div><span style="font-size:10px;color:#333">Counterirritants</span><span style="margin-left:auto;font-size:10px;font-weight:700;color:#5ba3d9">2.5%</span></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#8DC63F;flex-shrink:0"></div><span style="font-size:10px;color:#333">Lidocaine</span><span style="margin-left:auto;font-size:10px;font-weight:700;color:#5C9E1A">4.8%</span></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:#E8A020;flex-shrink:0"></div><span style="font-size:10px;color:#333">Oral switching</span><span style="margin-left:auto;font-size:10px;font-weight:700;color:#E8A020">Upside</span></div>
+        <div style="margin-top:4px;padding:6px 8px;background:#eaf3de;border-radius:4px;font-size:9px;color:#27500a;font-weight:700">Total: ~6% CAGR<br>$9.0B → $16.6B</div>
+      </div>
+    </div>
+  </div>
+  <div style="background:#eaf3de;border:1px solid #aad87a;border-radius:6px;padding:10px 14px;margin:10px 0;font-size:10.5px;color:#1a3a08"><strong>Breakthrough upside (+$1.1B by 2036):</strong> closing the efficacy gap to oral NSAIDs unlocks switching from a ~$4.5B addressable oral MSK pool. Requires a step-change in efficacy — genuinely matching oral performance.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px">
+    <div><div class="section-card"><div class="section-title">Age band analysis — TAM 2025 vs 2036</div>
+    <table class="region-table"><thead><tr><th>Age band</th><th>2025 share</th><th>2036 share</th><th>2025 $B</th><th>2036 $B</th><th>CAGR</th></tr></thead><tbody>
+      <tr><td><strong>18–39</strong></td><td>12%</td><td>10%</td><td>$1.1B</td><td>$1.6B</td><td>3.4%</td></tr>
+      <tr><td><strong>40–59</strong></td><td>28%</td><td>26%</td><td>$2.5B</td><td>$4.4B</td><td>5.3%</td></tr>
+      <tr><td><strong>60–74</strong></td><td>35%</td><td>34%</td><td>$3.1B</td><td>$5.6B</td><td>5.5%</td></tr>
+      <tr><td><strong>75+</strong></td><td>25%</td><td>30%</td><td>$2.2B</td><td>$5.1B</td><td>7.8%</td></tr>
+    </tbody></table></div></div>
+    <div class="mkt-commentary"><div class="mkt-commentary-title">Key growth drivers</div>
+    <ul class="bullet-list">
+      <li><strong>Demographics:</strong> chronic MSK pain prevalence growing with ageing populations globally; OA projected +60–100% by 2050</li>
+      <li><strong>Segment mix shift:</strong> clinically proven NSAIDs gaining share within category at expense of counterirritants (25% → 30.5% by 2036)</li>
+      <li><strong>Oral NSAID safety concerns:</strong> topical gaining 70–110bps share per year vs oral globally</li>
+      <li><strong>Oldest cohort (75+) fastest-growing</strong> at 7.8% CAGR — exactly where topical-first guidelines are most embedded</li>
+    </ul></div>
+  </div>`,
+
+  competitive:`
+  <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text)">Haleon is best positioned to fill the white space — but Hisamitsu is the competitor to watch</div>
+  <div class="comp-lessons">
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">PFZ</span></div>
+        <div><div class="lesson-brand">Pfizer (Advil/Thermacare)</div><div class="lesson-tagline">Oral incumbent, limited topical</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Dominant OTC oral NSAID (Advil); massive brand recognition and pharmacy distribution</div>
+      <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Limited topical anti-inflammatory innovation; Thermacare is heat-only, not anti-inflammatory</div>
+      <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Oral NSAID incumbents are not building toward the white space — they're defending oral share</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#C8102E;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">HSM</span></div>
+        <div><div class="lesson-brand">Hisamitsu (Salonpas)</div><div class="lesson-tagline">#2 globally, 47 patents filed in 2024</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Patch leadership; 47 patent filings in 2024 in transdermal delivery — best positioned after Haleon to move toward the white space</div>
+      <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Mixed NSAID/menthol positioning; weak brand outside Asia; no consumer OTC brand with clinical NSAID credibility in West</div>
+      <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>The most serious competitive threat — must move on penetration-enhancement IP before Hisamitsu closes the gap</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#CC0000;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">RKT</span></div>
+        <div><div class="lesson-brand">Reckitt (Biofreeze, Nurofen gel)</div><div class="lesson-tagline">Broad portfolio, fragmented brands</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Broad NSAID + menthol portfolio; Nurofen gel has ibuprofen clinical data; strong pharmacy presence</div>
+      <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Fragmented brands; Biofreeze declining; no single brand with Voltaren's global clinical authority</div>
+      <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Reckitt has the ingredients but not the focus — unlikely to invest $50–100M to challenge Haleon in next-gen topical</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#FF6B00;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">OPL</span></div>
+        <div><div class="lesson-brand">Opella/Sanofi (Icy Hot, Aspercreme)</div><div class="lesson-tagline">Strong US brand, no anti-inflammatory active</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Strong US brand recognition across Icy Hot and Aspercreme; broad format range (cream, patch, spray)</div>
+      <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>No anti-inflammatory active in any product; losing share as consumers move toward clinical efficacy claims</div>
+      <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Counterirritant players cannot close the efficacy gap without a full platform rebuild — structural vulnerability</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#1565C0;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">KVU</span></div>
+        <div><div class="lesson-brand">Kenvue (BenGay, Motrin oral)</div><div class="lesson-tagline">FDA-cleared smart patch 2025, tiny share</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Smart BenGay patch FDA cleared 2025; Motrin (oral) brand trust; J&J heritage in pharma and consumer health</div>
+      <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Tiny topical share; menthol active only; Kenvue restructuring limits large R&D bets</div>
+      <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Smart patch format is interesting but menthol active limits clinical claims — not a true Voltaren challenger</div></div>
+    <div class="lesson-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:6px;background:#004B87;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">IBSA</span></div>
+        <div><div class="lesson-brand">IBSA (Flector)</div><div class="lesson-tagline">Diclofenac patch, strong clinical data</div></div>
+      </div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Diclofenac patch with strong clinical data; Rx-to-OTC potential; transdermal expertise in pharma</div>
+      <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Small OTC presence; niche reach; no consumer brand awareness outside specialist channels</div>
+      <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Best acquisition target for any player wanting to accelerate diclofenac patch capability into OTC</div></div>
+  </div>
+  <div style="font-size:12px;font-weight:700;margin-bottom:8px;margin-top:14px">Full competitive matrix</div>
+  <div class="comp-matrix">
+    <div class="comp-matrix-hdr" style="grid-template-columns:36px 130px 100px 1fr 1fr 1fr"><div></div><div>Company</div><div>HQ</div><div>Key brands</div><div>Strengths</div><div>Concerns</div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#fff">PFZ</span></div></div><div><strong>Pfizer</strong><br><span style="font-size:9px;color:var(--muted)">USA</span></div><div>Advil (oral), Thermacare</div><div>Dominant OTC oral NSAID</div><div><span class="comp-tag-pos">OTC oral leader</span></div><div><span class="comp-tag-neg">Limited topical innovation</span></div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#C8102E;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#fff">HSM</span></div></div><div><strong>Hisamitsu</strong><br><span style="font-size:9px;color:var(--muted)">Japan</span></div><div>Salonpas, Feitas, Salonsip</div><div>47 patent filings (2024)</div><div><span class="comp-tag-pos">Patch leadership</span><span class="comp-tag-pos">IP momentum</span></div><div><span class="comp-tag-neg">Weak outside Asia</span><span class="comp-tag-neg">Mixed positioning</span></div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#CC0000;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#fff">RKT</span></div></div><div><strong>Reckitt</strong><br><span style="font-size:9px;color:var(--muted)">UK</span></div><div>Biofreeze, Nurofen gel, Moov</div><div>Broad portfolio</div><div><span class="comp-tag-pos">NSAID + menthol range</span></div><div><span class="comp-tag-neg">Fragmented brands</span><span class="comp-tag-neg">Biofreeze declining</span></div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#FF6B00;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#fff">OPL</span></div></div><div><strong>Opella</strong><br><span style="font-size:9px;color:var(--muted)">France</span></div><div>Icy Hot, Aspercreme</div><div>US brand recognition</div><div><span class="comp-tag-pos">Format range</span></div><div><span class="comp-tag-neg">No anti-inflammatory active</span><span class="comp-tag-neg">Losing share</span></div></div>
+    <div class="comp-matrix-row" style="grid-template-columns:36px 130px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#004B87;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#fff">IBSA</span></div></div><div><strong>IBSA</strong><br><span style="font-size:9px;color:var(--muted)">Switzerland</span></div><div>Flector</div><div>Diclofenac patch</div><div><span class="comp-tag-pos">Strong clinical data</span></div><div><span class="comp-tag-neg">Small OTC reach</span><span class="comp-tag-neg">Niche</span></div></div>
+  </div>`,
+
+  patents:`
+  <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text)">5 breakthrough technologies in topical anti-inflammatory pain relief</div>
+  <div class="tech-cards">
+    <div class="tech-card">
+      <div class="tech-card-num">1</div>
+      <div class="tech-card-name">Solvent-optimised skin penetration</div>
+      <div class="tech-card-desc">Diclofenac free acid in optimised solvent delivering 30–40× more drug through the skin than standard gel — oral-level efficacy without systemic risk</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Medium-high maturity</div>
+      <div class="tech-example">Futura Medical TPR100 / DermaSys</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-num">2</div>
+      <div class="tech-card-name">Dissolvable microneedle patches</div>
+      <div class="tech-card-desc">Painless microarrays that dissolve in the skin to release drug directly into the dermis, bypassing the stratum corneum entirely</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Low-medium maturity</div>
+      <div class="tech-example">HRF2105 OA patch (clinical trial)</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-num">3</div>
+      <div class="tech-card-name">Ionic liquid deep penetration</div>
+      <div class="tech-card-desc">Deep eutectic ionic liquids carrying molecules through the skin at levels previously only achievable systemically — molecule-agnostic platform</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Low-medium maturity</div>
+      <div class="tech-example">Celebrex (oral, Pfizer) — no OTC topical exists yet</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-num">4</div>
+      <div class="tech-card-name">Nanostructured lipid carriers</div>
+      <div class="tech-card-desc">Engineered lipid nanoparticles encapsulating NSAIDs for deeper tissue delivery and sustained release — academic preclinical outperforming Voltaren gel</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot filled"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Low-medium maturity</div>
+      <div class="tech-example">Academic preclinical vs Voltaren gel models</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-num">5</div>
+      <div class="tech-card-name">Dual mechanism delivery</div>
+      <div class="tech-card-desc">Sustained-release NSAID layer for deep inflammation + immediate lidocaine layer for surface pain relief — two OTC mechanisms, one application</div>
+      <div class="tech-maturity"><div class="maturity-dot filled"></div><div class="maturity-dot half"></div><div class="maturity-dot"></div><div class="maturity-dot"></div></div>
+      <div class="tech-patent">Low maturity</div>
+      <div class="tech-example">No OTC product exists; combination concept stage</div>
+    </div>
+  </div>
+  <div style="font-size:12px;font-weight:700;margin-bottom:8px;margin-top:14px">Technology vs. consumer needs — which techs address which needs</div>
+  <div class="need-matrix">
+    <div class="nm-hdr" style="grid-template-columns:160px repeat(5,1fr)"><div>Consumer need</div><div style="text-align:center">Solvent penetration</div><div style="text-align:center">Microneedle patch</div><div style="text-align:center">Ionic liquid</div><div style="text-align:center">Lipid carriers</div><div style="text-align:center">Dual mechanism</div></div>
+    ${[
+      {need:'A. Matches my pills',          t1:'yes',     t2:'yes',     t3:'yes',     t4:'partial', t5:'yes'},
+      {need:'B. Lasts all day',             t1:'partial', t2:'yes',     t3:'unclear', t4:'partial', t5:'partial'},
+      {need:'C. Reaches the joint',         t1:'yes',     t2:'yes',     t3:'yes',     t4:'partial', t5:'partial'},
+      {need:'D. Feel it immediately',       t1:'no',      t2:'no',      t3:'unclear', t4:'no',      t5:'yes'},
+      {need:'E. Perceptibly effective',     t1:'yes',     t2:'yes',     t3:'unclear', t4:'partial', t5:'yes'},
+      {need:'F. Simple regimen',            t1:'yes',     t2:'yes',     t3:'unclear', t4:'yes',     t5:'yes'},
+      {need:'G. Safe for ongoing use',      t1:'yes',     t2:'unclear', t3:'yes',     t4:'unclear', t5:'unclear'},
+      {need:'H. Affordable',               t1:'yes',     t2:'no',      t3:'unclear', t4:'partial', t5:'partial'},
+      {need:'I. Predictable onset',         t1:'yes',     t2:'yes',     t3:'unclear', t4:'unclear', t5:'yes'},
+      {need:'M. No side effects',           t1:'yes',     t2:'yes',     t3:'yes',     t4:'unclear', t5:'partial'},
+    ].map(r=>`<div class="nm-row" style="grid-template-columns:160px repeat(5,1fr)"><div class="nm-need">${r.need}</div>${[r.t1,r.t2,r.t3,r.t4,r.t5].map(v=>`<div class="nm-cell">${v==='yes'?'<div class="ic-yes">✓</div>':v==='no'?'<div class="ic-no">✗</div>':v==='partial'?'<div class="ic-partial">›</div>':'<div class="ic-maybe">?</div>'}</div>`).join('')}</div>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+    <div class="section-card"><div class="section-title">Publication momentum (PubMed — "topical" + "anti-inflammatory" + "transdermal")</div>
+      <div class="pub-chart">
+        ${[{y:'2016',v:30},{y:'2017',v:21},{y:'2018',v:16},{y:'2019',v:25},{y:'2020',v:23},{y:'2021',v:27},{y:'2022',v:21},{y:'2023',v:22},{y:'2024',v:25},{y:'2025',v:40}].map(d=>`<div class="pub-bar" style="height:${Math.round(d.v/40*100)}%"><span class="pub-val">${d.v}</span><span class="pub-lbl">${d.y}</span></div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:18px">+8% CAGR 2020–2025 · Source: PubMed / BCG analysis</div>
+    </div>
+    <div class="section-card"><div class="section-title">Patent filing momentum (anti-inflammatory topical relief)</div>
+      <div class="pub-chart">
+        ${[{y:'2018',v:132},{y:'2019',v:173},{y:'2020',v:183},{y:'2021',v:255},{y:'2022',v:309},{y:'2023',v:397},{y:'2024',v:536},{y:'2025',v:612}].map(d=>`<div class="pub-bar" style="height:${Math.round(d.v/612*100)}%;background:#802010;opacity:.7"><span class="pub-val" style="color:#802010">${d.v}</span><span class="pub-lbl">${d.y}</span></div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:18px">+24% CAGR vs avg. consumer health CAGR of 5–10% · Source: Patentsight, BCG analysis</div>
+    </div>
+  </div>`,
+
+  regulatory:`
+  <div class="section-card" style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#791f1f;margin-bottom:6px">Strong foundations for current products — but next-gen claims require significant clinical investment</div>
+  <table class="reg-table">
+    <thead><tr><th>Market</th><th>Risk</th><th>What you need to show</th><th>Key constraint</th><th>Pathway</th></tr></thead>
+    <tbody>
+      <tr><td><strong>US</strong></td><td><span class="risk-badge risk-med">Medium risk</span></td><td>Head-to-head efficacy vs current OTC diclofenac; safety non-inferiority</td><td>No OTC monograph for enhanced formulations; must go Rx first then switch via 505(b)(2) NDA</td><td>505(b)(2) NDA → Rx-to-OTC switch</td></tr>
+      <tr><td><strong>EU</strong></td><td><span class="risk-badge risk-med">Medium risk</span></td><td>Clinical superiority or significant benefit vs existing formulations</td><td>Combination products face device-drug classification under MDR; National/MRP hybrid pathway</td><td>National / MRP hybrid</td></tr>
+      <tr><td><strong>UK</strong></td><td><span class="risk-badge risk-med">Medium risk</span></td><td>Phase 3 superiority trial — MHRA made this explicit to Futura Medical in 2020</td><td>Bioequivalence alone insufficient; must prove clinical superiority vs current standard</td><td>National (MHRA)</td></tr>
+      <tr><td><strong>Japan</strong></td><td><span class="risk-badge risk-med">Medium risk</span></td><td>Local clinical data; PMDA engagement required</td><td>Hisamitsu holds dominant regulatory relationships; loxoprofen ecosystem not cross-border</td><td>PMDA</td></tr>
+      <tr><td><strong>China</strong></td><td><span class="risk-badge risk-high">High risk</span></td><td>Local clinical trials; local manufacturing partner; dual-track registration</td><td>Local partner required; complex filing system for foreign companies</td><td>SAMR</td></tr>
+      <tr><td><strong>India</strong></td><td><span class="risk-badge risk-med">Medium risk</span></td><td>Local clinical data; local manufacturing</td><td>Generic-dominated; price-sensitive; limited premium pricing opportunity</td><td>CDSCO</td></tr>
+    </tbody>
+  </table></div>
+  <div class="reg-two">
+    <div class="reg-box"><div class="reg-box-title">Key regulatory trends</div><ul class="bullet-list"><li><strong>ACR, NICE, EULAR all recommend topical NSAIDs as first-line</strong> — regulatory and clinical tailwind already in place</li><li><strong>Voltaren US OTC switch (2020)</strong> established the Rx-to-OTC pathway any next-gen formulation would follow</li><li><strong>Topical NSAID registrations up 22% YoY in Europe</strong> — regulators are receptive to innovation</li><li><strong>One Phase 3 superiority trial</strong> ($50–100M, 18–24 months) could serve US, EU, and UK simultaneously</li></ul></div>
+    <div class="reg-box"><div class="reg-box-title" style="color:#791f1f;border-bottom-color:#C04060">Key investment gates</div><ul class="bullet-list"><li><strong style="color:#791f1f">$50–100M Phase 3 investment required</strong> — no next-gen topical NSAID has completed a full OTC regulatory programme</li><li><strong style="color:#791f1f">Combination products add classification complexity</strong> — device-drug boundary under MDR could slow EU/UK timelines</li><li><strong style="color:#791f1f">No OTC monograph shortcut</strong> for enhanced formulations in US — full NDA pathway required</li></ul>
+    <div style="margin-top:10px;background:#f5f5f3;border-radius:4px;padding:8px 10px;font-size:10.5px;color:#444"><strong>Note:</strong> Voltaren's established regulatory dossier across 170+ markets is a significant asset — any next-gen Voltaren formulation inherits decades of safety and efficacy data.</div></div>
+  </div>`,
+
+  inspiration:`
+  <div class="inspo-intro">
+    <div class="inspo-intro-title">💡 Brainstorm — some ideas to get you started...</div>
+    <div class="inspo-intro-sub">These are illustrative product concepts based on the platform technologies and consumer needs identified in this deep-dive. They are starting points, not final recommendations.</div>
+  </div>
+  <div class="inspo-grid">
+    <div class="inspo-concept">
+      <div class="inspo-concept-img" style="background:linear-gradient(135deg,#1a3a08,#5C9E1A);display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center;color:#fff;padding:20px"><div style="font-size:26px;font-weight:900;font-style:italic;letter-spacing:-1px">Voltaren<br>Ultra</div><div style="font-size:12px;opacity:.8;margin-top:8px">Solvent-optimised · 24hr · Oral-equivalent</div></div>
+      </div>
+      <div class="inspo-concept-body">
+        <div class="inspo-badge">Existing brand · Solvent-optimised penetration · Extended release</div>
+        <div class="inspo-concept-name">Voltaren Ultra</div>
+        <div class="inspo-concept-tagline">The first topical that works like a pill — one application, 24-hour relief</div>
+        <div class="inspo-concept-desc">An evolution of Voltaren anchored on DermaSys-style solvent-optimised diclofenac free acid technology. Claims "oral-equivalent anti-inflammatory efficacy" supported by a Phase 3 superiority trial. Positioned as the clinical upgrade for the 607M OA patients currently using oral NSAIDs or underperforming standard gels. Manufactured at scale through Haleon's existing supply chain.</div>
+      </div>
+    </div>
+    <div class="inspo-concept">
+      <div class="inspo-concept-img" style="background:linear-gradient(135deg,#1a1a2e,#802010);display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center;color:#fff;padding:20px"><div style="font-size:24px;font-weight:900;font-style:italic">Voltaren<br>DeepPatch</div><div style="font-size:11px;opacity:.8;margin-top:6px">Dissolvable microneedle · Joint-depth delivery</div></div>
+      </div>
+      <div class="inspo-concept-body">
+        <div class="inspo-badge">Existing brand · Dissolvable microneedle · Chronic daily use</div>
+        <div class="inspo-concept-name">Voltaren DeepPatch</div>
+        <div class="inspo-concept-tagline">Reaches where standard gels can't — drug delivered directly into the joint</div>
+        <div class="inspo-concept-desc">A dissolvable microneedle patch under the Voltaren brand — bypassing the stratum corneum entirely to deliver diclofenac directly into the dermis and joint space. Designed for chronic OA patients who need all-day relief without reapplication. The format innovation (patch, not gel) creates new shelf presence and premium pricing power. Addresses the "reaches the joint" consumer need that no current OTC topical credibly owns.</div>
+      </div>
+    </div>
+  </div>
+  <div class="platform-box">
+    <div class="platform-box-title">Platform hypothesis — closing the efficacy gap between topical and oral NSAIDs is the defining opportunity</div>
+    <div class="platform-three">
+      <div class="plat-col core"><div class="plat-col-title">Core bet</div><div style="font-size:10.5px;color:#1a3a08;line-height:1.5">A topical anti-inflammatory product that delivers oral-equivalent efficacy through the skin with immediate sensory relief — breakthrough technology that closes the gap between topical and oral NSAIDs</div></div>
+      <div class="plat-col primary"><div class="plat-col-title">Primary R&D bets</div><ul class="bullet-list" style="margin:0"><li>Solvent-optimised skin penetration (DermaSys)</li><li>Dissolvable microneedle patches</li></ul><div style="font-size:9.5px;color:var(--h-green);margin-top:6px;font-weight:600">+ Potential platform: Chronic daily use format · Combination NSAID + menthol · Deep joint delivery</div></div>
+      <div class="plat-col secondary"><div class="plat-col-title">Secondary R&D bets</div><ul class="bullet-list" style="margin:0"><li>Ionic liquid deep penetration</li><li>Nanostructured lipid carriers</li><li>Dual mechanism delivery (NSAID + lidocaine)</li><li>Bioresponsive NSAID release</li><li>Large-area format for chronic back pain</li></ul></div>
+    </div>
+  </div>`},
   {rank:6,name:"Sleep-onset acceleration",full:true,tags:["Sleep","Night solutions"],desc:"Fast-acting OTC sleep solutions targeting the onset window — sublingual GABA, magnesium glycinate and next-generation non-melatonin formats.",
   exec:`<div class="exec-highlight"><div class="eh-title">Why this matters</div><div class="eh-text">"Fall asleep faster" is the #1 consumer sleep complaint. Sublingual rapid-dissolve GABA provides a neurotransmitter-level mechanism with proven impact — novel format, no direct OTC competitor. Haleon has no dedicated sleep supplement today.</div></div><div class="section-card"><div class="section-title">Key metrics</div><div class="stat-grid"><div class="stat-box"><div class="stat-num">$5.4B</div><div class="stat-lbl">TAM 2025</div></div><div class="stat-box"><div class="stat-num">$11.6B</div><div class="stat-lbl">TAM 2035 (8% CAGR)</div></div><div class="stat-box"><div class="stat-num">TRL 7</div><div class="stat-lbl">Prolonged-release melatonin sublingual</div></div></div></div>`,
   consumer:`<div class="section-card"><div class="section-title">Consumer needs</div><ul class="bullet-list"><li>Lying awake an hour nightly — fast-acting, non-habit-forming solution sought</li><li>Melatonin concerns — consumers seeking alternatives without morning grogginess</li><li>Natural sleep support — magnesium glycinate, L-theanine + GABA gaining trial</li></ul></div>`,
@@ -2131,31 +3044,92 @@ function updateTAM(id,val){
 }
 
 // ── WORKSHOP v2 ──
-const techOptions = [
-  {id:1, label:'Postbiotic & metabolite engineering',      short:'Postbiotic',        color:'#5C9E1A', desc:'Producing beneficial metabolites like butyrate and GLP-1 stimulators without live bacteria',                                    maturity:[1,1,0,0], patents:'0 patents',    example:'Resbiotic resM',          exampleUrl:'https://resbiotic.com/products/resm?srsltid=AfmBOorN7l2zbHJ0bxSL73HXhXFc1tCeY05EXEAvu69EW93gVCDy7tEe'},
-  {id:2, label:'Synthetic microbial consortia',            short:'Consortia',         color:'#185FA5', desc:'Manually assembled communities of multiple strains replacing FMT with standardised products',                                  maturity:[1,1,1,0], patents:'500+ patents', example:'Seres Vowst (FDA-approved)',exampleUrl:'https://www.nestlehealthscience.com/newsroom/press-releases/vowst'},
-  {id:3, label:'Precision delivery & microencapsulation',  short:'Precision delivery',color:'#534AB7', desc:'Capsules protecting live strains through stomach acid; release at specific gut sites',                                         maturity:[1,1,1,0], patents:'141 patents',  example:'Seed DS-01 ViaCap',        exampleUrl:'https://seed.com/daily-synbiotic?srsltid=AfmBOorzwVUiM4jxOjxU5z9Q6Dc11ItM16CtDW2s40zkzDnqbJ70P6D8'},
-  {id:4, label:'Next-gen anaerobic strain cultivation',    short:'Anaerobic strains', color:'#E8A020', desc:'Industrial-scale production of oxygen-sensitive bacteria previously impossible commercially',                                  maturity:[1,1,0,0], patents:'3 patents',    example:'Pendulum Akkermansia',     exampleUrl:'https://pendulumlife.com/products/pendulum-akkermansia-probiotic-gut-health?srsltid=AfmBOopppTrsRSFxO5RNIy73l4eOsf0vdU4s0N5pgv_9FYaj1IscbMVx'},
-  {id:5, label:'CRISPR-armed bacteriophage therapy',       short:'Phage therapy',     color:'#C04060', desc:'Engineered viruses selectively eliminating harmful gut bacteria while preserving beneficial strains',                          maturity:[1,0,0,0], patents:'25 patents',  example:'Eligo Bioscience',        exampleUrl:'https://eligo.bio/'},
-];
 
-// Consumer needs with which techs address them (tech ids, level: 'yes'|'partial'|'no'|'unclear')
-const consumerNeeds = [
-  {id:'A', roman:'A', label:'One product that reaches the gut, not three that might',                  techs:{1:'yes',  2:'partial', 3:'yes',     4:'partial', 5:'partial'}},
-  {id:'B', roman:'B', label:'Solving the underlying issue (root cause)',                               techs:{1:'partial', 2:'yes', 3:'no',      4:'partial', 5:'unclear'}},
-  {id:'C', roman:'C', label:'Made for what I\'m dealing with (condition-specific)',                   techs:{1:'partial', 2:'yes', 3:'partial', 4:'no',      5:'unclear'}},
-  {id:'D', roman:'D', label:'Building lasting gut health',                                             techs:{1:'no',   2:'yes',     3:'no',      4:'partial', 5:'partial'}},
-  {id:'E', roman:'E', label:'Perceptibly effective',                                                   techs:{1:'partial', 2:'unclear', 3:'partial', 4:'unclear', 5:'unclear'}},
-  {id:'F', roman:'F', label:'Simple regimen',                                                          techs:{1:'yes',  2:'partial', 3:'yes',     4:'partial', 5:'no'}},
-  {id:'G', roman:'G', label:'Safe for ongoing use',                                                    techs:{1:'yes',  2:'unclear', 3:'yes',     4:'partial', 5:'unclear'}},
-  {id:'H', roman:'H', label:'Affordable',                                                              techs:{1:'yes',  2:'no',      3:'partial', 4:'no',      5:'no'}},
-  {id:'I', roman:'I', label:'Predictable onset',                                                       techs:{1:'partial', 2:'unclear', 3:'unclear', 4:'unclear', 5:'unclear'}},
-  {id:'J', roman:'J', label:'Compatible with existing treatments',                                     techs:{1:'yes',  2:'partial', 3:'yes',     4:'partial', 5:'unclear'}},
-  {id:'K', roman:'K', label:'Believable and verifiable (science-backed claims)',                       techs:{1:'partial', 2:'unclear', 3:'partial', 4:'unclear', 5:'no'}},
-  {id:'L', roman:'L', label:'Easy to store',                                                           techs:{1:'yes',  2:'no',      3:'partial', 4:'no',      5:'unclear'}},
-  {id:'M', roman:'M', label:'No side effects',                                                         techs:{1:'yes',  2:'partial', 3:'yes',     4:'partial', 5:'partial'}},
-  {id:'N', roman:'N', label:'Easy to access (OTC, pharmacy, online)',                                  techs:{1:'partial', 2:'no',   3:'partial', 4:'no',      5:'no'}},
-];
+// ── PER-PLATFORM TECH & NEEDS DATA ──
+const platformTechOptions = {
+  // Platform index 0 = Gut microbiome
+  0: [
+    {id:1, label:'Postbiotic & metabolite engineering',      short:'Postbiotic',        color:'#5C9E1A', desc:'Producing beneficial metabolites like butyrate and GLP-1 stimulators without live bacteria',                                    maturity:[1,1,0,0], patents:'0 patents',    example:'Resbiotic resM',          exampleUrl:'https://resbiotic.com/'},
+    {id:2, label:'Synthetic microbial consortia',            short:'Consortia',         color:'#185FA5', desc:'Manually assembled communities of multiple strains replacing FMT with standardised products',                                  maturity:[1,1,1,0], patents:'500+ patents', example:'Seres Vowst (FDA-approved)',exampleUrl:'https://www.nestlehealthscience.com/newsroom/press-releases/vowst'},
+    {id:3, label:'Precision delivery & microencapsulation',  short:'Precision delivery',color:'#534AB7', desc:'Capsules protecting live strains through stomach acid; release at specific gut sites',                                         maturity:[1,1,1,0], patents:'141 patents',  example:'Seed DS-01 ViaCap',        exampleUrl:'https://seed.com/daily-synbiotic'},
+    {id:4, label:'Next-gen anaerobic strain cultivation',    short:'Anaerobic strains', color:'#E8A020', desc:'Industrial-scale production of oxygen-sensitive bacteria previously impossible commercially',                                  maturity:[1,1,0,0], patents:'3 patents',    example:'Pendulum Akkermansia',     exampleUrl:'https://pendulumlife.com/'},
+    {id:5, label:'CRISPR-armed bacteriophage therapy',       short:'Phage therapy',     color:'#C04060', desc:'Engineered viruses selectively eliminating harmful gut bacteria while preserving beneficial strains',                          maturity:[1,0,0,0], patents:'25 patents',  example:'Eligo Bioscience',        exampleUrl:'https://eligo.bio/'},
+  ],
+  // Platform index 1 = Perimenopause management
+  1: [
+    {id:1, label:'ERβ-selective receptor agonists',          short:'ERβ agonists',      color:'#A02070', desc:'Standardised plant extracts selectively activating oestrogen receptor beta in the hypothalamus — stabilising thermoregulation without systemic oestrogen', maturity:[1,1,1,0], patents:'~20 patents', example:'ERr 731 (Estroven), S-equol (Equelle)', exampleUrl:'https://www.estroven.com/'},
+    {id:2, label:'Serotonergic & GABAergic mood modulators', short:'Mood modulators',   color:'#534AB7', desc:'Botanical extracts modulating serotonin, GABA and noradrenaline pathways disrupted by oestrogen fluctuation',                 maturity:[1,1,1,0], patents:'~15 patents', example:'Ashwagandha KSM-66, Saffron affron',   exampleUrl:'https://www.ksm66ashwagandha.com/'},
+    {id:3, label:'Estrobolome-targeted probiotics',          short:'Estrobolome',       color:'#185FA5', desc:'Live bacterial strains with high β-glucuronidase activity restoring the gut\'s oestrogen recycling capacity',                 maturity:[1,1,0,0], patents:'~5 patents',  example:'Kaneka KABP-052',                     exampleUrl:'https://www.kanekanutrition.com/'},
+    {id:4, label:'Hydrolysed collagen peptides',             short:'Collagen peptides', color:'#E8A020', desc:'Type I and III collagen peptides addressing the ~30% collagen loss in first five postmenopausal years',                       maturity:[1,1,1,0], patents:'~30 patents', example:'Verisol (Gelita), UC-II (Lonza)',      exampleUrl:'https://www.gelita.com/en/products/verisol'},
+    {id:5, label:'Non-hormonal ERβ-active topicals',         short:'ERβ topicals',      color:'#C04060', desc:'Topical molecules activating skin oestrogen receptors locally without systemic hormonal effects',                             maturity:[1,1,0,0], patents:'~10 patents', example:'Emepelle / MEP Technology (Biopelle)', exampleUrl:'https://emepelle.com/'},
+  ],
+  // Platform index 4 = Advanced topical pain relief
+  4: [
+    {id:1, label:'Solvent-optimised skin penetration',          short:'Solvent penetration', color:'#802010', desc:'Diclofenac free acid in optimised solvent delivering 30–40× more drug through the skin than standard gel — oral-level efficacy without systemic risk', maturity:[1,1,1,0], patents:'~15 patents', example:'Futura Medical TPR100 / DermaSys',      exampleUrl:'https://www.futuramedical.com/'},
+    {id:2, label:'Dissolvable microneedle patches',             short:'Microneedle patch',   color:'#185FA5', desc:'Painless microarrays dissolving in the skin to release drug directly into the dermis, bypassing the stratum corneum entirely',                           maturity:[1,1,0,0], patents:'~30 patents', example:'HRF2105 OA patch (clinical trial)',   exampleUrl:'https://clinicaltrials.gov/'},
+    {id:3, label:'Ionic liquid deep penetration',               short:'Ionic liquid',        color:'#534AB7', desc:'Deep eutectic ionic liquids carrying molecules through the skin at levels previously only achievable systemically',                                        maturity:[1,1,0,0], patents:'~20 patents', example:'No OTC topical exists yet',           exampleUrl:''},
+    {id:4, label:'Nanostructured lipid carriers',               short:'Lipid nanocarriers',  color:'#E8A020', desc:'Engineered lipid nanoparticles encapsulating NSAIDs for deeper tissue delivery and sustained release',                                                    maturity:[1,1,0,0], patents:'~40 patents', example:'Academic preclinical vs Voltaren gel', exampleUrl:''},
+    {id:5, label:'Dual mechanism delivery (NSAID + lidocaine)', short:'Dual mechanism',      color:'#C04060', desc:'Sustained-release NSAID layer for deep inflammation + immediate lidocaine layer for surface pain — two OTC mechanisms, one application',                  maturity:[1,0,0,0], patents:'~10 patents', example:'No OTC product exists',               exampleUrl:''},
+  ],
+};
+
+const platformConsumerNeeds = {
+  // Platform index 0 = Gut microbiome
+  0: [
+    {id:'A', roman:'A', label:'One product that reaches the gut, not three that might',                  techs:{1:'yes',  2:'partial', 3:'yes',     4:'partial', 5:'partial'}},
+    {id:'B', roman:'B', label:'Solving the underlying issue (root cause)',                               techs:{1:'partial', 2:'yes', 3:'no',      4:'partial', 5:'unclear'}},
+    {id:'C', roman:'C', label:'Made for what I\'m dealing with (condition-specific)',                    techs:{1:'partial', 2:'yes', 3:'partial', 4:'no',      5:'unclear'}},
+    {id:'D', roman:'D', label:'Building lasting gut health',                                             techs:{1:'no',   2:'yes',     3:'no',      4:'partial', 5:'partial'}},
+    {id:'E', roman:'E', label:'Perceptibly effective',                                                   techs:{1:'partial', 2:'unclear', 3:'partial', 4:'unclear', 5:'unclear'}},
+    {id:'F', roman:'F', label:'Simple regimen',                                                          techs:{1:'yes',  2:'partial', 3:'yes',     4:'partial', 5:'no'}},
+    {id:'G', roman:'G', label:'Safe for ongoing use',                                                    techs:{1:'yes',  2:'unclear', 3:'yes',     4:'partial', 5:'unclear'}},
+    {id:'H', roman:'H', label:'Affordable',                                                              techs:{1:'yes',  2:'no',      3:'partial', 4:'no',      5:'no'}},
+    {id:'I', roman:'I', label:'Predictable onset',                                                       techs:{1:'partial', 2:'unclear', 3:'unclear', 4:'unclear', 5:'unclear'}},
+    {id:'J', roman:'J', label:'Compatible with existing treatments',                                     techs:{1:'yes',  2:'partial', 3:'yes',     4:'partial', 5:'unclear'}},
+    {id:'K', roman:'K', label:'Believable and verifiable (science-backed claims)',                       techs:{1:'partial', 2:'unclear', 3:'partial', 4:'unclear', 5:'no'}},
+    {id:'L', roman:'L', label:'Easy to store',                                                           techs:{1:'yes',  2:'no',      3:'partial', 4:'no',      5:'unclear'}},
+    {id:'M', roman:'M', label:'No side effects',                                                         techs:{1:'yes',  2:'partial', 3:'yes',     4:'partial', 5:'partial'}},
+    {id:'N', roman:'N', label:'Easy to access (OTC, pharmacy, online)',                                  techs:{1:'partial', 2:'no',   3:'partial', 4:'no',      5:'no'}},
+  ],
+  // Platform index 1 = Perimenopause management
+  1: [
+    {id:'A', roman:'A', label:'One product that covers everything (VMS + mood + sleep + cognition)',    techs:{1:'partial', 2:'no',      3:'partial', 4:'no',      5:'no'}},
+    {id:'B', roman:'B', label:'Working like hormones without being hormones',                            techs:{1:'yes',     2:'no',      3:'partial', 4:'no',      5:'yes'}},
+    {id:'C', roman:'C', label:'With me from first symptoms to the other side (4–8 yr journey)',         techs:{1:'yes',     2:'partial', 3:'unclear', 4:'partial', 5:'no'}},
+    {id:'D', roman:'D', label:'Something my doctor would recommend',                                     techs:{1:'yes',     2:'yes',     3:'unclear', 4:'no',      5:'unclear'}},
+    {id:'E', roman:'E', label:'Perceptibly effective (I feel it working)',                               techs:{1:'yes',     2:'yes',     3:'unclear', 4:'partial', 5:'partial'}},
+    {id:'F', roman:'F', label:'Simple regimen (one product, not five)',                                  techs:{1:'yes',     2:'yes',     3:'partial', 4:'yes',     5:'partial'}},
+    {id:'G', roman:'G', label:'Safe for ongoing daily use',                                              techs:{1:'yes',     2:'yes',     3:'yes',     4:'yes',     5:'unclear'}},
+    {id:'H', roman:'H', label:'Affordable (vs. $70+/month DTC)',                                         techs:{1:'partial', 2:'yes',     3:'partial', 4:'yes',     5:'unclear'}},
+    {id:'I', roman:'I', label:'Predictable onset (know when it starts working)',                         techs:{1:'yes',     2:'partial', 3:'no',      4:'no',      5:'unclear'}},
+    {id:'J', roman:'J', label:'Compatible with existing treatments (Rx, contraceptives)',                techs:{1:'yes',     2:'partial', 3:'yes',     4:'yes',     5:'unclear'}},
+    {id:'K', roman:'K', label:'Believable and verifiable (clinically substantiated)',                    techs:{1:'yes',     2:'partial', 3:'unclear', 4:'partial', 5:'no'}},
+    {id:'L', roman:'L', label:'Easy to store (room temperature, no refrigeration)',                      techs:{1:'yes',     2:'yes',     3:'unclear', 4:'yes',     5:'yes'}},
+    {id:'M', roman:'M', label:'No side effects or hormonal risk',                                        techs:{1:'yes',     2:'yes',     3:'yes',     4:'yes',     5:'unclear'}},
+    {id:'N', roman:'N', label:'Easy to access (pharmacy, grocery, online)',                              techs:{1:'yes',     2:'yes',     3:'partial', 4:'yes',     5:'partial'}},
+  ],
+  // Platform index 4 = Advanced topical pain relief
+  4: [
+    {id:'A', roman:'A', label:'Pain relief that matches my pills (oral-equivalent efficacy)',        techs:{1:'yes',     2:'yes',     3:'yes',     4:'partial', 5:'yes'}},
+    {id:'B', roman:'B', label:'One application that lasts all day (24hr duration)',                  techs:{1:'partial', 2:'yes',     3:'unclear', 4:'partial', 5:'partial'}},
+    {id:'C', roman:'C', label:'Reaches the joint, not just the skin surface',                        techs:{1:'yes',     2:'yes',     3:'yes',     4:'partial', 5:'partial'}},
+    {id:'D', roman:'D', label:'I can feel it working immediately (sensory onset signal)',             techs:{1:'no',      2:'no',      3:'unclear', 4:'no',      5:'yes'}},
+    {id:'E', roman:'E', label:'Perceptibly effective (noticeable improvement)',                      techs:{1:'yes',     2:'yes',     3:'unclear', 4:'partial', 5:'yes'}},
+    {id:'F', roman:'F', label:'Simple regimen (one product, easy application)',                      techs:{1:'yes',     2:'yes',     3:'unclear', 4:'yes',     5:'yes'}},
+    {id:'G', roman:'G', label:'Safe for ongoing daily use (no systemic side effects)',               techs:{1:'yes',     2:'unclear', 3:'yes',     4:'unclear', 5:'unclear'}},
+    {id:'H', roman:'H', label:'Affordable vs oral NSAIDs',                                           techs:{1:'yes',     2:'no',      3:'unclear', 4:'partial', 5:'partial'}},
+    {id:'I', roman:'I', label:'Predictable onset (know when it starts working)',                      techs:{1:'yes',     2:'yes',     3:'unclear', 4:'unclear', 5:'yes'}},
+    {id:'J', roman:'J', label:'Compatible with existing treatments',                                 techs:{1:'yes',     2:'yes',     3:'unclear', 4:'yes',     5:'yes'}},
+    {id:'K', roman:'K', label:'Believable and verifiable (Phase 3 clinical evidence)',               techs:{1:'yes',     2:'partial', 3:'unclear', 4:'unclear', 5:'unclear'}},
+    {id:'L', roman:'L', label:'Easy to store (no refrigeration, travel-friendly)',                   techs:{1:'yes',     2:'yes',     3:'unclear', 4:'yes',     5:'yes'}},
+    {id:'M', roman:'M', label:'No side effects (no GI/cardiovascular risk)',                         techs:{1:'yes',     2:'yes',     3:'yes',     4:'unclear', 5:'partial'}},
+    {id:'N', roman:'N', label:'Easy to access (pharmacy, grocery, online)',                          techs:{1:'yes',     2:'partial', 3:'unclear', 4:'partial', 5:'partial'}},
+  ],
+};
+
+// Active tech/need arrays — updated when platform is selected in workshop
+let techOptions = platformTechOptions[0];
+let consumerNeeds = platformConsumerNeeds[0];
 
 let wsCustomNeeds = [];    // {id, label}
 
@@ -2212,6 +3186,11 @@ function wsSelectPlatform(idx){
   toAnswers = {};
   toScores = {};
   toMatchups = [];
+  // Load platform-specific tech options and consumer needs
+  techOptions = platformTechOptions[idx] || platformTechOptions[0];
+  consumerNeeds = platformConsumerNeeds[idx] || platformConsumerNeeds[0];
+  wsSelectedTechs = [];
+  wsScores = {};
   document.getElementById('ws-next-1').disabled = false;
 }
 
@@ -3101,7 +4080,7 @@ function wsExportCSV(){
     if(seen.has(r.tech.id)) return;
     seen.add(r.tech.id);
     ['tech','brand','comm'].forEach(dim=>{
-      apEnsureActions(r.tech.id, dim); // seed if not yet visited
+      apEnsureActions(r.tech.id, dim);
       const key = r.tech.id+'__'+dim;
       const score = apGetScore(r.tech.id, dim);
       const actions = apActions[key] || [];
@@ -3244,6 +4223,42 @@ document.addEventListener("DOMContentLoaded",function(){
   document.querySelectorAll('img[data-imgvar="_IMG3"]').forEach(function(el){el.src=_IMG3;});
   document.querySelectorAll('img[data-imgvar="_IMG4"]').forEach(function(el){el.src=_IMG4;});
 });
+
+// ── PERIMENOPAUSE WORD CLOUD TOOLTIP ──
+function pmWcTT(e,t){
+  var tip=t.getAttribute('data-tip');
+  var el=document.getElementById('pm-wc-tooltip');
+  if(!tip||!el) return;
+  el.style.display='block';
+  el.innerHTML=tip;
+  var x=e.clientX+14, y=e.clientY-8;
+  if(x+230>window.innerWidth) x=e.clientX-234;
+  if(y+80>window.innerHeight) y=e.clientY-84;
+  el.style.left=x+'px';
+  el.style.top=y+'px';
+}
+function pmWcHide(){
+  var el=document.getElementById('pm-wc-tooltip');
+  if(el) el.style.display='none';
+}
+
+// ── TOPICAL PAIN WORD CLOUD TOOLTIP ──
+function tpWcTT(e,t){
+  var tip=t.getAttribute('data-tip');
+  var el=document.getElementById('tp-wc-tooltip');
+  if(!tip||!el) return;
+  el.style.display='block';
+  el.innerHTML=tip;
+  var x=e.clientX+14, y=e.clientY-8;
+  if(x+230>window.innerWidth) x=e.clientX-234;
+  if(y+80>window.innerHeight) y=e.clientY-84;
+  el.style.left=x+'px';
+  el.style.top=y+'px';
+}
+function tpWcHide(){
+  var el=document.getElementById('tp-wc-tooltip');
+  if(el) el.style.display='none';
+}
 
 // ── INIT ──
 function init(){
