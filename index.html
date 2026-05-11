@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <title>Haleon x BCG | Innovation Workshop</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -3230,11 +3229,11 @@ function wsGoStep(n){
     stepEl.classList.toggle('done', myIdx < curIdx);
   });
   if(n===2)  buildWSNeedsPanel();
-  if(n===25) buildWSCalibration();
+  if(n===25){ loadNeedsFromStorage(); buildWSCalibration(); startVotePolling(); }
   if(n===3)  buildWSTechBank();
   if(n===4)  buildWSRTWPanels();
   if(n===5){ loadVotesFromStorage(); loadNeedsFromStorage(); buildWSTracker(); startVotePolling(); }
-  if(n!==5)  stopVotePolling();
+  if(n!==5 && n!==25)  stopVotePolling();
   if(n===6)  buildWSActionPlan();
 }
 
@@ -4160,15 +4159,7 @@ async function sbDebugTest(){
 }
 
 
-let _sbReady = false;
-let _sbClient = null;
 function _sbConfigured(){ return SUPABASE_URL !== '' && SUPABASE_KEY !== ''; }
-function _getClient(){
-  if(!_sbClient && _sbConfigured() && window.supabase){
-    _sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  }
-  return _sbClient;
-}
 
 function _setSyncStatus(state){
   const el = document.getElementById('sync-indicator');
@@ -4190,21 +4181,51 @@ function _setSyncStatus(state){
   }
 }
 
-// ── Core Supabase helpers — using official JS client ──
+// ── Core Supabase helpers — raw fetch to avoid DataCloneError on Headers ──
+function _sbHeaders(){
+  return {
+    'apikey': SUPABASE_KEY,
+    'Authorization': 'Bearer '+SUPABASE_KEY,
+    'Content-Type': 'application/json'
+  };
+}
+
 async function _sbSet(key, value){
   if(!_sbConfigured()) return;
-  const db = _getClient();
-  if(!db) throw new Error('Supabase client not initialised');
-  const { error } = await db.from(SUPABASE_TABLE).upsert({ key, value }, { onConflict: 'key' });
-  if(error) throw new Error(error.message);
+  // Try upsert first
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
+    method:'POST',
+    headers: { ..._sbHeaders(), 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify({ key, value })
+  });
+  if(!res.ok){
+    // Fallback: delete then insert
+    await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}`, {
+      method:'DELETE', headers: _sbHeaders()
+    });
+    const res2 = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
+      method:'POST',
+      headers: { ..._sbHeaders(), 'Prefer':'return=minimal' },
+      body: JSON.stringify({ key, value })
+    });
+    if(!res2.ok){
+      const body = await res2.text().catch(()=>'');
+      throw new Error(`HTTP ${res2.status}: ${body}`);
+    }
+  }
 }
 
 async function _sbGet(key){
   if(!_sbConfigured()) return null;
-  const db = _getClient();
-  if(!db) throw new Error('Supabase client not initialised');
-  const { data, error } = await db.from(SUPABASE_TABLE).select('value').eq('key', key).limit(1);
-  if(error) throw new Error(error.message);
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}&select=value&limit=1`,
+    { headers: _sbHeaders() }
+  );
+  if(!res.ok){
+    const body = await res.text().catch(()=>'');
+    throw new Error(`HTTP ${res.status}: ${body}`);
+  }
+  const data = await res.json();
   return data && data.length ? data[0].value : null;
 }
 
