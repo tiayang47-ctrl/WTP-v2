@@ -4153,6 +4153,8 @@ async function sbDebugTest(){
   }
 
   log('\n✅ Connection test complete — Supabase is working correctly', '#aad87a');
+  log('\n💡 Tip: for upsert to work, add a unique constraint on the "key" column in Supabase:', '#888');
+  log('   Table Editor → workshop_submissions → key column → Edit → check "Is Unique"', '#888');
   _setSyncStatus('ok');
 }
 
@@ -4194,18 +4196,29 @@ function _sbHeaders(){
 
 async function _sbSet(key, value){
   if(!_sbConfigured()) return;
-  await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}`, {
-    method:'DELETE',
-    headers: _sbHeaders()
-  });
+  // Use upsert via ON CONFLICT — avoids race condition from delete+insert
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
     method:'POST',
-    headers:{ ..._sbHeaders(), 'Prefer': 'return=minimal' },
+    headers:{
+      ..._sbHeaders(),
+      'Prefer': 'resolution=merge-duplicates,return=minimal'
+    },
     body: JSON.stringify({ key, value })
   });
   if(!res.ok){
-    const body = await res.text().catch(()=>'');
-    throw new Error(`HTTP ${res.status}: ${body}`);
+    // Fallback: delete then insert
+    await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}`, {
+      method:'DELETE', headers: _sbHeaders()
+    });
+    const res2 = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
+      method:'POST',
+      headers:{ ..._sbHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ key, value })
+    });
+    if(!res2.ok){
+      const body = await res2.text().catch(()=>'');
+      throw new Error(`HTTP ${res2.status}: ${body}`);
+    }
   }
 }
 
@@ -4250,7 +4263,14 @@ async function loadVotesFromStorage(){
       let added = false;
       remote.forEach(r=>{
         const k = r.time+'|'+r.tech.id+'|'+r.platform;
-        if(!localKeys.has(k)){ wsTracker.push({...r, isNew:true}); added=true; }
+        if(!localKeys.has(k)){
+          // Rehydrate tech object from platformTechOptions in case it lost methods
+          const platformIdx = platforms.findIndex(p=>`#${p.rank} ${p.name}` === r.platform);
+          const techOpts = platformTechOptions[platformIdx] || platformTechOptions[0];
+          const fullTech = techOpts.find(t=>t.id === r.tech.id) || r.tech;
+          wsTracker.push({...r, tech: fullTech, isNew:true});
+          added=true;
+        }
       });
       if(added) buildWSTracker();
     }
