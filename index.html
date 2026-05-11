@@ -815,10 +815,12 @@ document.body.style.overflow = 'hidden';
           </div>
         </div>
         <div style="display:flex;gap:8px">
+          <button class="ws-btn" onclick="sbDebugTest()" style="font-size:10px;padding:5px 12px;color:#534AB7;border-color:#534AB7">🔍 Test Connection</button>
           <button class="ws-btn" onclick="wsExportCSV()" style="font-size:10px;padding:5px 12px;color:var(--h-green);border-color:var(--h-green)">⬇ Download CSV</button>
           <button class="ws-btn" onclick="wsClearTracker()" style="font-size:10px;padding:5px 12px;color:#C04060;border-color:#C04060">Clear all</button>
         </div>
       </div>
+      <div id="sb-debug-panel" style="display:none;background:#1a1a2e;border-radius:8px;padding:14px 16px;margin-bottom:14px;font-family:monospace;font-size:11px;color:#aad87a;white-space:pre-wrap;max-height:200px;overflow-y:auto"></div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:16px">RTW scores per technology — submitted by all groups this session · Votes sync automatically across all devices</div>
       <div id="tracker-area"></div>
       <div class="ws-nav-btns">
@@ -4082,7 +4084,79 @@ const SUPABASE_TABLE = 'workshop_submissions';
 const VOTES_KEY = 'workshop_votes_v1';
 const NEEDS_KEY = 'workshop_needs_v1';
 
-// ── Connection state ──
+// ── DEBUG TEST ──
+async function sbDebugTest(){
+  const panel = document.getElementById('sb-debug-panel');
+  if(!panel) return;
+  panel.style.display = 'block';
+  panel.textContent = '🔍 Running Supabase connection test...\n\n';
+
+  const log = (msg, col) => {
+    const line = document.createElement('div');
+    line.style.color = col || '#aad87a';
+    line.textContent = msg;
+    panel.appendChild(line);
+    panel.scrollTop = panel.scrollHeight;
+  };
+
+  // Step 1 — config check
+  log('① Config check:');
+  log('   URL: ' + (SUPABASE_URL || '⚠ EMPTY'));
+  log('   KEY: ' + (SUPABASE_KEY ? SUPABASE_KEY.slice(0,30)+'...' : '⚠ EMPTY'));
+  log('   Table: ' + SUPABASE_TABLE);
+
+  if(!_sbConfigured()){
+    log('\n⛔ Config missing — fill in SUPABASE_URL and SUPABASE_KEY', '#e05050');
+    _setSyncStatus('error');
+    return;
+  }
+
+  // Step 2 — write test
+  log('\n② Write test — inserting test row...');
+  try {
+    await _sbSet('__test__', JSON.stringify({t: Date.now()}));
+    log('   ✓ Write succeeded', '#aad87a');
+  } catch(e) {
+    log('   ⛔ Write failed: ' + e.message, '#e05050');
+    log('\n💡 Likely fix: check RLS is disabled on the table in Supabase', '#f5c842');
+    _setSyncStatus('error');
+    return;
+  }
+
+  // Step 3 — read test
+  log('\n③ Read test — fetching test row...');
+  try {
+    const val = await _sbGet('__test__');
+    if(val){
+      log('   ✓ Read succeeded: ' + val, '#aad87a');
+    } else {
+      log('   ⚠ Read returned empty — row may not have saved', '#f5c842');
+    }
+  } catch(e) {
+    log('   ⛔ Read failed: ' + e.message, '#e05050');
+    _setSyncStatus('error');
+    return;
+  }
+
+  // Step 4 — check votes key
+  log('\n④ Checking for existing votes...');
+  try {
+    const votes = await _sbGet(VOTES_KEY);
+    if(votes){
+      const parsed = JSON.parse(votes);
+      log('   ✓ Found ' + parsed.length + ' vote row(s) in storage', '#aad87a');
+    } else {
+      log('   ℹ No votes stored yet — submit some first', '#888');
+    }
+  } catch(e) {
+    log('   ⚠ Could not read votes: ' + e.message, '#f5c842');
+  }
+
+  log('\n✅ Connection test complete — Supabase is working correctly', '#aad87a');
+  _setSyncStatus('ok');
+}
+
+
 let _sbReady = false;
 function _sbConfigured(){ return SUPABASE_URL !== '' && SUPABASE_KEY !== ''; }
 
@@ -4129,7 +4203,10 @@ async function _sbSet(key, value){
     headers:{ ..._sbHeaders(), 'Prefer': 'return=minimal' },
     body: JSON.stringify({ key, value })
   });
-  if(!res.ok) throw new Error('Supabase write failed: '+res.status);
+  if(!res.ok){
+    const body = await res.text().catch(()=>'');
+    throw new Error(`HTTP ${res.status}: ${body}`);
+  }
 }
 
 async function _sbGet(key){
@@ -4138,7 +4215,10 @@ async function _sbGet(key){
     `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}&select=value&limit=1`,
     { headers: _sbHeaders() }
   );
-  if(!res.ok) throw new Error('Supabase read failed: '+res.status);
+  if(!res.ok){
+    const body = await res.text().catch(()=>'');
+    throw new Error(`HTTP ${res.status}: ${body}`);
+  }
   const data = await res.json();
   return data && data.length ? data[0].value : null;
 }
