@@ -446,6 +446,7 @@ document.body.style.overflow = 'hidden';
 .tracker-empty{text-align:center;padding:40px;color:var(--muted);font-size:12px}
 .submission-row-new{animation:fadeIn .4s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
 
 /* ── Platform tab styles (moved from JS templates) ── */
 
@@ -806,13 +807,19 @@ document.body.style.overflow = 'hidden';
     <!-- ── STEP 5: Live Tracker ── -->
     <div id="ws-panel-5" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <div style="font-size:18px;font-weight:700">Live Results Tracker</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="font-size:18px;font-weight:700">Live Results Tracker</div>
+          <div id="sync-indicator" style="display:flex;align-items:center;gap:5px;padding:3px 9px;background:#eaf3de;border-radius:20px;border:1px solid #aad87a">
+            <div style="width:7px;height:7px;border-radius:50%;background:#5C9E1A;animation:pulse-dot 2s infinite"></div>
+            <span style="font-size:9px;font-weight:700;color:#27500a;text-transform:uppercase;letter-spacing:.5px">Live — syncing every 5s</span>
+          </div>
+        </div>
         <div style="display:flex;gap:8px">
           <button class="ws-btn" onclick="wsExportCSV()" style="font-size:10px;padding:5px 12px;color:var(--h-green);border-color:var(--h-green)">⬇ Download CSV</button>
           <button class="ws-btn" onclick="wsClearTracker()" style="font-size:10px;padding:5px 12px;color:#C04060;border-color:#C04060">Clear all</button>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">RTW scores per technology — submitted by all groups this session</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">RTW scores per technology — submitted by all groups this session · Votes sync automatically across all devices</div>
       <div id="tracker-area"></div>
       <div class="ws-nav-btns">
         <button class="ws-btn" onclick="wsGoStep(4)">← Score again</button>
@@ -3223,7 +3230,8 @@ function wsGoStep(n){
   if(n===25) buildWSCalibration();
   if(n===3)  buildWSTechBank();
   if(n===4)  buildWSRTWPanels();
-  if(n===5)  buildWSTracker();
+  if(n===5){ loadVotesFromStorage(); loadNeedsFromStorage(); buildWSTracker(); startVotePolling(); }
+  if(n!==5)  stopVotePolling();
   if(n===6)  buildWSActionPlan();
 }
 
@@ -3574,6 +3582,19 @@ function renderTradeoffSummary(){
   // Top 3 needs by win score
   const ranked = wsNeedsOrder.map(id=>({ n:allNeeds.find(x=>x.id===id), score:toScores[id]||0 })).filter(x=>x.n);
   const maxScore = ranked[0].score;
+
+  // If all answered pairs were Unsure — no need has any wins
+  if(maxScore === 0){
+    el.innerHTML=`<div style="background:#fef6e4;border:1px solid #E8A020;border-radius:6px;padding:10px 12px;font-size:10.5px;color:#7a4d00">
+      <strong>No clear priority yet</strong> — all your answers so far were "Unsure". Make at least one definitive choice to surface a priority.
+    </div>`;
+    if(recEl) recEl.style.display='none';
+    // Block submit
+    const next2 = document.getElementById('ws-next-2');
+    if(next2) next2.disabled = true;
+    return;
+  }
+
   el.innerHTML = ranked.slice(0,5).map(({n,score},i)=>{
     const w = maxScore>0 ? Math.round(score/maxScore*100) : 0;
     const colors = ['#5C9E1A','#8DC63F','#B0D880','#ddd','#ddd'];
@@ -3634,7 +3655,24 @@ function wsSubmitNeeds(){
   const topId = wsNeedsOrder[0];
   const topNeed = allNeeds.find(n=>n.id===topId);
   if(!topNeed) return;
-  wsNeedsResponses.push({ needId: topNeed.id, label: topNeed.label, time: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
+  // Block if top need has 0 wins — all pairs answered as Unsure
+  if((toScores[topId]||0) === 0){
+    alert('No clear priority has emerged yet — at least one trade-off needs a definitive answer before you can submit.');
+    return;
+  }
+  const ts = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  // Store full ranked order (all needs in priority order)
+  const fullRanking = wsNeedsOrder.map((id,i) => {
+    const need = allNeeds.find(n=>n.id===id);
+    return { rank: i+1, needId: id, label: need ? need.label : id };
+  });
+  wsNeedsResponses.push({
+    needId: topNeed.id,
+    label: topNeed.label,
+    time: ts,
+    fullRanking
+  });
+  syncNeedsToStorage();
   wsGoStep(25);
 }
 
@@ -4028,6 +4066,70 @@ function wsGetOverall(scores){
   return 'M';
 }
 
+// ── SHARED VOTE STORAGE ──
+const VOTES_KEY = 'workshop_votes_v1';
+const NEEDS_KEY = 'workshop_needs_v1';
+
+async function syncVotesToStorage(){
+  try {
+    await window.storage.set(VOTES_KEY, JSON.stringify(wsTracker), true);
+  } catch(e){ console.warn('Storage write failed', e); }
+}
+
+async function syncNeedsToStorage(){
+  try {
+    await window.storage.set(NEEDS_KEY, JSON.stringify(wsNeedsResponses), true);
+  } catch(e){ console.warn('Needs storage write failed', e); }
+}
+
+async function loadVotesFromStorage(){
+  try {
+    const result = await window.storage.get(VOTES_KEY, true);
+    if(result && result.value){
+      const remote = JSON.parse(result.value);
+      const localKeys = new Set(wsTracker.map(r=>r.time+'|'+r.tech.id+'|'+r.platform));
+      let added = false;
+      remote.forEach(r=>{
+        const k = r.time+'|'+r.tech.id+'|'+r.platform;
+        if(!localKeys.has(k)){
+          wsTracker.push({...r, isNew:true});
+          added = true;
+        }
+      });
+      if(added) buildWSTracker();
+    }
+  } catch(e){ /* key not yet set — fine */ }
+}
+
+async function loadNeedsFromStorage(){
+  try {
+    const result = await window.storage.get(NEEDS_KEY, true);
+    if(result && result.value){
+      const remote = JSON.parse(result.value);
+      const localKeys = new Set(wsNeedsResponses.map(r=>r.time+'|'+r.needId));
+      let added = false;
+      remote.forEach(r=>{
+        const k = r.time+'|'+r.needId;
+        if(!localKeys.has(k)){
+          wsNeedsResponses.push(r);
+          added = true;
+        }
+      });
+      if(added){ buildWSCalibration(); buildWSTracker(); }
+    }
+  } catch(e){ /* key not yet set — fine */ }
+}
+
+// Poll for new votes every 5 seconds when on Step 5
+let votePoller = null;
+function startVotePolling(){
+  if(votePoller) return;
+  votePoller = setInterval(()=>{ loadVotesFromStorage(); loadNeedsFromStorage(); }, 5000);
+}
+function stopVotePolling(){
+  if(votePoller){ clearInterval(votePoller); votePoller = null; }
+}
+
 function wsSubmitResults(){
   const platform = platforms[wsSelectedPlatform];
   const ts = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
@@ -4045,11 +4147,16 @@ function wsSubmitResults(){
       rawScores: scores, time: ts, isNew: true
     });
   });
+  syncVotesToStorage();
   wsGoStep(5);
 }
 
 function wsClearTracker(){
-  if(confirm('Clear all submitted results?')){ wsTracker=[]; buildWSTracker(); }
+  if(confirm('Clear all submitted results?')){
+    wsTracker=[];
+    try { window.storage.delete(VOTES_KEY, true); } catch(e){}
+    buildWSTracker();
+  }
 }
 
 function wsExportCSV(){
@@ -4072,7 +4179,22 @@ function wsExportCSV(){
     ]);
   });
 
-  // ── Action Plan: seed all tech/dim combos then export only selected actions ──
+  // ── Sheet 2: Consumer Needs Rankings ──
+  const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+  const maxRankCols = Math.max(0, ...wsNeedsResponses.map(r=>(r.fullRanking||[]).length));
+  const needsHeader = ['Time', ...Array.from({length:maxRankCols},(_,i)=>`#${i+1} Priority`)];
+  const needsRows = [needsHeader];
+  wsNeedsResponses.forEach(r=>{
+    const ranking = r.fullRanking || [{rank:1, needId:r.needId, label:r.label}];
+    const row = [r.time];
+    for(let i=1;i<=maxRankCols;i++){
+      const item = ranking.find(x=>x.rank===i);
+      row.push(item ? item.label : '');
+    }
+    needsRows.push(row);
+  });
+
+  // ── Sheet 3: Action Plan ──
   const actionRows = [['Technology','Dimension','Score','Action','Owner','Deadline']];
   const dimLabels = {tech:'Tech RTW', brand:'Brand & Portfolio RTW', comm:'Commercial RTW'};
   const seen = new Set();
@@ -4094,7 +4216,9 @@ function wsExportCSV(){
   });
 
   const toCSV = rows => rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const csv = 'RTW SCORES\n' + toCSV(scoreRows) + '\n\nACTION PLAN\n' + toCSV(actionRows);
+  const csv = 'RTW SCORES\n' + toCSV(scoreRows)
+    + '\n\nCONSUMER NEEDS RANKINGS\n' + toCSV(needsRows)
+    + '\n\nACTION PLAN\n' + toCSV(actionRows);
 
   const ts = new Date().toISOString().slice(0,16).replace('T','_').replace(':','h');
   const filename = 'workshop_results_'+ts+'.csv';
@@ -4114,47 +4238,130 @@ function pillHTML(val){
 
 function buildWSTracker(){
   const el = document.getElementById('tracker-area');
-  if(!wsTracker.length){
+  const hasVotes = wsTracker.length > 0;
+  const hasNeeds = wsNeedsResponses.length > 0;
+
+  if(!hasVotes && !hasNeeds){
     el.innerHTML=`<div class="tracker-empty">No results submitted yet.<br><span style="font-size:11px">Complete the scoring and hit Submit Results to see scores here.</span></div>`;
     return;
   }
-  const byPlatform = wsTracker.reduce((acc,r)=>{
-    (acc[r.platform]||(acc[r.platform]=[])).push(r);
-    return acc;
-  },{});
+
   let html = '';
-  Object.entries(byPlatform).forEach(([plat, rows])=>{
-    html += `<div style="margin-bottom:24px">
-      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px">
-        <span style="background:var(--h-green);color:#fff;border-radius:4px;padding:2px 8px;font-size:10px">Platform</span>${plat}
-      </div>
+
+  // ── SECTION 1: Consumer Needs Rankings ──
+  if(hasNeeds){
+    html += `<div style="margin-bottom:28px">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px">
+        <span style="background:#534AB7;color:#fff;border-radius:4px;padding:2px 8px;font-size:10px">Step 2</span>Consumer Needs Rankings
+        <span style="font-size:10px;color:var(--muted);font-weight:400">${wsNeedsResponses.length} submission${wsNeedsResponses.length!==1?'s':''}</span>
+      </div>`;
+
+    // Vote tally for #1 need
+    const votes = {};
+    wsNeedsResponses.forEach(r=>{ votes[r.needId]=(votes[r.needId]||0)+1; });
+    const total = wsNeedsResponses.length;
+    const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+    const sorted = Object.entries(votes).sort((a,b)=>b[1]-a[1]);
+    const maxV = sorted[0]?.[1]||1;
+
+    html += `<div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:12px">📊 #1 priority need — group vote tally</div>`;
+    sorted.forEach(([id, count])=>{
+      const need = allNeeds.find(n=>n.id===id);
+      const label = need ? need.label : id;
+      const pct = Math.round((count/total)*100);
+      const isWinner = count===maxV;
+      html += `<div style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px">
+          <span style="font-size:11px;font-weight:${isWinner?700:400};color:${isWinner?'var(--text)':'#666'}">${label}</span>
+          <span style="font-size:11px;font-weight:700;color:${isWinner?'#534AB7':'#999'};white-space:nowrap;margin-left:8px">${count} vote${count!==1?'s':''} · ${pct}%</span>
+        </div>
+        <div style="background:#eee;border-radius:4px;height:8px">
+          <div style="background:${isWinner?'#534AB7':'#b5b0e0'};width:${pct}%;height:100%;border-radius:4px;transition:width .5s"></div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+
+    // Individual full rankings table
+    html += `<div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">Individual full rankings</div>
+      <div style="overflow-x:auto">
       <table class="tracker-table">
         <thead><tr>
-          <th>Technology</th>
-          <th style="text-align:center">Tech RTW</th>
-          <th style="text-align:center">Commercial RTW</th>
-          <th style="text-align:center">Brand &amp; Portfolio RTW</th>
-          <th style="text-align:center">Submitted</th>
-        </tr></thead>
-        <tbody>`;
-    rows.forEach((r)=>{
-      const rowClass = r.isNew ? 'submission-row-new' : '';
-      html += `<tr class="${rowClass}">
-        <td>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="background:${r.tech.color};color:#fff;border-radius:4px;padding:2px 7px;font-size:9px;font-weight:700">${r.tech.id}</span>
-            <span style="font-weight:600">${r.tech.label}</span>
-          </div>
-        </td>
-        <td style="text-align:center">${pillHTML(r.scores.tech)}</td>
-        <td style="text-align:center">${pillHTML(r.scores.comm)}</td>
-        <td style="text-align:center">${pillHTML(r.scores.brand)}</td>
-        <td style="text-align:center;color:var(--muted);font-size:10px">${r.time}</td>
-      </tr>`;
-      r.isNew = false;
+          <th style="min-width:60px">Time</th>`;
+
+    // Column headers = rank numbers (max needs across all submissions)
+    const maxRanks = Math.max(...wsNeedsResponses.map(r=>(r.fullRanking||[]).length));
+    for(let i=1;i<=maxRanks;i++) html+=`<th style="text-align:center;white-space:nowrap">#${i}</th>`;
+    html += `</tr></thead><tbody>`;
+
+    wsNeedsResponses.forEach(r=>{
+      html += `<tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">${r.time}</td>`;
+      const ranking = r.fullRanking || [{rank:1, needId:r.needId, label:r.label}];
+      for(let i=1;i<=maxRanks;i++){
+        const item = ranking.find(x=>x.rank===i);
+        if(item){
+          const isFirst = i===1;
+          html += `<td style="text-align:center;padding:4px 6px">
+            <div style="font-size:9.5px;padding:3px 6px;border-radius:4px;background:${isFirst?'#534AB7':'#f5f5f3'};color:${isFirst?'#fff':'#444'};line-height:1.3;max-width:120px;white-space:normal">${item.label}</div>
+          </td>`;
+        } else {
+          html += `<td></td>`;
+        }
+      }
+      html += `</tr>`;
     });
-    html += `</tbody></table></div>`;
-  });
+    html += `</tbody></table></div></div></div>`;
+  }
+
+  // ── SECTION 2: RTW Scores ──
+  if(hasVotes){
+    const byPlatform = wsTracker.reduce((acc,r)=>{
+      (acc[r.platform]||(acc[r.platform]=[])).push(r);
+      return acc;
+    },{});
+
+    html += `<div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px">
+        <span style="background:var(--h-green);color:#fff;border-radius:4px;padding:2px 8px;font-size:10px">Step 4</span>RTW Scores
+      </div>`;
+
+    Object.entries(byPlatform).forEach(([plat, rows])=>{
+      html += `<div style="margin-bottom:24px">
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px">
+          <span style="background:var(--h-green);color:#fff;border-radius:4px;padding:2px 8px;font-size:10px">Platform</span>${plat}
+        </div>
+        <table class="tracker-table">
+          <thead><tr>
+            <th>Technology</th>
+            <th style="text-align:center">Tech RTW</th>
+            <th style="text-align:center">Commercial RTW</th>
+            <th style="text-align:center">Brand &amp; Portfolio RTW</th>
+            <th style="text-align:center">Submitted</th>
+          </tr></thead>
+          <tbody>`;
+      rows.forEach((r)=>{
+        const rowClass = r.isNew ? 'submission-row-new' : '';
+        html += `<tr class="${rowClass}">
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="background:${r.tech.color};color:#fff;border-radius:4px;padding:2px 7px;font-size:9px;font-weight:700">${r.tech.id}</span>
+              <span style="font-weight:600">${r.tech.label}</span>
+            </div>
+          </td>
+          <td style="text-align:center">${pillHTML(r.scores.tech)}</td>
+          <td style="text-align:center">${pillHTML(r.scores.comm)}</td>
+          <td style="text-align:center">${pillHTML(r.scores.brand)}</td>
+          <td style="text-align:center;color:var(--muted);font-size:10px">${r.time}</td>
+        </tr>`;
+        r.isNew = false;
+      });
+      html += `</tbody></table></div>`;
+    });
+    html += `</div>`;
+  }
+
   el.innerHTML = html;
 }
 
