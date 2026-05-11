@@ -143,6 +143,12 @@ body{font-family:"Segoe UI",Arial,sans-serif;background:var(--h-light);color:var
 .pcard-stat{font-size:9px;color:var(--muted)}
 .pcard-stat strong{color:var(--text)}
 .pcard-need{font-size:9px;color:var(--muted);line-height:1.35;font-style:italic}
+.pcard-unmet{margin-top:6px;padding-top:6px;border-top:1px solid #f5f5f3}
+.pcard-unmet-title{font-size:8.5px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.pcard-unmet-item{display:flex;align-items:flex-start;gap:4px;margin-bottom:3px;font-size:9.5px;line-height:1.35}
+.pcard-unmet-bullet{font-weight:700;flex-shrink:0;line-height:1.35}
+.pcard-unmet-text{flex:1;color:var(--text)}
+.pcard-unmet-status{font-size:7.5px;font-weight:700;padding:1px 5px;border-radius:8px;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0;white-space:nowrap}
 .pcard-edit-wrap{display:flex;align-items:center;gap:3px;margin-top:6px;padding-top:5px;border-top:1px solid #f5f5f3}
 .pcard-edit-lbl{font-size:8.5px;color:var(--muted)}
 .pcard-edit{width:52px;padding:2px 4px;font-size:9px;border:1px solid #ddd;border-radius:3px;color:var(--text);text-align:right}
@@ -240,14 +246,103 @@ body{font-family:"Segoe UI",Arial,sans-serif;background:var(--h-light);color:var
   </div>
 </div>
 
+<!-- ── NAME CAPTURE GATE (shown after password) ── -->
+<div id="name-gate" style="
+  display:none;
+  position:fixed;inset:0;z-index:9998;
+  background:linear-gradient(135deg,#1A1A1A 0%,#0d2a0d 100%);
+  align-items:center;justify-content:center;
+">
+  <div style="
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:12px;
+    padding:44px 48px;
+    width:100%;max-width:420px;
+    text-align:center;
+    box-shadow:0 24px 60px rgba(0,0,0,.5);
+  ">
+    <!-- Logos -->
+    <div style="display:flex;align-items:center;justify-content:center;margin-bottom:28px;margin-right:40px">
+      <img src="" data-imgvar="_IMG1" style="height:72px;width:auto;object-fit:contain;mix-blend-mode:screen;margin-left:20px;margin-top:4px" alt="Haleon"/>
+      <span style="font-size:28px;font-weight:200;color:rgba(255,255,255,.4);margin:0 8px;margin-left:-14px">×</span>
+      <img src="" data-imgvar="_IMG2" style="height:36px;width:auto;object-fit:contain;mix-blend-mode:screen" alt="BCG"/>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;letter-spacing:.3px">Welcome</div>
+    <div style="font-size:11px;color:#888;margin-bottom:24px;line-height:1.5">Enter your name so we can attribute your<br>votes and rankings to you</div>
+
+    <!-- Input -->
+    <input
+      id="name-input"
+      type="text"
+      placeholder="Your name"
+      autocomplete="name"
+      onkeydown="if(event.key==='Enter')nameCheck()"
+      style="
+        width:100%;padding:12px 16px;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.18);
+        border-radius:6px;
+        color:#fff;font-size:14px;font-family:inherit;
+        text-align:center;
+        outline:none;transition:border .2s;
+        margin-bottom:14px;
+      "
+      onfocus="this.style.borderColor='#8DC63F'"
+      onblur="this.style.borderColor='rgba(255,255,255,.18)'"
+    >
+
+    <!-- Error msg -->
+    <div id="name-error" style="
+      font-size:11px;color:#e05050;height:16px;margin-bottom:10px;
+      opacity:0;transition:opacity .2s;
+    ">Please enter your name to continue.</div>
+
+    <!-- Button -->
+    <button onclick="nameCheck()" style="
+      width:100%;padding:12px;
+      background:#5C9E1A;
+      border:none;border-radius:6px;
+      color:#fff;font-size:13px;font-weight:700;
+      letter-spacing:.5px;cursor:pointer;
+      transition:background .2s;font-family:inherit;
+    "
+    onmouseover="this.style.background='#4a8214'"
+    onmouseout="this.style.background='#5C9E1A'"
+    >Continue →</button>
+
+    <div style="margin-top:20px;font-size:10px;color:#555">
+      Your name will appear in the live tracker and CSV export
+    </div>
+  </div>
+</div>
+
 <script>
+// Global participant name — captured after password gate
+window.PARTICIPANT_NAME = '';
+
+// Global facilitator mode flag
+window.FACILITATOR_MODE = false;
+
 function pwCheck(){
   var inp=document.getElementById('pw-input');
   var err=document.getElementById('pw-error');
-  var val=inp.value.trim().toUpperCase();
-  if(val==='ARGO'){
+  var val=inp.value.trim();
+  var valUpper=val.toUpperCase();
+  if(valUpper==='ARGO'){
+    window.FACILITATOR_MODE = false;
+    try { localStorage.removeItem('facilitatorMode'); } catch(e){}
     document.getElementById('pw-gate').style.display='none';
-    document.body.style.overflow='';
+    var ng = document.getElementById('name-gate');
+    ng.style.display = 'flex';
+    setTimeout(function(){ document.getElementById('name-input').focus(); }, 100);
+  } else if(val==='HaleonxBCG2026'){
+    window.FACILITATOR_MODE = true;
+    try { localStorage.setItem('facilitatorMode', '1'); } catch(e){}
+    document.getElementById('pw-gate').style.display='none';
+    var ng = document.getElementById('name-gate');
+    ng.style.display = 'flex';
+    setTimeout(function(){ document.getElementById('name-input').focus(); }, 100);
   } else {
     err.style.opacity='1';
     inp.value='';
@@ -258,8 +353,50 @@ function pwCheck(){
     },2500);
   }
 }
+
+function nameCheck(){
+  var inp=document.getElementById('name-input');
+  var err=document.getElementById('name-error');
+  var val=inp.value.trim();
+  if(val.length>=2){
+    window.PARTICIPANT_NAME = val;
+    try { localStorage.setItem('participantName', val); } catch(e){}
+    document.getElementById('name-gate').style.display='none';
+    document.body.style.overflow='';
+    // Apply the right mode now that gates are passed
+    if(typeof applyFacilitatorMode === 'function') applyFacilitatorMode();
+    if(typeof buildWSTracker === 'function') buildWSTracker();
+  } else {
+    err.style.opacity='1';
+    inp.style.borderColor='#e05050';
+    setTimeout(function(){
+      err.style.opacity='0';
+      inp.style.borderColor='rgba(255,255,255,.18)';
+    },2500);
+  }
+}
+
+// Restore facilitator mode from previous session
+try {
+  if(localStorage.getItem('facilitatorMode')==='1'){
+    window.FACILITATOR_MODE = true;
+  }
+} catch(e){}
+
+// Restore name from previous session if available
+try {
+  var savedName = localStorage.getItem('participantName');
+  if(savedName){ window.PARTICIPANT_NAME = savedName; }
+} catch(e){}
+
 document.body.style.overflow = 'hidden';
 </script>
+
+<!-- Floating facilitator badge — only visible in facilitator mode -->
+<div id="facilitator-badge" style="display:none;position:fixed;top:14px;right:18px;z-index:1000;background:#5C9E1A;color:#fff;padding:5px 12px;border-radius:14px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(92,158,26,.4)">
+  <span style="font-size:9px">⚙</span>
+  <span>Facilitator Mode</span>
+</div>
 
 <div class="header">
   <div class="logo-area">
@@ -330,7 +467,7 @@ document.body.style.overflow = 'hidden';
 <div class="page" id="page-dashboard">
   <div class="dashboard">
     <div class="dashboard-title">All Platforms — Dashboard</div>
-    <div class="dashboard-sub">Bubble size = 2025 TAM · X-axis = Tech Readiness (TRL 1–9) · Y-axis = Market attractiveness · Edit TAM on any card to update the chart instantly</div>
+    <div class="dashboard-sub">All 100 platforms · Bubble size = 2025 TAM ($B) · X-axis = Tech Readiness (TRL 3–9, forced distribution) · Y-axis = Market attractiveness (forced distribution) · Edit TAM on any card to update bubble size</div>
 
     <!-- Matrix first -->
     <div class="matrix-wrap">
@@ -343,13 +480,13 @@ document.body.style.overflow = 'hidden';
         <div class="bubble-tooltip" id="bubble-tooltip"></div>
       </div>
       <div class="matrix-legend">
-        <div style="font-size:10px;font-weight:700;color:var(--text);margin-right:4px">Bubble size = TAM:</div>
-        <div class="ml-item"><div class="ml-circle" style="width:7px;height:7px"></div>&lt;$1B</div>
-        <div class="ml-item"><div class="ml-circle" style="width:11px;height:11px"></div>$1–5B</div>
-        <div class="ml-item"><div class="ml-circle" style="width:16px;height:16px"></div>$5–15B</div>
-        <div class="ml-item"><div class="ml-circle" style="width:22px;height:22px"></div>&gt;$15B</div>
-        <div style="margin-left:8px;width:1px;height:14px;background:#ddd"></div>
-        <div class="ml-item"><div style="width:12px;height:12px;background:rgba(255,100,120,.25);border:1px dashed #E87080;border-radius:2px"></div>Short-term "Go-Explore" (TRL 6+, mid-high attractiveness)</div>
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-right:4px">Bubble size = 2025 TAM:</div>
+        <div class="ml-item"><div class="ml-circle" style="width:6px;height:6px;background:#5C9E1A"></div>&lt;$1B</div>
+        <div class="ml-item"><div class="ml-circle" style="width:11px;height:11px;background:#5C9E1A"></div>$1–5B</div>
+        <div class="ml-item"><div class="ml-circle" style="width:17px;height:17px;background:#5C9E1A"></div>$5–15B</div>
+        <div class="ml-item"><div class="ml-circle" style="width:24px;height:24px;background:#5C9E1A"></div>&gt;$15B</div>
+        <div style="margin-left:12px;width:1px;height:18px;background:#ddd"></div>
+        <div class="ml-item"><div style="width:14px;height:14px;background:rgba(255,150,170,0.22);border:1px dashed #E87080;border-radius:2px"></div>Pink zone = Short-term "Go-Explore" (TRL 6+, mid-high market attractiveness)</div>
       </div>
     </div>
 
@@ -545,7 +682,43 @@ document.body.style.overflow = 'hidden';
   .pos-brand-name{font-size:8px;color:#333;white-space:nowrap;font-weight:600;background:rgba(255,255,255,.85);padding:1px 3px;border-radius:2px}
   /* lessons */
   .comp-lessons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-  .lesson-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px;font-size:10.5px}
+  .lesson-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px;font-size:10.5px;scroll-margin-top:80px}
+  .lesson-card.comp-flash{animation:compFlash 1.6s ease-out}
+  .comp-matrix-row{scroll-margin-top:80px}
+  .comp-matrix-row.comp-flash{animation:compFlash 1.6s ease-out}
+  @keyframes compFlash{0%{background:#eaf3de;box-shadow:0 0 0 3px #5C9E1A}50%{background:#eaf3de;box-shadow:0 0 0 3px #5C9E1A}100%{background:transparent;box-shadow:none}}
+
+  /* Competitive positioning map */
+  .comp-map{display:grid;grid-template-columns:30px 1fr 220px;gap:14px;margin-bottom:20px;background:#fafafa;border:1px solid var(--border);border-radius:8px;padding:14px}
+  .comp-map-yaxis{display:flex;flex-direction:column;justify-content:space-between;align-items:center;font-size:9.5px;padding:8px 0;text-transform:uppercase;letter-spacing:.5px}
+  .comp-map-center{display:flex;flex-direction:column;gap:0}
+  .comp-map-plot{background:#fff;border:1px solid #ddd;border-radius:6px 6px 0 0;border-bottom:none;height:480px;position:relative;overflow:hidden}
+  .comp-map-xaxis{background:#fff;border:1px solid #ddd;border-top:1px dashed #ccc;display:flex;justify-content:space-between;align-items:flex-start;font-size:9.5px;color:var(--text);padding:8px 14px 4px}
+  .comp-map-xaxis>span{flex:1;line-height:1.3}
+  .comp-map-xtitle{background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 6px 6px;text-align:center;font-size:10px;color:var(--h-green);font-weight:700;letter-spacing:1.5px;padding:4px 0 8px}
+  .comp-chip{position:absolute;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s, box-shadow .15s;transform:translate(-50%,-50%);z-index:1}
+  .comp-chip:not(.comp-chip-text):hover{transform:translate(-50%,-50%) scale(1.12);box-shadow:0 4px 12px rgba(0,0,0,.18);z-index:5}
+  .comp-chip-text{cursor:default}
+  .comp-chip-cluster{border:2px dashed #bbb;border-radius:50%;padding:10px 14px;background:rgba(255,255,255,.8);flex-direction:column;text-align:center}
+  .comp-chip-sub{transition:transform .15s}
+  .comp-chip-sub:hover{transform:scale(1.12)}
+  .comp-map-commentary{display:flex;flex-direction:column;gap:8px}
+  .comp-comm-block{background:#fff;border:1px solid var(--border);border-left:3px solid #ccc;border-radius:4px;padding:8px 10px;font-size:10px;line-height:1.45;color:var(--text)}
+  .comp-filter{cursor:pointer;transition:background .15s, border-left-color .15s, box-shadow .15s;position:relative}
+  .comp-filter::after{content:"Click to highlight";position:absolute;right:8px;top:6px;font-size:8px;color:#999;font-style:italic;opacity:0;transition:opacity .15s}
+  .comp-filter:hover{background:#f5f5f3;border-left-color:#5C9E1A}
+  .comp-filter:hover::after{opacity:1}
+  .comp-filter.active{background:#eaf3de;border-left:3px solid var(--h-green);box-shadow:0 1px 3px rgba(92,158,26,.2)}
+  .comp-filter.active::after{content:"✓ Active — click to clear";opacity:1;color:#5C9E1A;font-weight:700;font-style:normal}
+  /* When a filter is active, dim chips that don't match */
+  .comp-map.filter-cpg .comp-chip:not([data-cat="cpg"]):not(.comp-chip-text){opacity:.18;filter:grayscale(60%)}
+  .comp-map.filter-dtc .comp-chip:not([data-cat="dtc"]):not(.comp-chip-text){opacity:.18;filter:grayscale(60%)}
+  .comp-map.filter-pharma .comp-chip:not([data-cat="pharma"]):not(.comp-chip-text){opacity:.18;filter:grayscale(60%)}
+  .comp-chip{transition:transform .15s, box-shadow .15s, opacity .25s, filter .25s}
+  .lesson-brand a, .comp-link{color:inherit;text-decoration:none;border-bottom:1px dotted #aaa;transition:all .15s}
+  .lesson-brand a:hover, .comp-link:hover{color:var(--h-green);border-bottom-color:var(--h-green);border-bottom-style:solid}
+  .comp-link{font-weight:600;color:#5C9E1A;cursor:pointer}
+  .comp-link::after{content:" ↗";font-size:8px;opacity:.5}
   .lesson-brand{font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px}
   .lesson-tagline{font-size:9.5px;color:var(--muted);font-style:italic;margin-bottom:8px}
   .lesson-row{margin-bottom:4px;line-height:1.4}
@@ -816,8 +989,8 @@ document.body.style.overflow = 'hidden';
         </div>
         <div style="display:flex;gap:8px">
           <button class="ws-btn" onclick="sbDebugTest()" style="font-size:10px;padding:5px 12px;color:#534AB7;border-color:#534AB7">🔍 Test Connection</button>
-          <button class="ws-btn" onclick="wsExportCSV()" style="font-size:10px;padding:5px 12px;color:var(--h-green);border-color:var(--h-green)">⬇ Download CSV</button>
-          <button class="ws-btn" onclick="wsClearTracker()" style="font-size:10px;padding:5px 12px;color:#C04060;border-color:#C04060">Clear all</button>
+          <button class="ws-btn fac-only" onclick="wsExportCSV()" style="font-size:10px;padding:5px 12px;color:var(--h-green);border-color:var(--h-green);display:none">⬇ Download CSV</button>
+          <button class="ws-btn fac-only" onclick="wsClearTracker()" style="font-size:10px;padding:5px 12px;color:#C04060;border-color:#C04060;display:none">Clear all</button>
         </div>
       </div>
       <div id="sb-debug-panel" style="display:none;background:#1a1a2e;border-radius:8px;padding:14px 16px;margin-bottom:14px;font-family:monospace;font-size:11px;color:#aad87a;white-space:pre-wrap;max-height:200px;overflow-y:auto"></div>
@@ -833,7 +1006,7 @@ document.body.style.overflow = 'hidden';
     <div id="ws-panel-6" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
         <div style="font-size:18px;font-weight:700">Action Plan</div>
-        <button class="ws-btn" onclick="wsExportCSV()" style="font-size:10px;padding:5px 12px;color:var(--h-green);border-color:var(--h-green)">⬇ Download CSV</button>
+        <button class="ws-btn fac-only" onclick="wsExportCSV()" style="font-size:10px;padding:5px 12px;color:var(--h-green);border-color:var(--h-green);display:none">⬇ Download CSV</button>
       </div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Proposed next steps based on majority RTW scores. Override any score below before printing.</div>
       <div id="action-plan-area"></div>
@@ -1289,62 +1462,155 @@ const platforms = [
 
   competitive:`
   
-  <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text)">Lessons from the market — Science wins, shortcuts don't, scale without depth stalls</div>
+  <div style="font-size:14px;font-weight:700;margin-bottom:4px;color:var(--text)">Deep domain expertise sits with subscale players; no scaled incumbent has built a microbiome moat</div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Click any company name to jump to its detail card below ↓</div>
+
+  <div class="comp-map">
+    <!-- Y axis label -->
+    <div class="comp-map-yaxis">
+      <span style="font-weight:700;color:var(--text)">Consumer</span>
+      <span style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:10px;color:var(--h-green);font-weight:700;letter-spacing:1px">POSITIONING</span>
+      <span style="font-weight:700;color:var(--text)">Pharma</span>
+    </div>
+
+    <!-- Center column: plot area on top, x-axis row below it -->
+    <div class="comp-map-center">
+      <div class="comp-map-plot">
+        <!-- Brand chips with absolute positioning to match scattered slide layout -->
+        <div class="comp-chip comp-chip-text" style="top:14%;left:88%;background:#fff;border:2px dashed #5C9E1A;color:#1a1a1a;font-weight:700;text-align:center;padding:8px 10px;font-size:10.5px;line-height:1.3;border-radius:4px;width:140px">White space:<br>Deep strain IP +<br>Consumer-facing scale</div>
+
+        <!-- Top row (Consumer-facing) -->
+        <div class="comp-chip" data-target="comp-reckitt" data-cat="cpg" style="top:12%;left:42%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#CC0000;display:flex;align-items:center;justify-content:center"><span style="font-size:10px;font-weight:900;color:#fff;letter-spacing:-.3px">reckitt</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-pg" data-cat="cpg" style="top:10%;left:54%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center"><span style="font-size:14px;font-weight:900;color:#fff">P&G</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-nestle" data-cat="cpg" style="top:10%;left:68%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#fff;border:1px solid #ddd;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#009FDA">Nestlé</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-danone" data-cat="cpg" style="top:18%;left:64%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#fff;letter-spacing:-.3px">DANONE</span></div>
+        </div>
+
+        <!-- Second row: Haleon, Bayer, Seed -->
+        <div class="comp-chip" data-target="comp-haleon" data-cat="cpg" style="top:28%;left:30%">
+          <div style="width:54px;height:48px;border-radius:6px;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><span style="font-size:10px;font-weight:900;color:#fff;letter-spacing:1px">HALEON</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-bayer" data-cat="cpg" style="top:32%;left:43%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#10384F;display:flex;align-items:center;justify-content:center"><span style="font-size:10px;font-weight:900;color:#fff">BAYER</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-seed" data-cat="dtc" style="top:30%;left:58%">
+          <div style="width:54px;height:48px;border-radius:6px;background:#1a1a1a;display:flex;align-items:center;justify-content:center"><svg width="32" height="20" viewBox="0 0 22 14"><ellipse cx="11" cy="7" rx="10" ry="6" fill="none" stroke="#fff" stroke-width="1.5"/><ellipse cx="11" cy="7" rx="5" ry="6" fill="none" stroke="#fff" stroke-width="1.5"/><line x1="1" y1="7" x2="21" y2="7" stroke="#fff" stroke-width="1.5"/></svg></div>
+        </div>
+
+        <!-- Third row: Junxiaobao, ZOE, Kirin, BioGaia -->
+        <div class="comp-chip" data-target="comp-junxiaobao" data-cat="dtc" style="top:50%;left:28%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#d4380d;display:flex;align-items:center;justify-content:center"><span style="font-size:13px;font-weight:900;color:#fff">菌</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-zoe" data-cat="dtc" style="top:50%;left:42%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#FFD700;display:flex;align-items:center;justify-content:center"><span style="font-size:13px;font-weight:900;color:#1a1a1a;letter-spacing:.5px">zoe</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-kirin" data-cat="dtc" style="top:52%;left:58%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#003087;display:flex;align-items:center;justify-content:center"><span style="font-size:11px;font-weight:900;color:#fff">KIRIN</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-biogaia" data-cat="dtc" style="top:50%;left:80%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#f5a623;display:flex;align-items:center;justify-content:center"><span style="font-size:10px;font-weight:900;color:#fff;letter-spacing:-.5px;text-align:center;line-height:1.1">Bio<br>Gaia</span></div>
+        </div>
+
+        <!-- Fourth row: Viome, Pendulum -->
+        <div class="comp-chip" data-target="comp-viome" data-cat="dtc" style="top:65%;left:46%">
+          <div style="width:48px;height:48px;border-radius:6px;background:#2C3E8C;display:flex;align-items:center;justify-content:center"><span style="font-size:9px;font-weight:900;color:#fff;letter-spacing:-.3px">VIOME</span></div>
+        </div>
+        <div class="comp-chip" data-target="comp-pendulum" data-cat="dtc" style="top:68%;left:58%">
+          <div style="width:54px;height:48px;border-radius:6px;background:#2D2D2D;display:flex;align-items:center;justify-content:center"><span style="font-size:8px;font-weight:900;color:#7BC67E;letter-spacing:-.3px;text-align:center;line-height:1.1">PEND<br>ULUM</span></div>
+        </div>
+
+        <!-- FDA approved cluster (oval, bottom-left) -->
+        <div class="comp-chip comp-chip-cluster" data-cat="pharma" style="top:82%;left:14%">
+          <div style="font-size:9px;color:#888;margin-bottom:6px;font-style:italic">FDA approved</div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span class="comp-chip-sub" data-target="comp-eligo" style="width:34px;height:34px;border-radius:6px;background:#5848D4;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="font-size:8px;font-weight:900;color:#fff">eligo</span></span>
+            <span class="comp-chip-sub" data-target="comp-seres" style="width:34px;height:34px;border-radius:6px;background:#4A148C;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="font-size:8px;font-weight:900;color:#fff">SERES</span></span>
+            <span class="comp-chip-sub" data-target="comp-ferring" style="width:34px;height:34px;border-radius:6px;background:#003087;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="font-size:7px;font-weight:900;color:#fff">FERRING</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- X-axis row — sits below the plot, not inside it -->
+      <div class="comp-map-xaxis">
+        <span style="text-align:left">Pre-commercial<br>/ early clinical</span>
+        <span style="text-align:center">Validated strains /<br>growing evidence</span>
+        <span style="text-align:right">Deep strain IP /<br>extensive clinical / scale</span>
+      </div>
+      <div class="comp-map-xtitle">MATURITY →</div>
+    </div>
+
+    <!-- Commentary column -->
+    <div class="comp-map-commentary">
+      <div class="comp-comm-block comp-filter" data-filter="cpg"><strong>CPG incumbents:</strong> scale + distribution but no proprietary strain IP or clinical breakthroughs</div>
+      <div class="comp-comm-block comp-filter" data-filter="dtc"><strong>DTC / specialists:</strong> deepest domain expertise but subscale ($129M–$200M); potential M&A / licensing for Haleon</div>
+      <div class="comp-comm-block comp-filter" data-filter="pharma"><strong>Pharma / biotech:</strong> different model; not a direct threat but FDA approvals are normalising the category</div>
+      <div class="comp-comm-block" style="background:#eaf3de;border-left:3px solid var(--h-green)"><strong>Overall convergence:</strong> CPG moving into science-backed space, pharma moving into nutraceuticals</div>
+    </div>
+  </div>
+
+  <div style="font-size:12px;font-weight:700;margin:24px 0 10px;color:var(--text)">Lessons from the market — Science wins, shortcuts don't, scale without depth stalls</div>
   <div class="comp-lessons">
-    <div class="lesson-card">
+    <div class="lesson-card" id="comp-seed">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="14" viewBox="0 0 22 14"><ellipse cx="11" cy="7" rx="10" ry="6" fill="none" stroke="#fff" stroke-width="1.5"/><ellipse cx="11" cy="7" rx="5" ry="6" fill="none" stroke="#fff" stroke-width="1.5"/><line x1="1" y1="7" x2="21" y2="7" stroke="#fff" stroke-width="1.5"/></svg></div>
-        <div><div class="lesson-brand">Seed</div><div class="lesson-tagline">Science-first DTC done right</div></div>
+        <div><div class="lesson-brand"><a href="https://seed.com/" target="_blank" rel="noopener">Seed</a></div><div class="lesson-tagline">Science-first DTC done right</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Rigour built trust; 3 yrs R&D before launch; premium pricing; 500%+ growth; profitable</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Single hero SKU; limited international</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Clinical DTC builds brands fast but needs larger platform to scale</div></div>
-    <div class="lesson-card">
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Rigour built trust; 3 yrs R&D before launch; premium pricing on <a class="comp-link" href="https://seed.com/daily-synbiotic" target="_blank" rel="noopener">DS-01 Daily Synbiotic</a>; 500%+ growth; profitable</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Single hero SKU; limited international</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Clinical DTC builds brands fast but needs larger platform to scale</div></div>
+    <div class="lesson-card" id="comp-biogaia">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#f5a623;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff;letter-spacing:-.5px">Bio<br>Gaia</span></div>
-        <div><div class="lesson-brand">BioGaia</div><div class="lesson-tagline">Deep science, slow scale</div></div>
+        <div><div class="lesson-brand"><a href="https://www.biogaia.com/" target="_blank" rel="noopener">BioGaia</a></div><div class="lesson-tagline">Deep science, slow scale</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>35 yrs on one strain family; 250+ studies; deepest clinical moat in industry</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Never achieved mass consumer awareness</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Domain depth alone doesn't deliver scale — needs consumer brand reach</div></div>
-    <div class="lesson-card">
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>35 yrs on one strain family (<a class="comp-link" href="https://www.biogaia.com/pages/meet-l-reuteri" target="_blank" rel="noopener">L. reuteri</a>); 250+ studies; deepest clinical moat in industry</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Never achieved mass consumer awareness</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Domain depth alone doesn't deliver scale — needs consumer brand reach</div></div>
+    <div class="lesson-card" id="comp-pg">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:11px;font-weight:900;color:#fff">P&G</span></div>
-        <div><div class="lesson-brand">Align (P&G)</div><div class="lesson-tagline">Strong launch, dead end</div></div>
+        <div><div class="lesson-brand"><a href="https://us.pg.com/" target="_blank" rel="noopener">Align (P&G)</a></div><div class="lesson-tagline">Strong launch, dead end</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Clear clinical story; strong retail execution; HCP marketing</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>One product, one strain, one market. No owned IP. No DTC</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Launch without platform investment = stagnation</div></div>
-    <div class="lesson-card">
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Clear clinical story on <a class="comp-link" href="https://www.alignprobiotics.com/en-us" target="_blank" rel="noopener">Align probiotic</a>; strong retail execution; HCP marketing</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>One product, one strain, one market. No owned IP. No DTC</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Launch without platform investment = stagnation</div></div>
+    <div class="lesson-card" id="comp-bodi">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:28px;height:28px;border-radius:4px;background:#E63946;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:900;color:#fff">BO</div>
-        <div><div class="lesson-brand">BODi-OME</div><div class="lesson-tagline">Too much, too fast</div></div>
+        <div><div class="lesson-brand"><a href="https://www.bodiome.com/" target="_blank" rel="noopener">BODi-OME (Reckitt)</a></div><div class="lesson-tagline">Too much, too fast</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Condition-specific probiotics concept</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>5 SKUs at launch. No clinical foundation. No HCP backing</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Cannot shortcut the evidence base. Multiple SKUs without hero dilutes everything</div></div>
-    <div class="lesson-card">
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Condition-specific probiotics concept (<a class="comp-link" href="https://www.bodiome.com/" target="_blank" rel="noopener">BODi-ome line</a>)</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>5 SKUs at launch. No clinical foundation. No HCP backing</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Cannot shortcut the evidence base. Multiple SKUs without hero dilutes everything</div></div>
+    <div class="lesson-card" id="comp-kirin">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#003087;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">KIRIN</span></div>
-        <div><div class="lesson-brand">Kirin iMUSE</div><div class="lesson-tagline">Local stronghold, limiting footprint</div></div>
+        <div><div class="lesson-brand"><a href="https://www.kirinholdings.com/en/" target="_blank" rel="noopener">Kirin iMUSE</a></div><div class="lesson-tagline">Local stronghold, limiting footprint</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>1st FCC approval; platformed the tech across categories; Shohei Ohtani ambassador 2025</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>No international expansion; FFC claims don't transfer to EU/US</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>1 strain / ingredient can be scaled into a platform business</div></div>
-    <div class="lesson-card">
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>1st FCC approval; platformed <a class="comp-link" href="https://www.kirinholdings.com/en/newsroom/release/2023/1127_01.html" target="_blank" rel="noopener">iMUSE</a> across categories; Shohei Ohtani ambassador 2025</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>No international expansion; FFC claims don't transfer to EU/US</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>1 strain / ingredient can be scaled into a platform business</div></div>
+    <div class="lesson-card" id="comp-junxiaobao">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:28px;height:28px;border-radius:4px;background:#d4380d;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff">菌</div>
-        <div><div class="lesson-brand">菌小宝 (Junxiaobao)</div><div class="lesson-tagline">Quantity over quality</div></div>
+        <div><div class="lesson-brand"><a href="https://www.junlebao.com/" target="_blank" rel="noopener">菌小宝 (Junxiaobao)</a></div><div class="lesson-tagline">Quantity over quality</div></div>
       </div>
       <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>CCTV credibility; academic partnerships; 100Bn CFU positioning</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Efficacy not proven; generic claims without true impact</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Tech breakthrough not per se focused on # of CFUs</div></div>
   </div>
   <div style="font-size:12px;font-weight:700;margin-bottom:8px">Incumbent players — scale and distribution but limited strain IP</div>
   <div class="comp-matrix">
     <div class="comp-matrix-hdr" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div></div><div>Company</div><div>Gut revenue (est.)</div><div>Key products</div><div>Strengths</div><div>Concerns</div></div>
-    <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#fff;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="28" height="18" viewBox="0 0 60 38"><rect width="60" height="38" rx="3" fill="#fff"/><text x="5" y="27" font-family="Arial" font-size="13" font-weight="900" fill="#009FDA">Nestlé</text></svg></div></div><div><strong>Nestlé</strong><br><span style="font-size:9px;color:var(--muted)">Switzerland</span></div><div>~$500–700M</div><div>Optifibre, Garden of Life, Pure Encapsulations</div><div><span class="comp-tag-pos">Deepest portfolio</span><span class="comp-tag-pos">Clinical credibility</span></div><div><span class="comp-tag-neg">Fragmented brands</span><span class="comp-tag-neg">Slow DTC</span></div></div>
-    <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff;letter-spacing:-.3px">DANONE</span></div></div><div><strong>Danone</strong><br><span style="font-size:9px;color:var(--muted)">France</span></div><div>~$1.5–2.5B</div><div>Activia, Actimel, Aptamil</div><div><span class="comp-tag-pos">Strongest probiotic brand awareness</span></div><div><span class="comp-tag-neg">Over-indexed on dairy</span><span class="comp-tag-neg">Limited supplements</span></div></div>
-    <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#10384F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">BAYER</span></div></div><div><strong>Bayer</strong><br><span style="font-size:9px;color:var(--muted)">Germany</span></div><div>~$300–500M</div><div>Phillips' Colon Health, MiraLAX</div><div><span class="comp-tag-pos">Pharmacy dominance</span><span class="comp-tag-pos">HCP trust</span></div><div><span class="comp-tag-neg">No strain differentiation</span></div></div>
+    <div class="comp-matrix-row" id="comp-nestle" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#fff;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="28" height="18" viewBox="0 0 60 38"><rect width="60" height="38" rx="3" fill="#fff"/><text x="5" y="27" font-family="Arial" font-size="13" font-weight="900" fill="#009FDA">Nestlé</text></svg></div></div><div><strong>Nestlé</strong><br><span style="font-size:9px;color:var(--muted)">Switzerland</span></div><div>~$500–700M</div><div>Optifibre, Garden of Life, Pure Encapsulations</div><div><span class="comp-tag-pos">Deepest portfolio</span><span class="comp-tag-pos">Clinical credibility</span></div><div><span class="comp-tag-neg">Fragmented brands</span><span class="comp-tag-neg">Slow DTC</span></div></div>
+    <div class="comp-matrix-row" id="comp-danone" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff;letter-spacing:-.3px">DANONE</span></div></div><div><strong>Danone</strong><br><span style="font-size:9px;color:var(--muted)">France</span></div><div>~$1.5–2.5B</div><div>Activia, Actimel, Aptamil</div><div><span class="comp-tag-pos">Strongest probiotic brand awareness</span></div><div><span class="comp-tag-neg">Over-indexed on dairy</span><span class="comp-tag-neg">Limited supplements</span></div></div>
+    <div class="comp-matrix-row" id="comp-bayer" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#10384F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">BAYER</span></div></div><div><strong>Bayer</strong><br><span style="font-size:9px;color:var(--muted)">Germany</span></div><div>~$300–500M</div><div>Phillips' Colon Health, MiraLAX</div><div><span class="comp-tag-pos">Pharmacy dominance</span><span class="comp-tag-pos">HCP trust</span></div><div><span class="comp-tag-neg">No strain differentiation</span></div></div>
     <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:11px;font-weight:900;color:#fff">P&G</span></div></div><div><strong>P&G</strong><br><span style="font-size:9px;color:var(--muted)">USA</span></div><div>~$400–600M</div><div>Align Probiotics, Metamucil</div><div><span class="comp-tag-pos">Top US probiotic (Align)</span><span class="comp-tag-pos">Strong retail</span></div><div><span class="comp-tag-neg">Limited international</span><span class="comp-tag-neg">No strain IP</span></div></div>
-    <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#CC0000;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff;letter-spacing:-.3px">reckitt</span></div></div><div><strong>Reckitt</strong><br><span style="font-size:9px;color:var(--muted)">UK</span></div><div>~$100–200M</div><div>Digestive Advantage, MegaRed</div><div><span class="comp-tag-pos">Strong retail/pharmacy</span></div><div><span class="comp-tag-neg">Smaller gut portfolio</span><span class="comp-tag-neg">Limited clinical diff.</span></div></div>
+    <div class="comp-matrix-row" id="comp-reckitt" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#CC0000;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff;letter-spacing:-.3px">reckitt</span></div></div><div><strong>Reckitt</strong><br><span style="font-size:9px;color:var(--muted)">UK</span></div><div>~$100–200M</div><div>Digestive Advantage, MegaRed</div><div><span class="comp-tag-pos">Strong retail/pharmacy</span></div><div><span class="comp-tag-neg">Smaller gut portfolio</span><span class="comp-tag-neg">Limited clinical diff.</span></div></div>
   </div>
   <div style="font-size:12px;font-weight:700;margin-bottom:8px">Emerging DTC players — building clinical moats and direct consumer relationships</div>
   <div class="comp-matrix">
     <div class="comp-matrix-hdr" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div></div><div>Company</div><div>Funding / Rev</div><div>Key differentiation</div><div>Strengths</div><div>Concerns</div></div>
     <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="14" viewBox="0 0 22 14"><ellipse cx="11" cy="7" rx="10" ry="6" fill="none" stroke="#fff" stroke-width="1.5"/><ellipse cx="11" cy="7" rx="5" ry="6" fill="none" stroke="#fff" stroke-width="1.5"/><line x1="1" y1="7" x2="21" y2="7" stroke="#fff" stroke-width="1.5"/></svg></div></div><div><strong>Seed</strong><br><span style="font-size:9px;color:var(--muted)">LA, US · 2015</span></div><div>~$200M rev; profitable; ~$1B sale explored</div><div>DS-01 synbiotic; 500%+ growth; top 5 Amazon; Sprouts + Target</div><div><span class="comp-tag-pos">Clinical rigour + DTC</span><span class="comp-tag-pos">Profitable</span></div><div><span class="comp-tag-neg">Single hero SKU</span><span class="comp-tag-neg">Limited international</span></div></div>
     <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#f5a623;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:7px;font-weight:900;color:#fff;text-align:center;line-height:1.2">Bio<br>Gaia</span></div></div><div><strong>BioGaia</strong><br><span style="font-size:9px;color:var(--muted)">Stockholm · 1990</span></div><div>$129M rev (2024)</div><div>Established global brand; trusted pediatric; strong strain IP</div><div><span class="comp-tag-pos">Deep clinical IP</span><span class="comp-tag-pos">Pediatric leader</span></div><div><span class="comp-tag-neg">Smaller scale</span></div></div>
-    <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#2D2D2D;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:7px;font-weight:900;color:#7BC67E;letter-spacing:-.3px">PEND<br>ULUM</span></div></div><div><strong>Pendulum</strong><br><span style="font-size:9px;color:var(--muted)">SF, US · 2012</span></div><div>$50–100M est.; $149–184M raised</div><div>First live Akkermansia; only probiotic proven to lower A1C; 17 patents</div><div><span class="comp-tag-pos">Deepest clinical moat</span><span class="comp-tag-pos">GLP-1 adjacency</span></div><div><span class="comp-tag-neg">Premium ~$70/mo</span><span class="comp-tag-neg">Niche</span></div></div>
-    <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#FF4F64;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:12px;font-weight:900;color:#fff;letter-spacing:1px">zoe</span></div></div><div><strong>ZOE</strong><br><span style="font-size:9px;color:var(--muted)">London/Boston · 2017</span></div><div>$118–133M raised; 100K+ subscribers</div><div>At-home gut + blood + glucose test; personalised app; 60+ papers</div><div><span class="comp-tag-pos">Strongest publishing</span><span class="comp-tag-pos">High retention</span></div><div><span class="comp-tag-neg">Not yet profitable</span><span class="comp-tag-neg">Regulatory gaps</span></div></div>
-    <div class="comp-matrix-row" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#2C3E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff;letter-spacing:-.3px">VIOME</span></div></div><div><strong>Viome</strong><br><span style="font-size:9px;color:var(--muted)">Bellevue · 2016</span></div><div>$302M raised; CVS deal</div><div>mRNA sequencing; AI supplement recs; Microsoft partnership</div><div><span class="comp-tag-pos">Most funded</span><span class="comp-tag-pos">Vertically integrated</span></div><div><span class="comp-tag-neg">High burn</span><span class="comp-tag-neg">Unit economics unclear</span></div></div>
+    <div class="comp-matrix-row" id="comp-pendulum" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#2D2D2D;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:7px;font-weight:900;color:#7BC67E;letter-spacing:-.3px">PEND<br>ULUM</span></div></div><div><strong>Pendulum</strong><br><span style="font-size:9px;color:var(--muted)">SF, US · 2012</span></div><div>$50–100M est.; $149–184M raised</div><div>First live Akkermansia; only probiotic proven to lower A1C; 17 patents</div><div><span class="comp-tag-pos">Deepest clinical moat</span><span class="comp-tag-pos">GLP-1 adjacency</span></div><div><span class="comp-tag-neg">Premium ~$70/mo</span><span class="comp-tag-neg">Niche</span></div></div>
+    <div class="comp-matrix-row" id="comp-zoe" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#FF4F64;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:12px;font-weight:900;color:#fff;letter-spacing:1px">zoe</span></div></div><div><strong>ZOE</strong><br><span style="font-size:9px;color:var(--muted)">London/Boston · 2017</span></div><div>$118–133M raised; 100K+ subscribers</div><div>At-home gut + blood + glucose test; personalised app; 60+ papers</div><div><span class="comp-tag-pos">Strongest publishing</span><span class="comp-tag-pos">High retention</span></div><div><span class="comp-tag-neg">Not yet profitable</span><span class="comp-tag-neg">Regulatory gaps</span></div></div>
+    <div class="comp-matrix-row" id="comp-viome" style="grid-template-columns:36px 120px 100px 1fr 1fr 1fr"><div><div style="width:32px;height:32px;border-radius:6px;background:#2C3E8C;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff;letter-spacing:-.3px">VIOME</span></div></div><div><strong>Viome</strong><br><span style="font-size:9px;color:var(--muted)">Bellevue · 2016</span></div><div>$302M raised; CVS deal</div><div>mRNA sequencing; AI supplement recs; Microsoft partnership</div><div><span class="comp-tag-pos">Most funded</span><span class="comp-tag-pos">Vertically integrated</span></div><div><span class="comp-tag-neg">High burn</span><span class="comp-tag-neg">Unit economics unclear</span></div></div>
   </div>`,
 
   patents:`
@@ -1755,37 +2021,37 @@ const platforms = [
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#2e7d32;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">ESTRO</span></div>
-        <div><div class="lesson-brand">Estroven</div><div class="lesson-tagline">Market-leading VMS brand</div></div>
+        <div><div class="lesson-brand"><a href="https://www.estroven.com/" target="_blank" rel="noopener">Estroven</a></div><div class="lesson-tagline">Market-leading VMS brand</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Strongest single-ingredient evidence base (ERr 731 meta-analysis, 4 RCTs); #1 US menopause brand; pharmacist-recommended</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Positioned for menopause broadly, not perimenopause; fragmented SKU range with mixed actives</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Clinical rigour wins — but perimenopause-specific positioning is still unclaimed</div></div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Strongest single-ingredient evidence base (ERr 731 meta-analysis, 4 RCTs); #1 US menopause brand; pharmacist-recommended (<a class="comp-link" href="https://www.estroven.com/products/" target="_blank" rel="noopener">Estroven Maximum Strength</a>)</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Positioned for menopause broadly, not perimenopause; fragmented SKU range with mixed actives</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Clinical rigour wins — but perimenopause-specific positioning is still unclaimed</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#10384F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">BAYER</span></div>
-        <div><div class="lesson-brand">Bayer (CanesMeno + Lynkuet)</div><div class="lesson-tagline">Dual OTC/Rx strategy</div></div>
+        <div><div class="lesson-brand"><a href="https://www.bayer.com/en/consumer-health" target="_blank" rel="noopener">Bayer (CanesMeno + Lynkuet)</a></div><div class="lesson-tagline">Dual OTC/Rx strategy</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Only player with both OTC and Rx in menopause; Lynkuet is first dual NK1/NK3 antagonist; Canesten brand trust in pharmacy</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>CanesMeno uses commodity actives; Rx targets VMS only; no multi-symptom OTC play</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Dual strategy is smart but OTC side lacks clinical differentiation — gap to exploit</div></div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Only player with both OTC and Rx; <a class="comp-link" href="https://www.bayer.com/en/news-stories/bayer-fda-approval-lynkuet" target="_blank" rel="noopener">Lynkuet</a> is first dual NK1/NK3 antagonist; <a class="comp-link" href="https://www.canesten.co.uk/canesmeno" target="_blank" rel="noopener">CanesMeno</a> brand trust in pharmacy</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>CanesMeno uses commodity actives; Rx targets VMS only; no multi-symptom OTC play</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Dual strategy is smart but OTC side lacks clinical differentiation — gap to exploit</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#7B1FA2;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">BON</span></div>
-        <div><div class="lesson-brand">Bonafide (Otsuka)</div><div class="lesson-tagline">DTC-to-retail with multi-SKU suite</div></div>
+        <div><div class="lesson-brand"><a href="https://hellobonafide.com/" target="_blank" rel="noopener">Bonafide (Otsuka)</a></div><div class="lesson-tagline">DTC-to-retail with multi-SKU suite</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Fastest-growing US menopause brand; symptom-specific portfolio; strong digital marketing; Otsuka backing</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Evidence base thinner than Estroven; retail expansion still early; no cognitive or sleep SKU</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>DTC model builds loyalty fast but clinical gap limits HCP endorsement and long-term credibility</div></div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Fastest-growing US menopause brand; symptom-specific portfolio (<a class="comp-link" href="https://hellobonafide.com/products/relizen" target="_blank" rel="noopener">Relizen</a>, <a class="comp-link" href="https://hellobonafide.com/products/ristela" target="_blank" rel="noopener">Ristela</a>); strong digital marketing; Otsuka backing</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Evidence base thinner than Estroven; retail expansion still early; no cognitive or sleep SKU</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>DTC model builds loyalty fast but clinical gap limits HCP endorsement and long-term credibility</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#E91E63;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">H&H</span></div>
-        <div><div class="lesson-brand">Health & Her</div><div class="lesson-tagline">UK perimenopause specialist</div></div>
+        <div><div class="lesson-brand"><a href="https://healthandher.com/" target="_blank" rel="noopener">Health & Her</a></div><div class="lesson-tagline">UK perimenopause specialist</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>UK market leader in menopause supplements; genuine perimenopause positioning; strong digital community</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>UK-centric; limited clinical differentiation; commodity multi-herb formulations</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Community and perimenopause identity matter — but science is needed to sustain loyalty</div></div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>UK market leader; genuine perimenopause positioning (<a class="comp-link" href="https://healthandher.com/products/perimenopause-multi-nutrient/" target="_blank" rel="noopener">Perimenopause Multi-Nutrient</a>); strong digital community</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>UK-centric; limited clinical differentiation; commodity multi-herb formulations</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Community and perimenopause identity matter — but science is needed to sustain loyalty</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#FF6F00;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">HUM</span></div>
-        <div><div class="lesson-brand">HUM Nutrition</div><div class="lesson-tagline">Premium DTC expanding into menopause</div></div>
+        <div><div class="lesson-brand"><a href="https://www.humnutrition.com/" target="_blank" rel="noopener">HUM Nutrition</a></div><div class="lesson-tagline">Premium DTC expanding into menopause</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Strong brand among millennial women; growing retail (Sephora, Target); menopause range launched 2023</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Menopause is a sub-line, not the core brand; limited clinical evidence; premium pricing limits mass reach</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Premium positioning builds aspirational appeal but limits scale — Haleon's distribution is the differentiator</div></div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Strong brand among millennial women; growing retail (Sephora, Target); menopause range launched 2023 (<a class="comp-link" href="https://www.humnutrition.com/products/fan-club" target="_blank" rel="noopener">Fan Club</a>)</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>Menopause is a sub-line, not the core brand; limited clinical evidence; premium pricing limits mass reach</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Premium positioning builds aspirational appeal but limits scale — Haleon's distribution is the differentiator</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#1565C0;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">KVU</span></div>
-        <div><div class="lesson-brand">Kenvue</div><div class="lesson-tagline">Broad consumer health — absent from category</div></div>
+        <div><div class="lesson-brand"><a href="https://www.kenvue.com/" target="_blank" rel="noopener">Kenvue</a></div><div class="lesson-tagline">Broad consumer health — absent from category</div></div>
       </div>
       <div class="lesson-row"><span class="lesson-label lbl-worked">✓ What worked</span><br>Massive distribution and pharmacy relationships; strong brand trust across OTC categories</div><div class="lesson-row"><span class="lesson-label lbl-didnt">✗ What didn't</span><br>No visible perimenopause strategy; absent from the category entirely; risk of late entry</div><div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Largest scaled competitor is asleep — window exists for Haleon to define the category</div></div>
   </div>
@@ -2545,49 +2811,49 @@ const platforms = [
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#003DA5;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">PFZ</span></div>
-        <div><div class="lesson-brand">Pfizer (Advil/Thermacare)</div><div class="lesson-tagline">Oral incumbent, limited topical</div></div>
+        <div><div class="lesson-brand"><a href="https://www.pfizer.com/" target="_blank" rel="noopener">Pfizer (Advil/Thermacare)</a></div><div class="lesson-tagline">Oral incumbent, limited topical</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Dominant OTC oral NSAID (Advil); massive brand recognition and pharmacy distribution</div>
-      <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Limited topical anti-inflammatory innovation; Thermacare is heat-only, not anti-inflammatory</div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Dominant OTC oral NSAID (<a class="comp-link" href="https://www.advil.com/" target="_blank" rel="noopener">Advil</a>); massive brand recognition and pharmacy distribution</div>
+      <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Limited topical anti-inflammatory innovation; <a class="comp-link" href="https://www.thermacare.com/" target="_blank" rel="noopener">Thermacare</a> is heat-only, not anti-inflammatory</div>
       <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Oral NSAID incumbents are not building toward the white space — they're defending oral share</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#C8102E;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:900;color:#fff">HSM</span></div>
-        <div><div class="lesson-brand">Hisamitsu (Salonpas)</div><div class="lesson-tagline">#2 globally, 47 patents filed in 2024</div></div>
+        <div><div class="lesson-brand"><a href="https://www.hisamitsu.co.jp/english/" target="_blank" rel="noopener">Hisamitsu (Salonpas)</a></div><div class="lesson-tagline">#2 globally, 47 patents filed in 2024</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Patch leadership; 47 patent filings in 2024 in transdermal delivery — best positioned after Haleon to move toward the white space</div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Patch leadership (<a class="comp-link" href="https://www.salonpas.us/" target="_blank" rel="noopener">Salonpas Pain Relieving Patch</a>); 47 patent filings in 2024 in transdermal delivery</div>
       <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Mixed NSAID/menthol positioning; weak brand outside Asia; no consumer OTC brand with clinical NSAID credibility in West</div>
       <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>The most serious competitive threat — must move on penetration-enhancement IP before Hisamitsu closes the gap</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#CC0000;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">RKT</span></div>
-        <div><div class="lesson-brand">Reckitt (Biofreeze, Nurofen gel)</div><div class="lesson-tagline">Broad portfolio, fragmented brands</div></div>
+        <div><div class="lesson-brand"><a href="https://www.reckitt.com/" target="_blank" rel="noopener">Reckitt (Biofreeze, Nurofen gel)</a></div><div class="lesson-tagline">Broad portfolio, fragmented brands</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Broad NSAID + menthol portfolio; Nurofen gel has ibuprofen clinical data; strong pharmacy presence</div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Broad NSAID + menthol portfolio; <a class="comp-link" href="https://www.nurofen.co.uk/products/nurofen-gel/" target="_blank" rel="noopener">Nurofen gel</a> has ibuprofen clinical data; <a class="comp-link" href="https://www.biofreeze.com/" target="_blank" rel="noopener">Biofreeze</a> strong pharmacy presence</div>
       <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Fragmented brands; Biofreeze declining; no single brand with Voltaren's global clinical authority</div>
       <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Reckitt has the ingredients but not the focus — unlikely to invest $50–100M to challenge Haleon in next-gen topical</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#FF6B00;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">OPL</span></div>
-        <div><div class="lesson-brand">Opella/Sanofi (Icy Hot, Aspercreme)</div><div class="lesson-tagline">Strong US brand, no anti-inflammatory active</div></div>
+        <div><div class="lesson-brand"><a href="https://www.opella.com/" target="_blank" rel="noopener">Opella/Sanofi (Icy Hot, Aspercreme)</a></div><div class="lesson-tagline">Strong US brand, no anti-inflammatory active</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Strong US brand recognition across Icy Hot and Aspercreme; broad format range (cream, patch, spray)</div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Strong US brand recognition across <a class="comp-link" href="https://www.icyhot.com/" target="_blank" rel="noopener">Icy Hot</a> and <a class="comp-link" href="https://www.aspercreme.com/" target="_blank" rel="noopener">Aspercreme</a>; broad format range (cream, patch, spray)</div>
       <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>No anti-inflammatory active in any product; losing share as consumers move toward clinical efficacy claims</div>
       <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Counterirritant players cannot close the efficacy gap without a full platform rebuild — structural vulnerability</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#1565C0;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">KVU</span></div>
-        <div><div class="lesson-brand">Kenvue (BenGay, Motrin oral)</div><div class="lesson-tagline">FDA-cleared smart patch 2025, tiny share</div></div>
+        <div><div class="lesson-brand"><a href="https://www.kenvue.com/" target="_blank" rel="noopener">Kenvue (BenGay, Motrin oral)</a></div><div class="lesson-tagline">FDA-cleared smart patch 2025, tiny share</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Smart BenGay patch FDA cleared 2025; Motrin (oral) brand trust; J&J heritage in pharma and consumer health</div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Smart <a class="comp-link" href="https://www.bengay.com/" target="_blank" rel="noopener">BenGay</a> patch FDA cleared 2025; <a class="comp-link" href="https://www.motrin.com/" target="_blank" rel="noopener">Motrin</a> (oral) brand trust; J&J heritage in pharma and consumer health</div>
       <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Tiny topical share; menthol active only; Kenvue restructuring limits large R&D bets</div>
       <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Smart patch format is interesting but menthol active limits clinical claims — not a true Voltaren challenger</div></div>
     <div class="lesson-card">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
         <div style="width:32px;height:32px;border-radius:6px;background:#004B87;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:8px;font-weight:900;color:#fff">IBSA</span></div>
-        <div><div class="lesson-brand">IBSA (Flector)</div><div class="lesson-tagline">Diclofenac patch, strong clinical data</div></div>
+        <div><div class="lesson-brand"><a href="https://www.ibsagroup.com/" target="_blank" rel="noopener">IBSA (Flector)</a></div><div class="lesson-tagline">Diclofenac patch, strong clinical data</div></div>
       </div>
-      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br>Diclofenac patch with strong clinical data; Rx-to-OTC potential; transdermal expertise in pharma</div>
+      <div class="lesson-row"><span class="lesson-label lbl-worked">✓ Strength</span><br><a class="comp-link" href="https://www.flector.com/" target="_blank" rel="noopener">Flector</a> diclofenac patch with strong clinical data; Rx-to-OTC potential; transdermal expertise in pharma</div>
       <div class="lesson-row"><span class="lesson-label lbl-didnt">✗ Concern</span><br>Small OTC presence; niche reach; no consumer brand awareness outside specialist channels</div>
       <div class="lesson-row"><span class="lesson-label lbl-impl">→ Implication</span><br>Best acquisition target for any player wanting to accelerate diclofenac patch capability into OTC</div></div>
   </div>
@@ -2761,81 +3027,81 @@ const chapters = [
 
 // ── ALL PLATFORM DATA ──
 const allPlatforms = [
-  {id:1,cluster:"Microbiome & Gut Health",name:"Gut micro. & postbiotics",tam25:16.14,tam35:40.00,cagr:9.5,trl:7,ma:8.5,need:"Persistent bloating with no lasting relief"},
-  {id:2,cluster:"Microbiome & Gut Health",name:"Oral micro. therapeutics",tam25:0.90,tam35:2.80,cagr:12.0,trl:6,ma:6.5,need:"Bleeding gums driving fear of tooth loss"},
-  {id:3,cluster:"Microbiome & Gut Health",name:"Oral-gut-brain systemic axis",tam25:0.38,tam35:1.40,cagr:13.9,trl:4,ma:5.0,need:"No product treats mouth, gut and mind together"},
-  {id:4,cluster:"Microbiome & Gut Health",name:"Engineered synbiotics",tam25:0.56,tam35:1.90,cagr:13.0,trl:5,ma:5.5,need:"Generic probiotics feel like a gamble"},
-  {id:5,cluster:"Microbiome & Gut Health",name:"Respiratory microbiome",tam25:0.25,tam35:1.00,cagr:14.9,trl:4,ma:4.0,need:"Worsening allergies with foggy antihistamines"},
-  {id:6,cluster:"Microbiome & Gut Health",name:"Gut-brain mood support",tam25:4.09,tam35:10.60,cagr:10.0,trl:5,ma:6.0,need:"Daily stress unresolved by coffee or apps"},
-  {id:7,cluster:"Microbiome & Gut Health",name:"Phage-based modulation",tam25:0.05,tam35:0.30,cagr:19.6,trl:3,ma:3.5,need:"Antibiotics wiping out the entire gut microbiome"},
-  {id:8,cluster:"Metabolic Health & GLP-1",name:"GLP-1 side-effect management",tam25:6.77,tam35:21.40,cagr:12.2,trl:7,ma:8.0,need:"Daily nausea on GLP-1 threatening adherence"},
-  {id:10,cluster:"Metabolic Health & GLP-1",name:"Insulin sensitivity support",tam25:2.69,tam35:7.30,cagr:10.5,trl:6,ma:7.0,need:"Pre-diabetic with no Rx; want to act now"},
-  {id:12,cluster:"Metabolic Health & GLP-1",name:"Post-weight-loss maintenance",tam25:2.20,tam35:5.70,cagr:10.0,trl:5,ma:6.5,need:"Lost 20kg but lost strength and shape"},
-  {id:13,cluster:"Metabolic Health & GLP-1",name:"GLP-1 transition protocols",tam25:0.40,tam35:2.10,cagr:18.0,trl:3,ma:5.0,need:"At goal weight but terrified of stopping"},
-  {id:14,cluster:"Metabolic Health & GLP-1",name:"Cardiometabolic daily wellness",tam25:9.97,tam35:23.60,cagr:9.0,trl:7,ma:7.5,need:"Borderline cholesterol, want to act before statins"},
-  {id:15,cluster:"Respiratory & Allergy",name:"Epithelial barrier science",tam25:2.13,tam35:4.60,cagr:8.0,trl:7,ma:7.0,need:"Spring allergies wrecked by drowsy antihistamines"},
-  {id:16,cluster:"Respiratory & Allergy",name:"Next-gen antihistamines",tam25:10.44,tam35:23.60,cagr:8.5,trl:7,ma:8.5,need:"Antihistamines cause daytime drowsiness"},
-  {id:17,cluster:"Respiratory & Allergy",name:"OTC allergy desensitisation",tam25:2.45,tam35:5.80,cagr:9.0,trl:5,ma:6.0,need:"Want allergies cured, not masked for decades"},
-  {id:18,cluster:"Respiratory & Allergy",name:"Advanced nasal drug delivery",tam25:3.52,tam35:7.60,cagr:8.0,trl:7,ma:7.0,need:"Nasal spray runs down throat unpleasantly"},
-  {id:19,cluster:"Respiratory & Allergy",name:"Pollution-triggered respiratory",tam25:1.13,tam35:3.20,cagr:11.0,trl:4,ma:4.5,need:"Tight chest from city air worsening yearly"},
-  {id:20,cluster:"Women's Health",name:"Perimenopause management",tam25:13.80,tam35:35.80,cagr:10.0,trl:7,ma:9.0,need:"Night sweats destroying sleep and daily energy"},
-  {id:21,cluster:"Women's Health",name:"Non-hormonal menopause care",tam25:3.59,tam35:8.90,cagr:9.5,trl:6,ma:7.0,need:"Hormone-contraindicated with unbearable hot flashes"},
-  {id:22,cluster:"Women's Health",name:"Cycle health & PMS",tam25:4.56,tam35:10.80,cagr:9.0,trl:6,ma:7.0,need:"Losing a full week monthly to PMS symptoms"},
-  {id:23,cluster:"Women's Health",name:"Fertility & preconception",tam25:4.32,tam35:11.20,cagr:10.0,trl:5,ma:6.0,need:"Year of trying with rising fear and uncertainty"},
-  {id:24,cluster:"Women's Health",name:"Postnatal recovery",tam25:1.77,tam35:4.20,cagr:9.0,trl:6,ma:6.5,need:"Postnatal depletion ignored by attention on baby"},
-  {id:25,cluster:"Women's Health",name:"Ovarian health",tam25:0.84,tam35:2.60,cagr:12.0,trl:4,ma:5.0,need:"PCOS without an actionable non-Rx plan"},
-  {id:26,cluster:"Women's Health",name:"Vaginal health & dryness",tam25:2.70,tam35:6.10,cagr:8.5,trl:7,ma:7.5,need:"Painful sex leading to intimacy avoidance"},
-  {id:27,cluster:"Night & Sleep",name:"Sleep-onset acceleration",tam25:5.37,tam35:11.60,cagr:8.0,trl:7,ma:7.5,need:"Lying awake an hour nightly watching the clock"},
-  {id:28,cluster:"Night & Sleep",name:"Advanced sleep formulations",tam25:2.87,tam35:6.80,cagr:9.0,trl:6,ma:7.0,need:"3am awakenings with inability to return to sleep"},
-  {id:29,cluster:"Night & Sleep",name:"Overnight oral & dental care",tam25:1.37,tam35:2.70,cagr:7.0,trl:8,ma:6.5,need:"Nighttime grinding causing jaw soreness"},
-  {id:30,cluster:"Night & Sleep",name:"Nocturnal restlessness & cramps",tam25:0.79,tam35:1.70,cagr:8.0,trl:7,ma:6.0,need:"Nightly restless legs causing exhausted dawns"},
-  {id:31,cluster:"Energy Management",name:"Iron & oxygen transport",tam25:3.81,tam35:7.50,cagr:7.0,trl:8,ma:7.5,need:"Iron deficiency with stomach-wrecking supplements"},
-  {id:32,cluster:"Energy Management",name:"Recovery & performance peptides",tam25:2.23,tam35:6.00,cagr:10.4,trl:4,ma:5.0,need:"Multi-day soreness barely helped by standard recovery"},
-  {id:33,cluster:"Energy Management",name:"Sustained physical energy",tam25:6.94,tam35:15.70,cagr:8.5,trl:7,ma:7.5,need:"Afternoon crashes worsened by anxious coffee"},
-  {id:34,cluster:"Energy Management",name:"Post-illness fatigue recovery",tam25:1.43,tam35:3.70,cagr:10.0,trl:5,ma:5.5,need:"Months of post-COVID fatigue at half power"},
-  {id:35,cluster:"Energy Management",name:"Mitochondrial performance",tam25:1.06,tam35:3.00,cagr:11.0,trl:6,ma:6.0,need:"Slower physical recovery in 40s"},
-  {id:36,cluster:"Energy Management",name:"Adrenal fatigue support",tam25:0.39,tam35:1.00,cagr:9.9,trl:4,ma:4.5,need:"Persistent burnout untouched by coffee"},
-  {id:38,cluster:"Cognition & Stress",name:"Cognitive performance",tam25:14.94,tam35:34.10,cagr:8.6,trl:6,ma:8.5,need:"Slipping mental sharpness multivitamins don't address"},
-  {id:39,cluster:"Cognition & Stress",name:"Cognitive acuity peptides",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,ma:5.5,need:"Memory and word recall slipping"},
-  {id:40,cluster:"Cognition & Stress",name:"Stress & cortisol management",tam25:5.24,tam35:12.40,cagr:9.0,trl:7,ma:7.5,need:"Chronic stress with no remedy moving the needle"},
-  {id:43,cluster:"Longevity",name:"UV-protection",tam25:9.46,tam35:22.40,cagr:9.0,trl:6,ma:8.0,need:"Forgetting sunscreen accelerating skin ageing"},
-  {id:44,cluster:"Longevity",name:"NAD+ restoration",tam25:1.30,tam35:4.90,cagr:14.2,trl:7,ma:7.0,need:"Want to invest in healthy ageing now"},
-  {id:45,cluster:"Longevity",name:"Longevity peptides",tam25:0.62,tam35:2.50,cagr:15.0,trl:3,ma:4.0,need:"Want to slow biological ageing at cellular level"},
-  {id:46,cluster:"Longevity",name:"Immune aging reversal",tam25:2.01,tam35:5.70,cagr:11.0,trl:5,ma:6.5,need:"Catching every infection with slower recovery"},
-  {id:47,cluster:"Longevity",name:"Autophagy activation",tam25:0.61,tam35:1.90,cagr:12.0,trl:5,ma:6.0,need:"Want fasting-like cellular cleanup"},
-  {id:48,cluster:"Longevity",name:"Sirtuin pathway activation",tam25:1.88,tam35:5.00,cagr:10.3,trl:5,ma:5.5,need:"Want to activate longevity genes"},
-  {id:49,cluster:"Cosmeceuticals",name:"Oral care gum repair",tam25:3.01,tam35:6.20,cagr:7.5,trl:8,ma:7.5,need:"Bleeding gums driving fear of surgery"},
-  {id:52,cluster:"Cosmeceuticals",name:"Oral whitening & enamel repair",tam25:4.17,tam35:9.00,cagr:8.0,trl:8,ma:7.5,need:"Whitening strips cause sensitivity"},
-  {id:53,cluster:"Cosmeceuticals",name:"Barrier repair therapeutics",tam25:3.80,tam35:9.00,cagr:9.0,trl:7,ma:7.0,need:"Dry cracked winter skin uncalmed by creams"},
-  {id:54,cluster:"Sexual Wellness",name:"Libido & arousal support",tam25:3.66,tam35:7.90,cagr:8.0,trl:5,ma:6.0,need:"Lost sex drive creating dread of intimacy"},
-  {id:55,cluster:"Sexual Wellness",name:"Natural erectile support",tam25:4.65,tam35:11.00,cagr:9.0,trl:6,ma:6.5,need:"Confidence loss without wanting to ask GP"},
-  {id:56,cluster:"Sexual Wellness",name:"Pelvic floor & continence",tam25:2.18,tam35:4.70,cagr:8.0,trl:7,ma:7.0,need:"Stress incontinence halting exercise"},
-  {id:57,cluster:"Sexual Wellness",name:"Sexual pain & dysfunction",tam25:1.44,tam35:3.40,cagr:9.0,trl:7,ma:6.5,need:"Chronic painful sex dismissed by physicians"},
-  {id:60,cluster:"Functional Nutrition",name:"Micronutrient gap solutions",tam25:13.67,tam35:26.90,cagr:7.0,trl:8,ma:8.5,need:"10 daily pills with unclear benefit"},
-  {id:61,cluster:"Functional Nutrition",name:"Bioactive proteins — precision fermentation",tam25:21.57,tam35:67.00,cagr:12.0,trl:7,ma:9.0,need:"Generic protein powders feel commodity"},
-  {id:62,cluster:"Functional Nutrition",name:"Performance & longevity nutrition",tam25:0.69,tam35:1.80,cagr:10.1,trl:5,ma:5.5,need:"Multivitamins fail to shift biological systems"},
-  {id:63,cluster:"Functional Nutrition",name:"Food fortification — access markets",tam25:3.56,tam35:7.00,cagr:7.0,trl:7,ma:6.0,need:"Children missing essential nutrients on affordable food"},
-  {id:64,cluster:"Pain MSK & Recovery",name:"Natural oral analgesics",tam25:1.95,tam35:4.20,cagr:8.0,trl:7,ma:7.0,need:"Daily ibuprofen risk to gut and kidneys"},
-  {id:65,cluster:"Pain MSK & Recovery",name:"Cartilage & connective tissue",tam25:4.56,tam35:9.40,cagr:7.5,trl:7,ma:7.5,need:"Knee pain on stairs limiting daily life"},
-  {id:66,cluster:"Pain MSK & Recovery",name:"Neuropathic nerve pain",tam25:2.15,tam35:5.10,cagr:9.0,trl:6,ma:6.5,need:"Burning feet untouched by OTC"},
-  {id:68,cluster:"Botanical Solutions",name:"Standardised botanicals",tam25:4.49,tam35:9.70,cagr:8.0,trl:7,ma:7.0,need:"Botanical aisle full but unclear which work"},
-  {id:70,cluster:"Botanical Solutions",name:"Natural oral care therapeutics",tam25:1.48,tam35:3.20,cagr:8.0,trl:7,ma:6.5,need:"Want fluoride-free without losing cavity protection"},
-  {id:71,cluster:"Botanical Solutions",name:"Ayurvedic 2.0 actives",tam25:3.24,tam35:7.00,cagr:8.0,trl:7,ma:7.0,need:"Curiosity about Ayurveda blocked by quality fears"},
-  {id:72,cluster:"Botanical Solutions",name:"Phase-based natural therapeutics",tam25:0.45,tam35:1.40,cagr:12.0,trl:5,ma:5.5,need:"Body changes through cycle, supplements don't"},
-  {id:82,cluster:"Digital Health",name:"Custom compounding",tam25:6.25,tam35:14.80,cagr:9.0,trl:7,ma:7.0,need:"8 morning pills consumer wishes were combined"},
-  {id:84,cluster:"Personalised & Targeted",name:"Biomarker & genetic dosing",tam25:2.12,tam35:5.50,cagr:10.0,trl:5,ma:6.0,need:"Multivitamins taken yet bloodwork shows deficiencies"},
-  {id:86,cluster:"Personalised & Targeted",name:"Life-stage targeted regimens",tam25:4.73,tam35:10.70,cagr:8.5,trl:7,ma:7.5,need:"Postpartum exhaustion with no clear regimen"},
-  {id:88,cluster:"Sensorial UX",name:"Advanced microencapsulation",tam25:12.46,tam35:29.50,cagr:9.0,trl:7,ma:8.5,need:"Probiotics destroyed by stomach acid"},
-  {id:89,cluster:"Sensorial UX",name:"Taste receptor modulation",tam25:1.39,tam35:3.60,cagr:10.0,trl:4,ma:5.0,need:"Adherence blocked by harsh medication taste"},
-  {id:90,cluster:"Sensorial UX",name:"Natural bitter blockers",tam25:0.66,tam35:1.70,cagr:9.9,trl:5,ma:5.0,need:"Bitter supplements impossible to take daily"},
-  {id:91,cluster:"Sensorial UX",name:"Swallowability & format compliance",tam25:2.13,tam35:4.60,cagr:8.0,trl:8,ma:7.0,need:"Inability to swallow large pills"},
-  {id:93,cluster:"Anti-inflammatory",name:"Advanced topical pain relief",tam25:6.32,tam35:14.30,cagr:8.5,trl:7,ma:8.0,need:"Oral anti-inflammatories damaging stomach"},
-  {id:94,cluster:"Anti-inflammatory",name:"Inflammaging intervention",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,ma:5.5,need:"Felt inflammation despite normal bloodwork"},
-  {id:95,cluster:"Anti-inflammatory",name:"Overnight anti-inflammatory",tam25:0.50,tam35:1.30,cagr:10.0,trl:7,ma:5.5,need:"Morning stiffness taking hours to resolve"},
-  {id:96,cluster:"Anti-inflammatory",name:"Anti-inflammation peptides",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,ma:5.5,need:"Daily ibuprofen damaging gut yet still needed"},
-  {id:98,cluster:"Delivery Innovation",name:"Dissolvable oral delivery",tam25:3.61,tam35:7.80,cagr:8.0,trl:8,ma:7.0,need:"On-the-go relief without water access"},
-  {id:99,cluster:"Delivery Innovation",name:"Controlled-release engineering",tam25:4.56,tam35:10.30,cagr:8.5,trl:7,ma:7.0,need:"4-hour painkiller wear-off creating clock-watching"},
-  {id:100,cluster:"Delivery Innovation",name:"Advanced bioavailability & delivery",tam25:11.83,tam35:28.00,cagr:9.0,trl:7,ma:8.0,need:"Most supplements are expensive urine"}
+  {id:1,cluster:"Microbiome & Gut Health",name:"Gut micro. & postbiotics",tam25:16.14,tam35:40.00,cagr:9.5,trl:7,trlF:7.1,ma:8.0,maF:8.2,need:"Persistent bloating with no lasting relief",unmetNeeds:[{t:"Persistent bloating with no lasting relief",s:"covered"},{t:"Distrust in probiotic survival through stomach acid",s:"covered"},{t:"Unpredictable gut disrupting daily plans",s:"partial"}]},
+  {id:2,cluster:"Microbiome & Gut Health",name:"Oral micro. therapeutics",tam25:0.90,tam35:2.80,cagr:12.0,trl:6,trlF:5.7,ma:3.0,maF:3.8,need:"Bleeding gums driving fear of tooth loss",unmetNeeds:[{t:"Bleeding gums driving fear of tooth loss",s:"covered"},{t:"Chronic bad breath unresolved by toothpaste",s:"covered"},{t:"Cavity prevention without fluoride or harsh chemicals",s:"partial"}]},
+  {id:3,cluster:"Microbiome & Gut Health",name:"Oral-gut-brain systemic axis",tam25:0.38,tam35:1.40,cagr:13.9,trl:4,trlF:4.8,ma:3.0,maF:3.4,need:"No product treats mouth, gut and mind together",unmetNeeds:[{t:"No product treats mouth, gut and mind together",s:"covered"},{t:"Worry about long-term decline driving preventative action",s:"partial"},{t:"Reluctance to stack five separate supplements",s:"partial"}]},
+  {id:4,cluster:"Microbiome & Gut Health",name:"Engineered synbiotics",tam25:0.56,tam35:1.90,cagr:13.0,trl:5,trlF:5.3,ma:3.0,maF:3.6,need:"Generic probiotics feel like a gamble",unmetNeeds:[{t:"Generic probiotics feel like a gamble",s:"covered"},{t:"Multiple probiotic failures eroding category trust",s:"covered"},{t:"Demand for clinically-backed science over marketing",s:"covered"}]},
+  {id:5,cluster:"Microbiome & Gut Health",name:"Respiratory microbiome",tam25:0.25,tam35:1.00,cagr:14.9,trl:4,trlF:3.5,ma:3.0,maF:3.2,need:"Worsening allergies with foggy antihistamines",unmetNeeds:[{t:"Worsening allergies with foggy antihistamines",s:"covered"},{t:"Frequent infections without source-level protection",s:"partial"},{t:"Urban pollution damaging breathing with no OTC fix",s:"partial"}]},
+  {id:6,cluster:"Microbiome & Gut Health",name:"Gut-brain mood support",tam25:4.09,tam35:10.60,cagr:10.0,trl:5,trlF:5.1,ma:6.0,maF:6.0,need:"Daily stress unresolved by coffee or apps",unmetNeeds:[{t:"Daily stress unresolved by coffee, magnesium or apps",s:"covered"},{t:"Post-meal mood drops linked to gut",s:"covered"},{t:"Want more than vitamins, less than antidepressants",s:"covered"}]},
+  {id:7,cluster:"Microbiome & Gut Health",name:"Phage-based microbiome modulation",tam25:0.05,tam35:0.30,cagr:19.6,trl:3,trlF:3.5,ma:3.0,maF:3.0,need:"Antibiotics wiping out the entire gut microbiome",unmetNeeds:[{t:"Antibiotics wiping out the entire gut microbiome",s:"covered"},{t:"Need to kill gum-disease bacteria without collateral damage",s:"covered"},{t:"Mouthwash kills everything; want targeted only",s:"covered"}]},
+  {id:8,cluster:"Metabolic Health & GLP-1",name:"GLP-1 side-effect management",tam25:6.77,tam35:21.40,cagr:12.2,trl:7,trlF:7.0,ma:7.0,maF:7.8,need:"Daily nausea on GLP-1 threatening adherence",unmetNeeds:[{t:"Daily nausea on GLP-1 threatening adherence",s:"covered"},{t:"Bloating and constipation with nothing made for it",s:"covered"},{t:"Inability to function at work due to side effects",s:"partial"}]},
+  {id:10,cluster:"Metabolic Health & GLP-1",name:"Insulin sensitivity support",tam25:2.69,tam35:7.30,cagr:10.5,trl:6,trlF:5.6,ma:5.0,maF:5.4,need:"Pre-diabetic with no Rx; want to act now",unmetNeeds:[{t:"Pre-diabetic with no Rx; want to act now",s:"covered"},{t:"Energy crashes after carb-heavy meals",s:"covered"},{t:"Aversion to metformin side effects",s:"partial"}]},
+  {id:12,cluster:"Metabolic Health & GLP-1",name:"Post-weight-loss maintenance",tam25:2.20,tam35:5.70,cagr:10.0,trl:5,trlF:4.8,ma:5.0,maF:5.8,need:"Lost 20kg but lost strength and shape",unmetNeeds:[{t:"Lost 20kg but lost strength and shape",s:"covered"},{t:"Fear of full regain after stopping GLP-1",s:"covered"},{t:"Want muscle back without binge eating",s:"partial"}]},
+  {id:13,cluster:"Metabolic Health & GLP-1",name:"GLP-1 transition protocols",tam25:0.40,tam35:2.10,cagr:18.0,trl:3,trlF:3.0,ma:3.0,maF:3.6,need:"At goal weight but terrified of stopping",unmetNeeds:[{t:"At goal weight but terrified of stopping",s:"covered"},{t:"No physician plan for life after GLP-1",s:"partial"},{t:"Don't want lifelong injections, can't go back",s:"partial"}]},
+  {id:14,cluster:"Metabolic Health & GLP-1",name:"Cardiometabolic daily wellness",tam25:9.97,tam35:23.60,cagr:9.0,trl:7,trlF:6.7,ma:8.0,maF:7.2,need:"Borderline cholesterol, want to act before statins",unmetNeeds:[{t:"Borderline cholesterol with desire to act before statins",s:"covered"},{t:"Family history driving preventative urgency",s:"covered"},{t:"GP says fine but consumer wants daily protection",s:"covered"}]},
+  {id:15,cluster:"Respiratory & Allergy",name:"Epithelial barrier science",tam25:2.13,tam35:4.60,cagr:8.0,trl:7,trlF:7.4,ma:4.0,maF:4.6,need:"Spring allergies wrecked by drowsy antihistamines",unmetNeeds:[{t:"Spring allergies wrecked by drowsy antihistamines",s:"covered"},{t:"Want to block allergies before they hit",s:"covered"},{t:"Daily urban pollution felt in lungs and sinuses",s:"covered"}]},
+  {id:16,cluster:"Respiratory & Allergy",name:"Next-gen antihistamines",tam25:10.44,tam35:23.60,cagr:8.5,trl:7,trlF:6.6,ma:7.0,maF:7.2,need:"Antihistamines cause daytime drowsiness",unmetNeeds:[{t:"Existing antihistamines cause daytime drowsiness",s:"covered"},{t:"Incomplete symptom relief from current options",s:"covered"},{t:"Long-term efficacy decline with cetirizine/loratadine",s:"covered"}]},
+  {id:17,cluster:"Respiratory & Allergy",name:"OTC allergy desensitisation",tam25:2.45,tam35:5.80,cagr:9.0,trl:5,trlF:4.5,ma:5.0,maF:5.2,need:"Want allergies cured, not masked for decades",unmetNeeds:[{t:"Want allergies cured, not masked for decades",s:"covered"},{t:"Allergy shots require monthly clinic visits",s:"covered"},{t:"Wish to break inherited allergy pattern in children",s:"partial"}]},
+  {id:18,cluster:"Respiratory & Allergy",name:"Advanced nasal drug delivery",tam25:3.52,tam35:7.60,cagr:8.0,trl:7,trlF:7.4,ma:5.0,maF:5.4,need:"Nasal spray runs down throat unpleasantly",unmetNeeds:[{t:"Nasal spray runs down throat with unpleasant taste",s:"covered"},{t:"Uncertainty whether dose reaches target site",s:"covered"},{t:"Juggling multiple nasal products daily",s:"partial"}]},
+  {id:19,cluster:"Respiratory & Allergy",name:"Pollution-triggered respiratory",tam25:1.13,tam35:3.20,cagr:11.0,trl:4,trlF:3.6,ma:4.0,maF:4.0,need:"Tight chest from city air worsening yearly",unmetNeeds:[{t:"Tight chest from city air worsening yearly",s:"covered"},{t:"Masks not delivering real lung protection",s:"covered"},{t:"Constant worry about long-term pollution damage",s:"partial"}]},
+  {id:20,cluster:"Women's Health",name:"Perimenopause management",tam25:13.80,tam35:35.80,cagr:10.0,trl:7,trlF:7.5,ma:8.0,maF:8.0,need:"Night sweats destroying sleep and daily energy",unmetNeeds:[{t:"Night sweats destroying sleep and daily energy",s:"covered"},{t:"Severe mood swings affecting relationships",s:"covered"},{t:"Refusal of HRT due to cancer risk, no alternative",s:"covered"}]},
+  {id:21,cluster:"Women's Health",name:"Non-hormonal menopause care",tam25:3.59,tam35:8.90,cagr:9.5,trl:6,trlF:6.3,ma:5.0,maF:5.6,need:"Hormone-contraindicated with unbearable hot flashes",unmetNeeds:[{t:"Hormone-contraindicated with unbearable hot flashes",s:"covered"},{t:"Supplements feel ineffective vs severity",s:"partial"},{t:"Desire for OTC access without liver monitoring",s:"partial"}]},
+  {id:22,cluster:"Women's Health",name:"Cycle health & PMS",tam25:4.56,tam35:10.80,cagr:9.0,trl:6,trlF:6.0,ma:6.0,maF:6.0,need:"Losing a full week monthly to PMS symptoms",unmetNeeds:[{t:"Losing a full week monthly to PMS symptoms",s:"covered"},{t:"Only option offered is hormonal contraception",s:"covered"},{t:"No product addresses the full monthly cycle",s:"covered"}]},
+  {id:23,cluster:"Women's Health",name:"Fertility & preconception",tam25:4.32,tam35:11.20,cagr:10.0,trl:5,trlF:4.9,ma:6.0,maF:6.0,need:"Year of trying with rising fear and uncertainty",unmetNeeds:[{t:"Year of trying with rising fear and uncertainty",s:"covered"},{t:"Generic prenatals feel like a guess",s:"covered"},{t:"No couple-level product covering the partner",s:"partial"}]},
+  {id:24,cluster:"Women's Health",name:"Postnatal recovery",tam25:1.77,tam35:4.20,cagr:9.0,trl:6,trlF:6.1,ma:4.0,maF:4.4,need:"Postnatal depletion ignored by attention on baby",unmetNeeds:[{t:"Postnatal depletion ignored by attention on baby",s:"covered"},{t:"Hair loss, sleep loss and depletion vitamins miss",s:"covered"},{t:"Breastfeeding-safe products specifically designed",s:"partial"}]},
+  {id:25,cluster:"Women's Health",name:"Ovarian health",tam25:0.84,tam35:2.60,cagr:12.0,trl:4,trlF:3.8,ma:3.0,maF:3.6,need:"PCOS without an actionable non-Rx plan",unmetNeeds:[{t:"Low AMH driving fear of closing fertility window",s:"covered"},{t:"PCOS without an actionable non-Rx plan",s:"covered"},{t:"Want to protect future fertility years ahead",s:"partial"}]},
+  {id:26,cluster:"Women's Health",name:"Vaginal health & dryness",tam25:2.70,tam35:6.10,cagr:8.5,trl:7,trlF:7.3,ma:5.0,maF:5.2,need:"Painful sex leading to intimacy avoidance",unmetNeeds:[{t:"Painful sex leading to intimacy avoidance",s:"covered"},{t:"Estrogen cream contraindicated post-cancer",s:"covered"},{t:"Recurring UTIs unresolved by lubricants",s:"covered"}]},
+  {id:27,cluster:"Night & Sleep",name:"Sleep-onset acceleration",tam25:5.37,tam35:11.60,cagr:8.0,trl:7,trlF:7.2,ma:6.0,maF:6.2,need:"Lying awake an hour nightly watching the clock",unmetNeeds:[{t:"Lying awake an hour nightly watching the clock",s:"covered"},{t:"Melatonin gummies too slow to take effect",s:"covered"},{t:"Next-day grogginess impairing work performance",s:"partial"}]},
+  {id:28,cluster:"Night & Sleep",name:"Advanced sleep formulations for better sleep quality",tam25:2.87,tam35:6.80,cagr:9.0,trl:6,trlF:5.6,ma:5.0,maF:5.2,need:"3am awakenings with inability to return to sleep",unmetNeeds:[{t:"3am awakenings with inability to return to sleep",s:"covered"},{t:"Falls asleep but sleep quality remains poor",s:"covered"},{t:"Wake up unrefreshed despite full hours in bed",s:"covered"}]},
+  {id:29,cluster:"Night & Sleep",name:"Overnight oral & dental care",tam25:1.37,tam35:2.70,cagr:7.0,trl:8,trlF:7.6,ma:3.0,maF:3.8,need:"Nighttime grinding causing jaw soreness",unmetNeeds:[{t:"Nighttime grinding causing jaw soreness and sensitivity",s:"covered"},{t:"Enamel wear with anxiety over dental costs",s:"covered"},{t:"Morning gum bleeding daytime products miss",s:"covered"}]},
+  {id:30,cluster:"Night & Sleep",name:"Nocturnal restlessness & cramps",tam25:0.79,tam35:1.70,cagr:8.0,trl:7,trlF:6.9,ma:3.2,maF:3.4,need:"Nightly restless legs causing exhausted dawns",unmetNeeds:[{t:"Nightly restless legs causing exhausted dawns",s:"covered"},{t:"Painful 3am calf cramps forcing pacing",s:"covered"},{t:"Partner-disturbing twitching ruining shared sleep",s:"covered"}]},
+  {id:31,cluster:"Energy Management",name:"Iron & oxygen transport",tam25:3.81,tam35:7.50,cagr:7.0,trl:8,trlF:7.9,ma:5.0,maF:5.4,need:"Iron deficiency with stomach-wrecking supplements",unmetNeeds:[{t:"Iron deficiency with stomach-wrecking supplements",s:"covered"},{t:"Iron taken but no energy gain — absorption doubts",s:"covered"},{t:"Black stools and constipation deterring daily use",s:"covered"}]},
+  {id:32,cluster:"Energy Management",name:"Recovery & performance peptides",tam25:2.23,tam35:6.00,cagr:10.4,trl:4,trlF:4.2,ma:5.0,maF:5.2,need:"Multi-day soreness barely helped by standard recovery",unmetNeeds:[{t:"Multi-day soreness barely helped by standard recovery",s:"covered"},{t:"Chronic injury stalled despite physiotherapy",s:"covered"},{t:"Want age-defying recovery to keep training hard",s:"covered"}]},
+  {id:33,cluster:"Energy Management",name:"Sustained physical energy",tam25:6.94,tam35:15.70,cagr:8.5,trl:7,trlF:6.8,ma:6.0,maF:6.4,need:"Afternoon crashes worsened by anxious coffee",unmetNeeds:[{t:"Afternoon crashes worsened by anxious coffee use",s:"covered"},{t:"Multivitamins with no felt benefit",s:"covered"},{t:"Want all-day energy without sugar or caffeine",s:"partial"}]},
+  {id:34,cluster:"Energy Management",name:"Post-illness fatigue recovery",tam25:1.43,tam35:3.70,cagr:10.0,trl:5,trlF:4.7,ma:4.0,maF:4.2,need:"Months of post-COVID fatigue at half power",unmetNeeds:[{t:"Months of post-COVID fatigue at half power",s:"covered"},{t:"Recovery from illness slower than years prior",s:"covered"},{t:"Want recovery-specific product, not generic vitamins",s:"partial"}]},
+  {id:35,cluster:"Energy Management",name:"Mitochondrial performance",tam25:1.06,tam35:3.00,cagr:11.0,trl:6,trlF:6.4,ma:4.0,maF:4.0,need:"Slower physical recovery in 40s",unmetNeeds:[{t:"Slower physical recovery in 40s",s:"covered"},{t:"Aware mitochondria matter, unsure what to take",s:"partial"},{t:"Want long-term energy investment now, not later",s:"partial"}]},
+  {id:36,cluster:"Energy Management",name:"Adrenal fatigue support",tam25:0.39,tam35:1.00,cagr:9.9,trl:4,trlF:4.0,ma:3.0,maF:3.2,need:"Persistent burnout untouched by coffee",unmetNeeds:[{t:"Persistent burnout untouched by coffee or willpower",s:"covered"},{t:"Symptoms dismissed by GP but felt as real",s:"covered"},{t:"Want resilience, not weeks of recovery after stress",s:"partial"}]},
+  {id:38,cluster:"Cognition & Stress",name:"Cognitive performance",tam25:14.94,tam35:34.10,cagr:8.6,trl:6,trlF:6.0,ma:7.0,maF:7.8,need:"Slipping mental sharpness multivitamins don't address",unmetNeeds:[{t:"Slipping mental sharpness multivitamins don't address",s:"covered"},{t:"Demands of work, family and elder care need all-day focus",s:"covered"},{t:"Nootropic claims without trusted scientific backing",s:"partial"}]},
+  {id:39,cluster:"Cognition & Stress",name:"Cognitive acuity peptides",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,trlF:5.5,ma:3.0,maF:3.6,need:"Memory and word recall slipping",unmetNeeds:[{t:"Memory and word recall slipping",s:"covered"},{t:"Standard cognitive supplements deliver no felt effect",s:"covered"},{t:"Want neuron-level treatment, not generic vitamins",s:"covered"}]},
+  {id:40,cluster:"Cognition & Stress",name:"Stress & cortisol management",tam25:5.24,tam35:12.40,cagr:9.0,trl:7,trlF:7.4,ma:6.0,maF:6.2,need:"Chronic stress with no remedy moving the needle",unmetNeeds:[{t:"Chronic stress with no remedy moving the needle",s:"covered"},{t:"Racing mind ruining sleep, waking exhausted",s:"covered"},{t:"Want anxiety relief without prescription medication",s:"covered"}]},
+  {id:43,cluster:"Longevity",name:"UV-protection",tam25:9.46,tam35:22.40,cagr:9.0,trl:6,trlF:6.1,ma:7.0,maF:7.2,need:"Forgetting sunscreen accelerating skin ageing",unmetNeeds:[{t:"Forgetting sunscreen accelerating visible skin ageing",s:"covered"},{t:"Want year-round protection without hourly reapplication",s:"covered"},{t:"Post-melanoma scare driving demand for layered defence",s:"partial"}]},
+  {id:44,cluster:"Longevity",name:"NAD+ restoration",tam25:1.30,tam35:4.90,cagr:14.2,trl:7,trlF:7.1,ma:4.0,maF:4.8,need:"Want to invest in healthy ageing now",unmetNeeds:[{t:"Want to invest in healthy ageing now",s:"covered"},{t:"Premium wellness brands feel overpriced and untrustworthy",s:"covered"},{t:"One product preferred over a supplement cabinet",s:"partial"}]},
+  {id:45,cluster:"Longevity",name:"Longevity peptides",tam25:0.62,tam35:2.50,cagr:15.0,trl:3,trlF:3.2,ma:3.0,maF:3.6,need:"Want to slow biological ageing at cellular level",unmetNeeds:[{t:"Want to slow biological ageing at cellular level",s:"covered"},{t:"Telomere science visible in research, not in products",s:"covered"},{t:"Want gene-level intervention, not topical fixes",s:"covered"}]},
+  {id:46,cluster:"Longevity",name:"Immune aging reversal",tam25:2.01,tam35:5.70,cagr:11.0,trl:5,trlF:6.8,ma:5.0,maF:5.2,need:"Catching every infection with slower recovery",unmetNeeds:[{t:"Catching every infection with slower recovery",s:"covered"},{t:"Generic senior multivitamins feel under-targeted",s:"covered"},{t:"Want resilience into 70s and 80s, not symptom management",s:"partial"}]},
+  {id:47,cluster:"Longevity",name:"Autophagy activation",tam25:0.61,tam35:1.90,cagr:12.0,trl:5,trlF:5.4,ma:3.0,maF:3.6,need:"Want fasting-like cellular cleanup",unmetNeeds:[{t:"Want fasting-like cellular cleanup without starvation",s:"covered"},{t:"Autophagy in content but no trusted product on shelf",s:"covered"},{t:"Want to reverse age-related decline before damage accumulates",s:"covered"}]},
+  {id:48,cluster:"Longevity",name:"Sirtuin pathway activation",tam25:1.88,tam35:5.00,cagr:10.3,trl:5,trlF:4.7,ma:4.0,maF:4.0,need:"Want to activate longevity genes",unmetNeeds:[{t:"Want to activate longevity genes without giving up food",s:"covered"},{t:"Sirtuin science visible but no trusted product",s:"covered"},{t:"Falling energy and recovery year over year",s:"covered"}]},
+  {id:49,cluster:"Cosmeceuticals",name:"Oral care gum repair",tam25:3.01,tam35:6.20,cagr:7.5,trl:8,trlF:7.6,ma:5.0,maF:5.2,need:"Bleeding gums driving fear of surgery",unmetNeeds:[{t:"Bleeding gums driving fear of surgery and tooth loss",s:"covered"},{t:"Receding gums affecting smile and confidence",s:"covered"},{t:"Whitening and sensitivity formulas miss gum health",s:"covered"}]},
+  {id:52,cluster:"Cosmeceuticals",name:"Oral whitening & enamel repair",tam25:4.17,tam35:9.00,cagr:8.0,trl:8,trlF:7.7,ma:5.0,maF:5.6,need:"Whitening strips cause sensitivity",unmetNeeds:[{t:"Whitening strips cause sensitivity and short-lived results",s:"covered"},{t:"Want brightness without enamel damage",s:"covered"},{t:"Coffee, wine and ageing yellowing teeth faster than fixes",s:"covered"}]},
+  {id:53,cluster:"Cosmeceuticals",name:"Barrier repair therapeutics",tam25:3.80,tam35:9.00,cagr:9.0,trl:7,trlF:6.6,ma:5.0,maF:5.6,need:"Dry cracked winter skin uncalmed by creams",unmetNeeds:[{t:"Dry, cracked winter skin uncalmed by thick creams",s:"covered"},{t:"Repeating eczema flares despite religious moisturising",s:"covered"},{t:"Steroid creams unsafe for long-term daily use",s:"covered"}]},
+  {id:54,cluster:"Sexual Wellness",name:"Libido & arousal support",tam25:3.66,tam35:7.90,cagr:8.0,trl:5,trlF:5.4,ma:5.0,maF:5.4,need:"Lost sex drive creating dread of intimacy",unmetNeeds:[{t:"Lost sex drive creating dread of intimacy",s:"covered"},{t:"Stress, contraception and exhaustion killing desire",s:"covered"},{t:"Shelf supplements feel like scams to desperate women",s:"partial"}]},
+  {id:55,cluster:"Sexual Wellness",name:"Natural erectile support",tam25:4.65,tam35:11.00,cagr:9.0,trl:6,trlF:5.9,ma:6.0,maF:6.0,need:"Confidence loss without wanting to ask GP",unmetNeeds:[{t:"Confidence loss without wanting to ask GP for Rx",s:"covered"},{t:"Telemedicine ED services feel low-trust",s:"covered"},{t:"Want body-natural support, not timing-dependent drug",s:"covered"}]},
+  {id:56,cluster:"Sexual Wellness",name:"Pelvic floor & continence",tam25:2.18,tam35:4.70,cagr:8.0,trl:7,trlF:7.5,ma:4.0,maF:4.6,need:"Stress incontinence halting exercise",unmetNeeds:[{t:"Stress incontinence on sneeze or jump halting exercise",s:"covered"},{t:"Post-natal pelvic floor neglected by GP, only pads offered",s:"covered"},{t:"Surgery aversion with doubt over whether kegels are enough",s:"covered"}]},
+  {id:57,cluster:"Sexual Wellness",name:"Sexual pain & dysfunction",tam25:1.44,tam35:3.40,cagr:9.0,trl:7,trlF:7.4,ma:4.0,maF:4.2,need:"Chronic painful sex dismissed by physicians",unmetNeeds:[{t:"Chronic painful sex dismissed by physicians",s:"covered"},{t:"Anticipatory tensing every time intimacy is suggested",s:"covered"},{t:"Mainstream products fail to acknowledge the problem",s:"covered"}]},
+  {id:60,cluster:"Functional Nutrition",name:"Micronutrient gap solutions",tam25:13.67,tam35:26.90,cagr:7.0,trl:8,trlF:8.7,ma:7.0,maF:7.0,need:"10 daily pills with unclear benefit",unmetNeeds:[{t:"10 daily pills with unclear benefit",s:"covered"},{t:"Want condition-targeted product, not generic multivitamin",s:"covered"},{t:"Overwhelm leads to trusting loudest social ad",s:"covered"}]},
+  {id:61,cluster:"Functional Nutrition",name:"Bioactive proteins from precision fermentation",tam25:21.57,tam35:67.00,cagr:12.0,trl:7,trlF:6.7,ma:8.0,maF:8.0,need:"Generic protein powders feel commodity",unmetNeeds:[{t:"Generic protein powders feel commodity",s:"covered"},{t:"Want bioactive immune and bone proteins body recognises",s:"covered"},{t:"Lactoferrin and breast-milk proteins absent at premium tier",s:"partial"}]},
+  {id:62,cluster:"Functional Nutrition",name:"Performance & longevity nutrition",tam25:0.69,tam35:1.80,cagr:10.1,trl:5,trlF:5.1,ma:3.0,maF:3.4,need:"Multivitamins fail to shift biological systems",unmetNeeds:[{t:"Off-label metformin as only option, want OTC alternative",s:"covered"},{t:"Want biohacker-grade optimisation with clinical trust",s:"covered"},{t:"Multivitamins fail to shift biological systems",s:"covered"}]},
+  {id:63,cluster:"Functional Nutrition",name:"Food fortification for access markets",tam25:3.56,tam35:7.00,cagr:7.0,trl:7,trlF:7.4,ma:5.0,maF:5.2,need:"Children missing essential nutrients on affordable food",unmetNeeds:[{t:"Worry children miss essential nutrients on affordable food",s:"covered"},{t:"Aspirational fortified food vs Western supplements",s:"covered"},{t:"Changing family diet with unknown nutrient gaps",s:"covered"}]},
+  {id:64,cluster:"Pain MSK & Recovery",name:"Natural oral analgesics",tam25:1.95,tam35:4.20,cagr:8.0,trl:7,trlF:6.8,ma:4.0,maF:4.4,need:"Daily ibuprofen risk to gut and kidneys",unmetNeeds:[{t:"Daily ibuprofen risk to gut and kidneys",s:"covered"},{t:"Paracetamol insufficient, opioid step too far",s:"covered"},{t:"Want pain relief without organ damage long-term",s:"covered"}]},
+  {id:65,cluster:"Pain MSK & Recovery",name:"Cartilage & connective tissue",tam25:4.56,tam35:9.40,cagr:7.5,trl:7,trlF:7.3,ma:5.0,maF:5.8,need:"Knee pain on stairs limiting daily life",unmetNeeds:[{t:"Knee and hip pain on stairs limiting daily life",s:"covered"},{t:"Want to keep running and hiking through ageing",s:"covered"},{t:"Glucosamine brands fail to rebuild worn cartilage",s:"covered"}]},
+  {id:66,cluster:"Pain MSK & Recovery",name:"Neuropathic nerve pain",tam25:2.15,tam35:5.10,cagr:9.0,trl:6,trlF:5.5,ma:5.0,maF:5.0,need:"Burning feet untouched by OTC",unmetNeeds:[{t:"Burning, tingling feet untouched by OTC",s:"covered"},{t:"Gabapentin offered but side effects deter use",s:"covered"},{t:"Fear nerve pain signals worsening underlying disease",s:"covered"}]},
+  {id:68,cluster:"Botanical Solutions",name:"Standardised botanicals",tam25:4.49,tam35:9.70,cagr:8.0,trl:7,trlF:7.0,ma:5.0,maF:5.8,need:"Botanical aisle full but unclear which work",unmetNeeds:[{t:"Botanical aisle full but unclear which work",s:"covered"},{t:"Doubt that kitchen-grade turmeric delivers efficacy",s:"covered"},{t:"Want standardised, proven botanicals over marketing",s:"covered"}]},
+  {id:70,cluster:"Botanical Solutions",name:"Natural oral care therapeutics",tam25:1.48,tam35:3.20,cagr:8.0,trl:7,trlF:7.1,ma:4.0,maF:4.0,need:"Want fluoride-free without losing cavity protection",unmetNeeds:[{t:"Want fluoride-free without losing cavity protection",s:"covered"},{t:"Natural toothpastes taste poor and feel ineffective",s:"covered"},{t:"Trusted plant-based oral care for kids without harsh chemicals",s:"covered"}]},
+  {id:71,cluster:"Botanical Solutions",name:"Ayurvedic 2.0 actives",tam25:3.24,tam35:7.00,cagr:8.0,trl:7,trlF:6.9,ma:5.0,maF:5.4,need:"Curiosity about Ayurveda blocked by quality fears",unmetNeeds:[{t:"Curiosity about Ayurveda blocked by quality fears",s:"covered"},{t:"Concern over heavy metals and unverified blends",s:"covered"},{t:"Want traditional medicine validated by modern trials",s:"partial"}]},
+  {id:72,cluster:"Botanical Solutions",name:"Phase-based natural therapeutics",tam25:0.45,tam35:1.40,cagr:12.0,trl:5,trlF:5.1,ma:3.0,maF:3.4,need:"Body changes through cycle, supplements don't",unmetNeeds:[{t:"Body changes through cycle, supplements don't",s:"covered"},{t:"Want product adapting to each cycle phase",s:"covered"},{t:"Cycle-syncing trend has no real shelf product",s:"partial"}]},
+  {id:82,cluster:"Digital Health",name:"Custom compounding",tam25:6.25,tam35:14.80,cagr:9.0,trl:7,trlF:7.0,ma:6.0,maF:6.4,need:"8 morning pills consumer wishes were combined",unmetNeeds:[{t:"8 morning pills consumer wishes were combined",s:"covered"},{t:"Off-the-shelf multivitamins miss specific needs",s:"covered"},{t:"Compounded stack desired but cost-prohibitive",s:"partial"}]},
+  {id:84,cluster:"Personalised & Targeted",name:"Biomarker & genetic dosing",tam25:2.12,tam35:5.50,cagr:10.0,trl:5,trlF:4.9,ma:5.0,maF:5.0,need:"Multivitamins taken yet bloodwork shows deficiencies",unmetNeeds:[{t:"Multivitamins taken yet bloodwork shows deficiencies",s:"covered"},{t:"Genetic data exists but no actionable supplement guidance",s:"covered"},{t:"Wasting money on unneeded supplements, missing real ones",s:"covered"}]},
+  {id:86,cluster:"Personalised & Targeted",name:"Life-stage targeted regimens",tam25:4.73,tam35:10.70,cagr:8.5,trl:7,trlF:6.5,ma:6.0,maF:6.0,need:"Postpartum exhaustion with no clear regimen",unmetNeeds:[{t:"Postpartum exhaustion with no clear regimen",s:"covered"},{t:"Senior multivitamins feel too old, generic adult too young",s:"covered"},{t:"Perimenopause body change without category response",s:"covered"}]},
+  {id:88,cluster:"Sensorial UX",name:"Advanced microencapsulation",tam25:12.46,tam35:29.50,cagr:9.0,trl:7,trlF:6.5,ma:7.0,maF:7.6,need:"Probiotics destroyed by stomach acid",unmetNeeds:[{t:"Probiotics destroyed by stomach acid before reaching gut",s:"covered"},{t:"Want slow-release lasting all day, not morning burst",s:"covered"},{t:"Half of label ingredients wasted by poor absorption",s:"partial"}]},
+  {id:89,cluster:"Sensorial UX",name:"Taste receptor modulation",tam25:1.39,tam35:3.60,cagr:10.0,trl:4,trlF:4.1,ma:4.0,maF:4.2,need:"Adherence blocked by harsh medication taste",unmetNeeds:[{t:"Adherence blocked by harsh medication taste",s:"covered"},{t:"Daily battles with kids over revolting gummies",s:"covered"},{t:"Avoidance of supplements due to breakfast-ruining taste",s:"partial"}]},
+  {id:90,cluster:"Sensorial UX",name:"Natural bitter blockers",tam25:0.66,tam35:1.70,cagr:9.9,trl:5,trlF:5.0,ma:3.0,maF:3.8,need:"Bitter supplements impossible to take daily",unmetNeeds:[{t:"Bitter herbal supplements impossible to take daily",s:"covered"},{t:"Liquid kids' vitamins lost to nightly battles",s:"covered"},{t:"Want plant-based medicines without tree-bark taste",s:"partial"}]},
+  {id:91,cluster:"Sensorial UX",name:"Swallowability & format compliance",tam25:2.13,tam35:4.60,cagr:8.0,trl:8,trlF:7.8,ma:4.0,maF:4.8,need:"Inability to swallow large pills",unmetNeeds:[{t:"Inability to swallow large pills, daily gagging",s:"covered"},{t:"Elderly crushing destroys taste and active ingredients",s:"covered"},{t:"Multi-supplement throat soreness from pill burden",s:"covered"}]},
+  {id:93,cluster:"Anti-inflammatory",name:"Advanced topical pain relief",tam25:6.32,tam35:14.30,cagr:8.5,trl:7,trlF:6.6,ma:6.0,maF:6.4,need:"Oral anti-inflammatories damaging stomach",unmetNeeds:[{t:"Oral anti-inflammatories damaging stomach and kidneys",s:"covered"},{t:"Standard gels work but absorb too slowly",s:"covered"},{t:"Want targeted joint relief, not systemic exposure",s:"covered"}]},
+  {id:94,cluster:"Anti-inflammatory",name:"Inflammaging intervention",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,trlF:5.4,ma:3.0,maF:3.6,need:"Felt inflammation despite normal bloodwork",unmetNeeds:[{t:"Felt inflammation despite normal bloodwork",s:"covered"},{t:"Want to address underlying fire, not mask it",s:"partial"},{t:"Inflammation-linked conditions driving prevention urgency",s:"partial"}]},
+  {id:95,cluster:"Anti-inflammatory",name:"Overnight anti-inflammatory",tam25:0.50,tam35:1.30,cagr:10.0,trl:7,trlF:6.8,ma:3.0,maF:3.4,need:"Morning stiffness taking hours to resolve",unmetNeeds:[{t:"Morning stiffness taking hours to resolve",s:"covered"},{t:"Joint pain peaks overnight, oral pre-bed unsafe",s:"covered"},{t:"Want overnight relief for easier mornings",s:"covered"}]},
+  {id:96,cluster:"Anti-inflammatory",name:"Anti-inflammation peptides",tam25:0.64,tam35:2.00,cagr:12.1,trl:5,trlF:4.7,ma:3.0,maF:3.6,need:"Daily ibuprofen damaging gut yet still needed",unmetNeeds:[{t:"Daily ibuprofen damaging gut yet still needed",s:"covered"},{t:"Want precision immunomodulation, not blanket suppression",s:"covered"},{t:"Tired of choosing between relief and organ protection",s:"covered"}]},
+  {id:98,cluster:"Delivery Innovation",name:"Dissolvable oral delivery",tam25:3.61,tam35:7.80,cagr:8.0,trl:8,trlF:7.5,ma:5.0,maF:5.4,need:"On-the-go relief without water access",unmetNeeds:[{t:"On-the-go relief without water access",s:"covered"},{t:"Capsules and tablets sticking in throat causing choking",s:"covered"},{t:"Children refusing pills, draining mornings",s:"covered"}]},
+  {id:99,cluster:"Delivery Innovation",name:"Controlled-release engineering",tam25:4.56,tam35:10.30,cagr:8.5,trl:7,trlF:6.6,ma:6.0,maF:6.0,need:"4-hour painkiller wear-off creating clock-watching",unmetNeeds:[{t:"4-hour painkiller wear-off creating clock-watching",s:"covered"},{t:"Night waking from cleared evening dose",s:"covered"},{t:"Want one morning dose lasting all day",s:"partial"}]},
+  {id:100,cluster:"Delivery Innovation",name:"Advanced bioavailability& delivery",tam25:11.83,tam35:28.00,cagr:9.0,trl:7,trlF:6.9,ma:7.0,maF:7.4,need:"Most supplements are expensive urine",unmetNeeds:[{t:"Concern most supplements are 'expensive urine'",s:"covered"},{t:"Doubt daily turmeric reaches the bloodstream",s:"covered"},{t:"Want absorption-proven formulations, not waste",s:"covered"}]},
 ];
 
 const clusterColors={
@@ -2850,7 +3116,6 @@ const clusterColors={
   "Anti-inflammatory":"#982010","Delivery Innovation":"#186858"
 };
 
-let activeCluster='All';
 let platformData=allPlatforms.map(p=>({...p}));
 let currentPlatform=0, currentChapter='exec';
 
@@ -2908,36 +3173,74 @@ function buildDashboard(){
   buildClusterCards();
 }
 
+// activeClusters: Set of cluster names currently visible
+let activeClusters = null; // null = uninitialised; will be filled with all clusters on first build
+
 function buildClusterFilters(){
-  const clusters=['All',...new Set(allPlatforms.map(p=>p.cluster))];
-  document.getElementById('cluster-filters').innerHTML=
-    `<span class="cf-label">Filter by cluster:</span>`+
-    clusters.map(c=>{
-      const col=c==='All'?'#555':clusterColors[c];
-      return `<div class="cf-btn${c==='All'?' active':''}" onclick="filterCluster('${c}')" style="${c!=='All'?`border-color:${col}20`:''}">${c}</div>`;
+  const allClusterList = [...new Set(allPlatforms.map(p=>p.cluster))];
+  if(activeClusters === null){
+    activeClusters = new Set(allClusterList); // start with all visible
+  }
+  document.getElementById('cluster-filters').innerHTML =
+    `<span class="cf-label">Toggle clusters:</span>` +
+    `<div class="cf-btn cf-all" onclick="toggleAllClusters()" style="font-weight:700">${activeClusters.size===allClusterList.length?'Hide all':'Show all'}</div>` +
+    allClusterList.map(c=>{
+      const col=clusterColors[c]||'#555';
+      return `<div class="cf-btn ${activeClusters.has(c)?'active':''}" onclick="toggleCluster('${c.replace(/'/g,"\\'")}')" style="border-color:${col}40">${c}</div>`;
     }).join('');
   styleFilterBtns();
 }
 
 function styleFilterBtns(){
   document.querySelectorAll('.cf-btn').forEach(b=>{
-    const c=b.textContent;
+    const c=b.textContent.trim();
+    if(b.classList.contains('cf-all')){
+      b.style.background='#1a1a1a'; b.style.color='#fff'; b.style.borderColor='#1a1a1a';
+      return;
+    }
     if(b.classList.contains('active')){
-      const col=c==='All'?'#555':clusterColors[c]||'#555';
+      const col=clusterColors[c]||'#555';
       b.style.background=col; b.style.color='#fff'; b.style.borderColor=col;
+      b.style.opacity='1';
     } else {
-      b.style.background='#fff'; b.style.color=clusterColors[c]||'var(--muted)';
-      b.style.borderColor=clusterColors[c]?clusterColors[c]+'40':'var(--border)';
+      b.style.background='#f5f5f3';
+      b.style.color='#999';
+      b.style.borderColor='#ddd';
+      b.style.opacity='0.6';
+      b.style.textDecoration='line-through';
+      b.style.textDecorationColor='#bbb';
     }
   });
+  // Reset text-decoration on active buttons
+  document.querySelectorAll('.cf-btn.active').forEach(b=>{ b.style.textDecoration='none'; });
 }
 
-function filterCluster(c){
-  activeCluster=c;
-  document.querySelectorAll('.cf-btn').forEach(b=>b.classList.toggle('active',b.textContent===c));
-  styleFilterBtns();
+function toggleCluster(c){
+  if(activeClusters.has(c)){
+    activeClusters.delete(c);
+  } else {
+    activeClusters.add(c);
+  }
+  buildClusterFilters();
   buildMatrix();
   buildClusterCards();
+}
+
+function toggleAllClusters(){
+  const allClusterList = [...new Set(allPlatforms.map(p=>p.cluster))];
+  if(activeClusters.size === allClusterList.length){
+    activeClusters = new Set(); // hide all
+  } else {
+    activeClusters = new Set(allClusterList); // show all
+  }
+  buildClusterFilters();
+  buildMatrix();
+  buildClusterCards();
+}
+
+// Legacy filter function — kept for backward compatibility if called from elsewhere
+function filterCluster(c){
+  if(c==='All'){ toggleAllClusters(); } else { toggleCluster(c); }
 }
 
 function bubbleR(t){return t<1?5:t<5?9:t<15?14:20;}
@@ -2946,49 +3249,67 @@ function buildMatrix(){
   const svg=document.getElementById('matrix-svg');
   const W=920,H=460,pad={l:52,r:16,t:36,b:46};
   const iW=W-pad.l-pad.r,iH=H-pad.t-pad.b;
-  const filtered=activeCluster==='All'?platformData:platformData.filter(p=>p.cluster===activeCluster);
-
-  // forced distribution: rank platforms by (ma + trl/9) and spread them evenly
-  const sorted=[...filtered].sort((a,b)=>(b.ma+b.trl/9)-(a.ma+a.trl/9));
+  const filtered=platformData.filter(p=>activeClusters && activeClusters.has(p.cluster));
 
   let html='';
-  // Zone backgrounds
-  html+=`<rect x="${pad.l+iW*5/8}" y="${pad.t}" width="${iW*3/8}" height="${iH*0.62}" rx="3" fill="rgba(255,150,160,0.15)" stroke="#E87080" stroke-width="1" stroke-dasharray="4,3"/>`;
-  html+=`<text x="${pad.l+iW*5/8+6}" y="${pad.t+15}" font-size="9" font-weight="700" fill="#C04060" font-family="Segoe UI,Arial">Short-term "Go-Explore"</text>`;
-  html+=`<rect x="${pad.l}" y="${pad.t}" width="${iW*0.5}" height="${iH*0.32}" rx="3" fill="rgba(80,80,180,0.05)" stroke="#9090CC" stroke-width="0.5" stroke-dasharray="3,4"/>`;
-  html+=`<text x="${pad.l+6}" y="${pad.t+15}" font-size="9" font-weight="700" fill="#6060A0" font-family="Segoe UI,Arial">Disruption zone</text>`;
+  // Plot box edges for reference
+  const x0=pad.l, x1=pad.l+iW, y0=pad.t, y1=pad.t+iH;
+  // Helpers: map TRL (3-9) → x and MA (0-9, Low→High) → y
+  const xT = trl => x0 + (Math.max(3,Math.min(9,trl))-3)/6 * iW;
+  const yM = ma  => y0 + (1 - Math.max(0,Math.min(9,ma))/9) * iH;
 
-  // Grid
-  for(let t=1;t<=9;t++){
-    const x=pad.l+(t-1)/8*iW;
+  // ── DIAGONAL DIVIDER LINES (both with same slope = parallel) ──
+  // Slope: dTRL/dMA = (3.5 - 7.5)/(9 - 0) = -4/9
+  // Line 1: (TRL 7.5, MA 0) → (TRL 3.5, MA 9)
+  html+=`<line x1="${xT(7.5)}" y1="${yM(0)}" x2="${xT(3.5)}" y2="${yM(9)}" stroke="#1a1a1a" stroke-width="1" opacity="0.55"/>`;
+  // Line 2: same slope (-4/9), upper endpoint at (TRL 6.5, MA 9)
+  //   ΔTRL = 9 - 6.5 = 2.5 → ΔMA = 2.5 × 9/4 = 5.625 → lower endpoint at (9, 9 - 5.625 = 3.375)
+  html+=`<line x1="${xT(6.5)}" y1="${yM(9)}" x2="${xT(9)}" y2="${yM(3.375)}" stroke="#1a1a1a" stroke-width="1" opacity="0.55"/>`;
+
+  // ── HORIZONTAL LINE at MA = Mid (4.5), between the two diagonals ──
+  // Mid line intersects Line 1 at: MA=4.5 → TRL = 7.5 + (4.5/9)*(3.5-7.5) = 7.5 + 0.5*(-4) = 5.5
+  // Mid line intersects Line 2 at: MA=4.5 → TRL = 6.5 + ((9-4.5)/9)*(9-6.5)*9/9... using parametric form:
+  //   For Line 2: TRL = 6.5 + ((9-MA)/(9-3.375)) * (9-6.5) = 6.5 + (4.5/5.625)*2.5 = 6.5 + 2.0 = 8.5
+  // Note: simplified — for parallel lines: TRL_on_line2 = TRL_on_line1 + (6.5-3.5) at any MA
+  // At MA=4.5: Line1 = 5.5, Line2 = 5.5 + 3.0 = 8.5
+  html+=`<line x1="${xT(5.5)}" y1="${yM(4.5)}" x2="${xT(8.5)}" y2="${yM(4.5)}" stroke="#1a1a1a" stroke-width="1" opacity="0.55"/>`;
+
+  // ── PINK "Short-term Go-Explore" ZONE ──
+  // Upper-right wedge above Line 2: (6.5, High) → (9, High) → (9, 3.375)
+  const pinkPath = `M ${xT(6.5)},${yM(9)} L ${xT(9)},${yM(9)} L ${xT(9)},${yM(3.375)} Z`;
+  html+=`<path d="${pinkPath}" fill="rgba(255,150,170,0.22)" stroke="#E87080" stroke-width="1.2" stroke-dasharray="4,3"/>`;
+  html+=`<text x="${x1-10}" y="${y0+16}" text-anchor="end" font-size="11" font-weight="700" fill="#C04060" font-family="Segoe UI,Arial">Short term "Go-Explore"</text>`;
+
+  // ── DISRUPTION ZONE label (upper-left, above/left of Line 1) ──
+  html+=`<text x="${xT(4.5)}" y="${y0+24}" text-anchor="middle" font-size="11" font-weight="700" fill="#1a1a1a" font-family="Segoe UI,Arial">Disruption zone</text>`;
+
+  // ── TECH BETS label (lower-right, below Line 2) ──
+  html+=`<text x="${x1-12}" y="${y1-12}" text-anchor="end" font-size="11" font-weight="700" fill="#1a1a1a" font-family="Segoe UI,Arial">Tech bets</text>`;
+
+
+  // X-axis: TRL 3 to 9 (7 grid lines)
+  for(let t=3;t<=9;t++){
+    const x=pad.l+(t-3)/6*iW;
     html+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${pad.t+iH}" stroke="#f0f0ee" stroke-width="1"/>`;
     html+=`<text x="${x}" y="${pad.t+iH+16}" text-anchor="middle" font-size="9" fill="#888" font-family="Segoe UI,Arial">${t}</text>`;
   }
-  ['High','','Mid','','Low'].forEach((l,i)=>{
-    const y=pad.t+i/4*iH;
+  // Y-axis labels: Low, Mid, High
+  ['High','Mid','Low'].forEach((l,i)=>{
+    const y=pad.t+i/2*iH;
     html+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+iW}" y2="${y}" stroke="#f0f0ee" stroke-width="1"/>`;
-    if(l) html+=`<text x="${pad.l-5}" y="${y+4}" text-anchor="end" font-size="9" fill="#888" font-family="Segoe UI,Arial">${l}</text>`;
+    html+=`<text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="#888" font-weight="600" font-family="Segoe UI,Arial">${l}</text>`;
   });
-  html+=`<text x="${pad.l+iW/2}" y="${H-6}" text-anchor="middle" font-size="10" font-weight="700" fill="#888" font-family="Segoe UI,Arial">Tech readiness (TRL)</text>`;
-  html+=`<text x="13" y="${pad.t+iH/2}" text-anchor="middle" font-size="10" font-weight="700" fill="#888" font-family="Segoe UI,Arial" transform="rotate(-90,13,${pad.t+iH/2})">Market attractiveness</text>`;
+  html+=`<text x="${pad.l+iW/2}" y="${H-6}" text-anchor="middle" font-size="11" font-weight="700" fill="#5C9E1A" font-family="Segoe UI,Arial">Tech readiness (TRL)</text>`;
+  html+=`<text x="13" y="${pad.t+iH/2}" text-anchor="middle" font-size="11" font-weight="700" fill="#5C9E1A" font-family="Segoe UI,Arial" transform="rotate(-90,13,${pad.t+iH/2})">Market attractiveness</text>`;
 
-  // Forced distribution: spread bubbles evenly in a grid to avoid overlap
-  const n=sorted.length;
-  const cols=Math.ceil(Math.sqrt(n*1.6));
-  const rows=Math.ceil(n/cols);
-  const cellW=iW/cols, cellH=iH/rows;
-
-  sorted.forEach((p,i)=>{
-    // base position from data
-    const baseX=pad.l+(p.trl-1)/8*iW;
-    const baseY=pad.t+(1-(p.ma-1)/9)*iH;
-    // forced grid position
-    const col=i%cols, row=Math.floor(i/cols);
-    const gx=pad.l+col*cellW+cellW/2;
-    const gy=pad.t+row*cellH+cellH/2;
-    // blend: 60% data position, 40% forced grid
-    const x=baseX*0.65+gx*0.35;
-    const y=baseY*0.65+gy*0.35;
+  // Position each platform using FORCED distribution columns
+  // trlF: 3-9 → maps to 0-1 of width
+  // maF: 3-9 → maps to 1-0 of height (high MA at top, low at bottom)
+  filtered.forEach(p=>{
+    const trlVal = p.trlF || p.trl;
+    const maVal  = p.maF  || p.ma;
+    const x=pad.l+Math.max(0,Math.min(1,(trlVal-3)/6))*iW;
+    const y=pad.t+Math.max(0,Math.min(1,(9-maVal)/6))*iH;
     const r=bubbleR(p.tam25);
     const col_=clusterColors[p.cluster]||'#5C9E1A';
     html+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${col_}" opacity="0.78" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" style="cursor:pointer" onmouseenter="showTT(event,${p.id})" onmouseleave="hideTT()"/>`;
@@ -3002,22 +3323,32 @@ var _bubbleTT=null;
 function showTT(e,id){
   const p=platformData.find(x=>x.id===id); if(!p) return;
   const tt=_bubbleTT||(_bubbleTT=document.getElementById('bubble-tooltip'));
-  tt.innerHTML=`<strong>#${p.id} — ${p.name}</strong><div style="color:#aaa;font-size:9.5px;margin:2px 0">${p.cluster}</div>TAM 2025: <strong>$${p.tam25}B</strong> · TRL: <strong>${p.trl}</strong> · MA: <strong>${p.ma}</strong><br><em style="color:#ccc;font-size:9.5px">${p.need}</em>`;
+  const trlF = p.trlF||p.trl, maF = p.maF||p.ma;
+  tt.innerHTML=`<strong>#${p.id} — ${p.name}</strong><div style="color:#aaa;font-size:9.5px;margin:2px 0">${p.cluster}</div>TAM 2025: <strong>$${p.tam25.toFixed(2)}B</strong> · TAM 2035: <strong>$${p.tam35.toFixed(1)}B</strong> · CAGR: <strong>${p.cagr}%</strong><br>TRL: <strong>${trlF.toFixed(1)}</strong> · MA: <strong>${maF.toFixed(1)}</strong><br><em style="color:#ccc;font-size:9.5px">${p.need||''}</em>`;
   tt.style.display='block';
   const rect=document.getElementById('bubble-chart').getBoundingClientRect();
-  tt.style.left=Math.min(e.clientX-rect.left+12,rect.width-250)+'px';
-  tt.style.top=Math.max(e.clientY-rect.top-70,4)+'px';
+  tt.style.left=Math.min(e.clientX-rect.left+12,rect.width-260)+'px';
+  tt.style.top=Math.max(e.clientY-rect.top-80,4)+'px';
 }
 function hideTT(){var tt=_bubbleTT||(_bubbleTT=document.getElementById('bubble-tooltip'));tt.style.display='none';}
 
 function buildClusterCards(){
   const allClusters=[...new Set(allPlatforms.map(p=>p.cluster))];
-  const clusters=activeCluster==='All'?allClusters:allClusters.filter(c=>c===activeCluster);
+  const clusters=allClusters.filter(c=>activeClusters && activeClusters.has(c));
   const area=document.getElementById('cluster-cards-area');
   area.innerHTML=clusters.map(cluster=>{
     const ps=platformData.filter(p=>p.cluster===cluster);
     const col=clusterColors[cluster]||'#5C9E1A';
-    const cards=ps.map(p=>`
+    const cards=ps.map(p=>{
+      const unmetHtml = p.unmetNeeds && p.unmetNeeds.length ? `
+        <div class="pcard-unmet">
+          <div class="pcard-unmet-title">Top unmet consumer needs</div>
+          ${p.unmetNeeds.map(n=>`<div class="pcard-unmet-item">
+              <span class="pcard-unmet-bullet" style="color:${col}">•</span>
+              <span class="pcard-unmet-text">${n.t}</span>
+            </div>`).join('')}
+        </div>` : '';
+      return `
       <div class="pcard" style="--c:${col}" onmouseenter="this.style.borderColor='${col}'" onmouseleave="this.style.borderColor='var(--border)'">
         <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:${col};border-radius:3px 0 0 3px"></div>
         <div class="pcard-top">
@@ -3029,12 +3360,13 @@ function buildClusterCards(){
           <span class="pcard-stat"><strong>$${p.tam25}B</strong> TAM</span>
           <span class="pcard-stat"><strong>${p.cagr}%</strong> CAGR</span>
         </div>
-        <div class="pcard-need">"${p.need}"</div>
+        ${unmetHtml}
         <div class="pcard-edit-wrap">
           <span class="pcard-edit-lbl">Edit 2025 TAM $</span>
           <input class="pcard-edit" value="${p.tam25.toFixed(2)}" onchange="updateTAM(${p.id},this.value)"/>B
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
     return `<div class="cluster-section">
       <div class="cluster-hdr" style="background:${col}">
         <div class="cluster-hdr-dot" style="background:rgba(255,255,255,.5)"></div>
@@ -3049,7 +3381,16 @@ function buildClusterCards(){
 function updateTAM(id,val){
   const p=platformData.find(x=>x.id===id); if(!p) return;
   const v=parseFloat(val);
-  if(!isNaN(v)&&v>=0){p.tam25=v; buildMatrix();}
+  if(isNaN(v)||v<0) return;
+  p.tam25=v;
+  // Also re-derive market attractiveness from TAM (log-scale mapping to 3–9 forced distribution)
+  // TAM range in data: ~$0.05B → ~$30B → map log(TAM) onto MA 3 (small) → 9 (large)
+  const tamForMa = Math.max(0.05, v);
+  const logMin = Math.log10(0.05);   // ≈ -1.3
+  const logMax = Math.log10(30);     // ≈ 1.48
+  const normalized = (Math.log10(tamForMa) - logMin) / (logMax - logMin); // 0..1
+  p.maF = 3 + Math.max(0, Math.min(1, normalized)) * 6; // 3..9
+  buildMatrix();
 }
 
 // ── WORKSHOP v2 ──
@@ -3663,6 +4004,7 @@ function wsSubmitNeeds(){
     return;
   }
   const ts = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const submitter = window.PARTICIPANT_NAME || 'Anonymous';
   // Store full ranked order (all needs in priority order)
   const fullRanking = wsNeedsOrder.map((id,i) => {
     const need = allNeeds.find(n=>n.id===id);
@@ -3672,6 +4014,7 @@ function wsSubmitNeeds(){
     needId: topNeed.id,
     label: topNeed.label,
     time: ts,
+    submitter,
     fullRanking
   });
   syncNeedsToStorage();
@@ -3779,7 +4122,8 @@ function buildWSCalibration(){
   respEl.innerHTML = wsNeedsResponses.map((r,i) => {
     const need = allNeeds.find(n=>n.id===r.needId);
     return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f5f5f5">
-      <span style="font-size:10px;color:var(--muted);width:60px;flex-shrink:0">${r.time||'--:--'}</span>
+      <span style="font-size:10.5px;font-weight:600;color:var(--text);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.submitter||'Anonymous'}</span>
+      <span style="font-size:10px;color:var(--muted);width:48px;flex-shrink:0">${r.time||'--:--'}</span>
       <span style="background:var(--h-green);color:#fff;border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;flex-shrink:0">#1</span>
       <span style="font-size:10.5px;color:var(--text)">${need?need.label:r.needId}</span>
     </div>`;
@@ -4303,6 +4647,7 @@ function stopVotePolling(){
 function wsSubmitResults(){
   const platform = platforms[wsSelectedPlatform];
   const ts = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const submitter = window.PARTICIPANT_NAME || 'Anonymous';
   wsSelectedTechs.forEach(id=>{
     const tech = techOptions.find(t=>t.id===id);
     const scores = wsScores[id];
@@ -4314,7 +4659,7 @@ function wsSubmitResults(){
       platform: `#${platform.rank} ${platform.name}`,
       tech, techOverall: overall,
       scores: { tech: techScore, comm: commScore, brand: brandScore },
-      rawScores: scores, time: ts, isNew: true
+      rawScores: scores, time: ts, submitter, isNew: true
     });
   });
   syncVotesToStorage();
@@ -4335,20 +4680,17 @@ async function wsClearTracker(){
 }
 
 function wsExportCSV(){
-  const pwd = prompt('Enter facilitator password to download results:');
-  if(pwd === null) return; // cancelled
-  if(pwd.trim() !== 'HaleonxBCG2026'){
-    alert('Incorrect password.');
+  if(!window.FACILITATOR_MODE){
+    alert('Only facilitators can download the results.\n\nTo enable facilitator mode, log out and re-enter with the facilitator password.');
     return;
   }
-
-  if(!wsTracker.length){ alert('No results to export yet.'); return; }
+  if(!wsTracker.length && !wsNeedsResponses.length){ alert('No results to export yet.'); return; }
 
   // ── Sheet 1: RTW Scores ──
-  const scoreRows = [['Platform','Technology','Tech RTW','Brand & Portfolio RTW','Commercial RTW','Overall RTW','Submitted']];
+  const scoreRows = [['Platform','Technology','Submitted By','Tech RTW','Brand & Portfolio RTW','Commercial RTW','Overall RTW','Time']];
   wsTracker.forEach(r=>{
     scoreRows.push([
-      r.platform, r.tech.label,
+      r.platform, r.tech.label, r.submitter||'Anonymous',
       r.scores.tech, r.scores.brand, r.scores.comm,
       r.techOverall, r.time
     ]);
@@ -4357,11 +4699,11 @@ function wsExportCSV(){
   // ── Sheet 2: Consumer Needs Rankings ──
   const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
   const maxRankCols = Math.max(0, ...wsNeedsResponses.map(r=>(r.fullRanking||[]).length));
-  const needsHeader = ['Time', ...Array.from({length:maxRankCols},(_,i)=>`#${i+1} Priority`)];
+  const needsHeader = ['Submitted By','Time', ...Array.from({length:maxRankCols},(_,i)=>`#${i+1} Priority`)];
   const needsRows = [needsHeader];
   wsNeedsResponses.forEach(r=>{
     const ranking = r.fullRanking || [{rank:1, needId:r.needId, label:r.label}];
-    const row = [r.time];
+    const row = [r.submitter||'Anonymous', r.time];
     for(let i=1;i<=maxRankCols;i++){
       const item = ranking.find(x=>x.rank===i);
       row.push(item ? item.label : '');
@@ -4464,6 +4806,7 @@ function buildWSTracker(){
       <div style="overflow-x:auto">
       <table class="tracker-table">
         <thead><tr>
+          <th style="min-width:90px">Name</th>
           <th style="min-width:60px">Time</th>`;
 
     // Column headers = rank numbers (max needs across all submissions)
@@ -4472,7 +4815,9 @@ function buildWSTracker(){
     html += `</tr></thead><tbody>`;
 
     wsNeedsResponses.forEach(r=>{
-      html += `<tr><td style="color:var(--muted);font-size:10px;white-space:nowrap">${r.time}</td>`;
+      html += `<tr>
+        <td style="font-size:10.5px;font-weight:600;color:var(--text);white-space:nowrap">${r.submitter||'Anonymous'}</td>
+        <td style="color:var(--muted);font-size:10px;white-space:nowrap">${r.time}</td>`;
       const ranking = r.fullRanking || [{rank:1, needId:r.needId, label:r.label}];
       for(let i=1;i<=maxRanks;i++){
         const item = ranking.find(x=>x.rank===i);
@@ -4513,7 +4858,8 @@ function buildWSTracker(){
             <th style="text-align:center">Tech RTW</th>
             <th style="text-align:center">Commercial RTW</th>
             <th style="text-align:center">Brand &amp; Portfolio RTW</th>
-            <th style="text-align:center">Submitted</th>
+            <th style="text-align:center">Submitted by</th>
+            <th style="text-align:center">Time</th>
           </tr></thead>
           <tbody>`;
       rows.forEach((r)=>{
@@ -4528,6 +4874,7 @@ function buildWSTracker(){
           <td style="text-align:center">${pillHTML(r.scores.tech)}</td>
           <td style="text-align:center">${pillHTML(r.scores.comm)}</td>
           <td style="text-align:center">${pillHTML(r.scores.brand)}</td>
+          <td style="text-align:center;font-size:10.5px;font-weight:600;color:var(--text)">${r.submitter||'Anonymous'}</td>
           <td style="text-align:center;color:var(--muted);font-size:10px">${r.time}</td>
         </tr>`;
         r.isNew = false;
@@ -4647,7 +4994,52 @@ function init(){
   buildPlatformNav(); loadPlatform(0);
   buildDashboard();
   buildWSPlatforms();
+  // Show facilitator badge + facilitator-only buttons if facilitator mode is active
+  applyFacilitatorMode();
 }
+function applyFacilitatorMode(){
+  var badge = document.getElementById('facilitator-badge');
+  if(window.FACILITATOR_MODE){
+    if(badge) badge.style.display = 'flex';
+    document.querySelectorAll('.fac-only').forEach(function(el){ el.style.display=''; });
+  } else {
+    if(badge) badge.style.display = 'none';
+    document.querySelectorAll('.fac-only').forEach(function(el){ el.style.display='none'; });
+  }
+}
+// Click handler for competitive positioning map — scroll to the brand's detail card
+document.addEventListener('click', function(e){
+  // Commentary filter click — toggle highlight of matching chips
+  const filter = e.target.closest('.comp-filter');
+  if(filter){
+    const cat = filter.getAttribute('data-filter');
+    const map = filter.closest('.comp-map');
+    if(!map || !cat) return;
+    const isActive = filter.classList.contains('active');
+    // Clear all filter states first
+    map.parentElement.querySelectorAll('.comp-filter').forEach(f=>f.classList.remove('active'));
+    map.classList.remove('filter-cpg','filter-dtc','filter-pharma');
+    // If it wasn't active, activate it now (otherwise leave cleared = toggle off)
+    if(!isActive){
+      filter.classList.add('active');
+      map.classList.add('filter-'+cat);
+    }
+    return;
+  }
+
+  const chip = e.target.closest('[data-target]');
+  if(!chip) return;
+  const id = chip.getAttribute('data-target');
+  if(!id) return;
+  const target = document.getElementById(id);
+  if(!target) return;
+  target.scrollIntoView({behavior:'smooth', block:'center'});
+  target.classList.remove('comp-flash');
+  // Force reflow so animation re-triggers
+  void target.offsetWidth;
+  target.classList.add('comp-flash');
+});
+
 init();
 </script>
 </body>
