@@ -4066,68 +4066,145 @@ function wsGetOverall(scores){
   return 'M';
 }
 
-// ── SHARED VOTE STORAGE ──
+// ── SUPABASE CONFIG ─────────────────────────────────────────────────────────
+// 1. Go to https://supabase.com → New project (free tier)
+// 2. Settings → API → copy Project URL and anon/public key into the two lines below
+// 3. Go to Table Editor → New table → name it "workshop_submissions"
+//    Columns: id (int8, primary key, default: auto), key (text), value (text),
+//             inserted_at (timestamptz, default: now())
+// 4. Set RLS to disabled (or add a policy allowing anon insert + select)
+// ────────────────────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://khmyycmyycsktttrcmniv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_YBohKFiGmyx5-ML98o3i7Q_AzheqFmw';
+const SUPABASE_TABLE = 'workshop_submissions';
+// ────────────────────────────────────────────────────────────────────────────
+
 const VOTES_KEY = 'workshop_votes_v1';
 const NEEDS_KEY = 'workshop_needs_v1';
 
+// ── Connection state ──
+let _sbReady = false;
+function _sbConfigured(){ return SUPABASE_URL !== '' && SUPABASE_KEY !== ''; }
+
+function _setSyncStatus(state){
+  // state: 'ok' | 'error' | 'off'
+  const el = document.getElementById('sync-indicator');
+  if(!el) return;
+  const dot = el.querySelector('div');
+  const lbl = el.querySelector('span');
+  if(state==='ok'){
+    el.style.background='#eaf3de'; el.style.borderColor='#aad87a';
+    if(dot){ dot.style.background='#5C9E1A'; dot.style.animation='pulse-dot 2s infinite'; }
+    if(lbl){ lbl.style.color='#27500a'; lbl.textContent='Live — syncing every 5s'; }
+  } else if(state==='error'){
+    el.style.background='#fef6e4'; el.style.borderColor='#E8A020';
+    if(dot){ dot.style.background='#E8A020'; dot.style.animation='none'; }
+    if(lbl){ lbl.style.color='#7a4d00'; lbl.textContent='Sync error — check config'; }
+  } else {
+    el.style.background='#f5f5f3'; el.style.borderColor='#ccc';
+    if(dot){ dot.style.background='#aaa'; dot.style.animation='none'; }
+    if(lbl){ lbl.style.color='#888'; lbl.textContent='Local only — add Supabase config to sync'; }
+  }
+}
+
+// ── Core Supabase helpers ──
+function _sbHeaders(){
+  // Supports both new publishable keys (sb_publishable_...) and legacy anon keys (eyJ...)
+  const isLegacy = SUPABASE_KEY.startsWith('eyJ');
+  return {
+    'apikey': SUPABASE_KEY,
+    'Authorization': isLegacy ? 'Bearer '+SUPABASE_KEY : 'Bearer '+SUPABASE_KEY,
+    'Content-Type': 'application/json',
+  };
+}
+
+async function _sbSet(key, value){
+  if(!_sbConfigured()) return;
+  await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}`, {
+    method:'DELETE',
+    headers: _sbHeaders()
+  });
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
+    method:'POST',
+    headers:{ ..._sbHeaders(), 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ key, value })
+  });
+  if(!res.ok) throw new Error('Supabase write failed: '+res.status);
+}
+
+async function _sbGet(key){
+  if(!_sbConfigured()) return null;
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}&select=value&limit=1`,
+    { headers: _sbHeaders() }
+  );
+  if(!res.ok) throw new Error('Supabase read failed: '+res.status);
+  const data = await res.json();
+  return data && data.length ? data[0].value : null;
+}
+
+// ── Sync functions ──
 async function syncVotesToStorage(){
+  if(!_sbConfigured()){ _setSyncStatus('off'); return; }
   try {
-    await window.storage.set(VOTES_KEY, JSON.stringify(wsTracker), true);
-  } catch(e){ console.warn('Storage write failed', e); }
+    await _sbSet(VOTES_KEY, JSON.stringify(wsTracker));
+    _setSyncStatus('ok');
+  } catch(e){ console.warn('Votes sync failed', e); _setSyncStatus('error'); }
 }
 
 async function syncNeedsToStorage(){
+  if(!_sbConfigured()){ _setSyncStatus('off'); return; }
   try {
-    await window.storage.set(NEEDS_KEY, JSON.stringify(wsNeedsResponses), true);
-  } catch(e){ console.warn('Needs storage write failed', e); }
+    await _sbSet(NEEDS_KEY, JSON.stringify(wsNeedsResponses));
+    _setSyncStatus('ok');
+  } catch(e){ console.warn('Needs sync failed', e); _setSyncStatus('error'); }
 }
 
 async function loadVotesFromStorage(){
+  if(!_sbConfigured()){ _setSyncStatus('off'); return; }
   try {
-    const result = await window.storage.get(VOTES_KEY, true);
-    if(result && result.value){
-      const remote = JSON.parse(result.value);
+    const val = await _sbGet(VOTES_KEY);
+    if(val){
+      const remote = JSON.parse(val);
       const localKeys = new Set(wsTracker.map(r=>r.time+'|'+r.tech.id+'|'+r.platform));
       let added = false;
       remote.forEach(r=>{
         const k = r.time+'|'+r.tech.id+'|'+r.platform;
-        if(!localKeys.has(k)){
-          wsTracker.push({...r, isNew:true});
-          added = true;
-        }
+        if(!localKeys.has(k)){ wsTracker.push({...r, isNew:true}); added=true; }
       });
       if(added) buildWSTracker();
     }
-  } catch(e){ /* key not yet set — fine */ }
+    _setSyncStatus('ok');
+  } catch(e){ console.warn('Votes load failed', e); _setSyncStatus('error'); }
 }
 
 async function loadNeedsFromStorage(){
+  if(!_sbConfigured()){ _setSyncStatus('off'); return; }
   try {
-    const result = await window.storage.get(NEEDS_KEY, true);
-    if(result && result.value){
-      const remote = JSON.parse(result.value);
+    const val = await _sbGet(NEEDS_KEY);
+    if(val){
+      const remote = JSON.parse(val);
       const localKeys = new Set(wsNeedsResponses.map(r=>r.time+'|'+r.needId));
       let added = false;
       remote.forEach(r=>{
         const k = r.time+'|'+r.needId;
-        if(!localKeys.has(k)){
-          wsNeedsResponses.push(r);
-          added = true;
-        }
+        if(!localKeys.has(k)){ wsNeedsResponses.push(r); added=true; }
       });
       if(added){ buildWSCalibration(); buildWSTracker(); }
     }
-  } catch(e){ /* key not yet set — fine */ }
+    _setSyncStatus('ok');
+  } catch(e){ console.warn('Needs load failed', e); _setSyncStatus('error'); }
 }
 
 // Poll for new votes every 5 seconds when on Step 5
 let votePoller = null;
 function startVotePolling(){
   if(votePoller) return;
+  _setSyncStatus(_sbConfigured() ? 'ok' : 'off');
   votePoller = setInterval(()=>{ loadVotesFromStorage(); loadNeedsFromStorage(); }, 5000);
 }
 function stopVotePolling(){
-  if(votePoller){ clearInterval(votePoller); votePoller = null; }
+  if(votePoller){ clearInterval(votePoller); votePoller=null; }
 }
 
 function wsSubmitResults(){
@@ -4151,11 +4228,16 @@ function wsSubmitResults(){
   wsGoStep(5);
 }
 
-function wsClearTracker(){
-  if(confirm('Clear all submitted results?')){
+async function wsClearTracker(){
+  if(confirm('Clear all submitted results for everyone?')){
     wsTracker=[];
-    try { window.storage.delete(VOTES_KEY, true); } catch(e){}
+    wsNeedsResponses=[];
+    if(_sbConfigured()){
+      try { await _sbSet(VOTES_KEY, '[]'); } catch(e){}
+      try { await _sbSet(NEEDS_KEY, '[]'); } catch(e){}
+    }
     buildWSTracker();
+    buildWSCalibration();
   }
 }
 
