@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src *; img-src * data:; font-src *; style-src * 'unsafe-inline'">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <title>Haleon x BCG | Innovation Workshop</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -4161,10 +4161,16 @@ async function sbDebugTest(){
 
 
 let _sbReady = false;
+let _sbClient = null;
 function _sbConfigured(){ return SUPABASE_URL !== '' && SUPABASE_KEY !== ''; }
+function _getClient(){
+  if(!_sbClient && _sbConfigured() && window.supabase){
+    _sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+  return _sbClient;
+}
 
 function _setSyncStatus(state){
-  // state: 'ok' | 'error' | 'off'
   const el = document.getElementById('sync-indicator');
   if(!el) return;
   const dot = el.querySelector('div');
@@ -4184,56 +4190,21 @@ function _setSyncStatus(state){
   }
 }
 
-// ── Core Supabase helpers ──
-function _sbHeaders(){
-  // Supports both new publishable keys (sb_publishable_...) and legacy anon keys (eyJ...)
-  const isLegacy = SUPABASE_KEY.startsWith('eyJ');
-  return {
-    'apikey': SUPABASE_KEY,
-    'Authorization': isLegacy ? 'Bearer '+SUPABASE_KEY : 'Bearer '+SUPABASE_KEY,
-    'Content-Type': 'application/json',
-  };
-}
-
+// ── Core Supabase helpers — using official JS client ──
 async function _sbSet(key, value){
   if(!_sbConfigured()) return;
-  // Use upsert via ON CONFLICT — avoids race condition from delete+insert
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
-    method:'POST',
-    headers:{
-      ..._sbHeaders(),
-      'Prefer': 'resolution=merge-duplicates,return=minimal'
-    },
-    body: JSON.stringify({ key, value })
-  });
-  if(!res.ok){
-    // Fallback: delete then insert
-    await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}`, {
-      method:'DELETE', headers: _sbHeaders()
-    });
-    const res2 = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
-      method:'POST',
-      headers:{ ..._sbHeaders(), 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ key, value })
-    });
-    if(!res2.ok){
-      const body = await res2.text().catch(()=>'');
-      throw new Error(`HTTP ${res2.status}: ${body}`);
-    }
-  }
+  const db = _getClient();
+  if(!db) throw new Error('Supabase client not initialised');
+  const { error } = await db.from(SUPABASE_TABLE).upsert({ key, value }, { onConflict: 'key' });
+  if(error) throw new Error(error.message);
 }
 
 async function _sbGet(key){
   if(!_sbConfigured()) return null;
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?key=eq.${encodeURIComponent(key)}&select=value&limit=1`,
-    { headers: _sbHeaders() }
-  );
-  if(!res.ok){
-    const body = await res.text().catch(()=>'');
-    throw new Error(`HTTP ${res.status}: ${body}`);
-  }
-  const data = await res.json();
+  const db = _getClient();
+  if(!db) throw new Error('Supabase client not initialised');
+  const { data, error } = await db.from(SUPABASE_TABLE).select('value').eq('key', key).limit(1);
+  if(error) throw new Error(error.message);
   return data && data.length ? data[0].value : null;
 }
 
