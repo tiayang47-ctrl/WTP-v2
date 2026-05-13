@@ -544,13 +544,14 @@ document.body.style.overflow = 'hidden';
 .rtw-dim-title{font-size:11px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--h-green);display:flex;align-items:center;gap:6px}
 .rtw-q{margin-bottom:10px}
 .rtw-q-text{font-size:10.5px;color:#333;line-height:1.4;margin-bottom:5px}
-.rtw-btn-row{display:flex;gap:4px}
-.rtw-btn{flex:1;padding:5px 0;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .15s;position:relative}
+.rtw-btn-row{display:flex;gap:4px;flex-wrap:wrap}
+.rtw-btn{flex:1 1 auto;min-width:0;padding:5px 6px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .15s;position:relative;line-height:1.2;text-align:center}
+.rtw-btn-opt{font-size:9.5px;font-weight:600;padding:6px 4px;letter-spacing:.1px}
 .rtw-overall{background:#f7fcf2;border:1px solid #d6e9c5;border-radius:6px;padding:10px;margin-bottom:12px}
 .rtw-overall .rtw-q-text{font-weight:700;color:#1a3a08}
 .rtw-subqs{border-top:1px solid #f0f0ee;padding-top:8px}
-.rtw-overall .rtw-btn[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);background:rgba(26,26,26,.96);color:#fff;padding:8px 10px;border-radius:6px;font-size:10px;font-weight:500;line-height:1.35;white-space:normal;width:210px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.25);text-align:left;pointer-events:none}
-.rtw-overall .rtw-btn[data-tooltip]:hover::before{content:'';position:absolute;left:50%;bottom:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(26,26,26,.96);z-index:201;pointer-events:none}
+.rtw-btn[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);background:rgba(26,26,26,.96);color:#fff;padding:8px 10px;border-radius:6px;font-size:10px;font-weight:500;line-height:1.4;white-space:normal;width:220px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.25);text-align:left;pointer-events:none}
+.rtw-btn[data-tooltip]:hover::before{content:'';position:absolute;left:50%;bottom:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(26,26,26,.96);z-index:201;pointer-events:none}
 .rtw-btn.h{border-color:#aad87a;color:#27500a;background:#e2f0d0}
 .rtw-btn.m{border-color:#f5c842;color:#633806;background:#faeeda}
 .rtw-btn.l{border-color:#f09595;color:#791f1f;background:#fce4e4}
@@ -3484,30 +3485,164 @@ let consumerNeeds = platformConsumerNeeds[0];
 let wsCustomNeeds = [];    // {id, label}
 
 const rtwDims = [
-  {id:'tech',  label:'Tech RTW',               color:'#185FA5', overallQuestion:'Overall, how ready-to-win are we technically for this technology?', questions:['Do we have R&D expertise in the underlying science?','Does our manufacturing support the required format & delivery?','Do we have clinical evidence or IP to leverage?','Can we access this capability within a viable timeframe?']},
-  {id:'comm',  label:'Commercial RTW',         color:'#E8A020', overallQuestion:'Overall, how ready-to-win are we commercially for this technology?', questions:['Can we enter in our core / priority markets?','Do we have a competitive advantage vs. existing players?','Can we realistically capture meaningful share?','Is the market large and growing enough to justify investment?']},
-  {id:'brand', label:'Brand & Portfolio RTW',  color:'#534AB7', overallQuestion:'Overall, how ready-to-win are we from a brand and portfolio perspective?', questions:['Is there a Haleon brand consumers would trust here?','Does the platform reinforce our science-backed OTC positioning?','Do we have defensible brand differentiation vs. competitors?','Do we have existing loyalty or HCP endorsement?']},
+  {
+    id:'tech', label:'Tech RTW', color:'#185FA5',
+    overallQuestion:'Overall, how ready-to-win are we technically for this opportunity?',
+    overallOptions:[
+      {v:'H', label:'High',   desc:'Capability exists today or is actively being built — deployable in the near term'},
+      {v:'M', label:'Medium', desc:'Gap closable via partnership, licence, or moderate internal build'},
+      {v:'L', label:'Low',    desc:'Requires M&A or long-term R&D build before deployment is feasible'}
+    ],
+    questions:[
+      {
+        q:'Do we have a validated solution or technology ready to deploy?',
+        options:[
+          {v:'H', label:'Short-term', desc:'Validated and deployable today, with no further R&D required'},
+          {v:'M', label:'Mid-term',   desc:'In active development; deployable within 2–3 years'},
+          {v:'L', label:'Long-term',  desc:'Requires new research, novel platform, or external partnership'}
+        ]
+      },
+      {
+        q:'Do we have clinical evidence or IP protecting this solution?',
+        options:[
+          {v:'H', label:'High',   desc:'IP filed and/or clinical data in hand — protectable from launch'},
+          {v:'M', label:'Medium', desc:'Some evidence in place; IP filings or trials in progress'},
+          {v:'L', label:'Low',    desc:'No protection — open to immediate competitive replication'}
+        ]
+      },
+      {
+        q:'Can our existing manufacturing or delivery infrastructure support this at scale?',
+        options:[
+          {v:'H', label:'High',   desc:'Existing setup supports it with only minor changes'},
+          {v:'M', label:'Medium', desc:'Requires moderate investment or a third-party partner'},
+          {v:'L', label:'Low',    desc:'Requires significant new infrastructure, technology, or capability'}
+        ]
+      },
+      {
+        q:'How quickly can we reach regulatory approval or compliance in key markets?',
+        options:[
+          {v:'H', label:'Short-term', desc:'Low regulatory risk, precedent exists — under 18 months'},
+          {v:'M', label:'Mid-term',   desc:'Moderate complexity, no major blockers — 2–3 years'},
+          {v:'L', label:'Long-term',  desc:'Novel claim or ingredient requiring full dossier — 3+ years'}
+        ]
+      }
+    ]
+  },
+  {
+    id:'comm', label:'Commercial RTW', color:'#E8A020',
+    overallQuestion:'Overall, how ready-to-win are we commercially for this opportunity?',
+    overallOptions:[
+      {v:'H', label:'High',   desc:'Clear entry path, differentiated advantage, credible market leader position'},
+      {v:'M', label:'Medium', desc:'Viable entry; followership position acceptable given market or competitor dynamics'},
+      {v:'L', label:'Low',    desc:'High barriers to entry, no clear advantage, risk of being a marginal player'}
+    ],
+    questions:[
+      {
+        q:'Can we enter in our core / priority markets?',
+        options:[
+          {v:'H', label:'High',   desc:'Clear path into our core / priority markets — distribution, regulatory and channel access in place'},
+          {v:'M', label:'Medium', desc:'Entry possible but requires meaningful effort on distribution, channel or regulatory readiness'},
+          {v:'L', label:'Low',    desc:'Significant barriers — regulatory, channel or distribution gaps make entry difficult'}
+        ]
+      },
+      {
+        q:'What is the realistic timeline to meaningful revenue?',
+        options:[
+          {v:'H', label:'Short-term', desc:'Launch and capture meaningful share within the next 2 years'},
+          {v:'M', label:'Mid-term',   desc:'Requires market development or channel build — 2–4 years to meaningful revenue'},
+          {v:'L', label:'Long-term',  desc:'Long adoption cycle or infrastructure build — 4+ years to material revenue'}
+        ]
+      },
+      {
+        q:'How does our position compare to the leading competitor today?',
+        options:[
+          {v:'H', label:'Ahead',  desc:'Clear advantage or first-mover position vs. competitors'},
+          {v:'M', label:'On par', desc:'Competitive parity — no meaningful differentiation either way'},
+          {v:'L', label:'Behind', desc:'Competitors already have an established advantage to overcome'}
+        ]
+      },
+      {
+        q:'Is the market large and growing enough to justify the investment?',
+        options:[
+          {v:'H', label:'High',   desc:'Large category, strong growth (>5% p.a.), clear ROI case for full investment'},
+          {v:'M', label:'Medium', desc:'Viable but requires careful prioritisation against other investment options'},
+          {v:'L', label:'Low',    desc:'Niche or declining category — hard to build a compelling ROI case'}
+        ]
+      }
+    ]
+  },
+  {
+    id:'brand', label:'Brand & Portfolio RTW', color:'#534AB7',
+    overallQuestion:'Overall, how ready-to-win are we from a brand and portfolio perspective?',
+    overallOptions:[
+      {v:'H', label:'High',   desc:'Existing Haleon brand equity directly transfers and supports this opportunity'},
+      {v:'M', label:'Medium', desc:'Adjacent brand fit — credible extension within existing category architecture'},
+      {v:'L', label:'Low',    desc:'Sits outside current brand reach — would require a new category position'}
+    ],
+    questions:[
+      {
+        q:'Do we have a Haleon brand consumers would trust here?',
+        options:[
+          {v:'H', label:'High',   desc:'Strong existing brand equity in this space — consumers would trust us immediately'},
+          {v:'M', label:'Medium', desc:'Credible stretch — may need repositioning or a new sub-brand'},
+          {v:'L', label:'Low',    desc:'Significant brand equity mismatch or consumer credibility gap'}
+        ]
+      },
+      {
+        q:'Does this reinforce our science-backed OTC positioning?',
+        options:[
+          {v:'H', label:'High',   desc:'Directly reinforces our brand purpose and science-backed positioning'},
+          {v:'M', label:'Medium', desc:'Neutral — neither reinforces nor conflicts with existing positioning'},
+          {v:'L', label:'Low',    desc:'Risk of diluting or conflicting with existing brand perceptions'}
+        ]
+      },
+      {
+        q:'Does this fall within an existing Haleon category?',
+        options:[
+          {v:'H', label:'High',   desc:'Sits squarely within an existing Haleon category where we already operate at scale'},
+          {v:'M', label:'Medium', desc:'Adjacent to an existing category — credible extension without entering a new space'},
+          {v:'L', label:'Low',    desc:'Falls outside current Haleon categories — would require entering a new category'}
+        ]
+      },
+      {
+        q:'Do we have an existing consumer base, or must we build from scratch?',
+        options:[
+          {v:'H', label:'High',   desc:'Strong existing loyalty base — current users are a ready audience to activate'},
+          {v:'M', label:'Medium', desc:'Some base — meaningful but with significant non-users to convert'},
+          {v:'L', label:'Low',    desc:'Starting cold — fragmented category, must win new consumers entirely from scratch'}
+        ]
+      }
+    ]
+  }
 ];
 
-const rtwScoreDescriptions = {
-  tech: {
-    H: 'High: Capability exists today / is being built',
-    M: 'Medium: Gap closable via partnership or license',
-    L: 'Low: Requires M&A or long-term build',
-    '?': 'Not sure: Insufficient evidence to score yet'
-  },
-  brand: {
-    H: 'High: Brand equity directly transferable',
-    M: 'Medium: Adjacent brand fit; extension needed within existing category',
-    L: 'Low: New category required',
-    '?': 'Not sure: Insufficient evidence to score yet'
-  },
-  comm: {
-    H: 'High: Clear entry path, differentiated advantage, credible market leader position',
-    M: 'Medium: Viable entry; followership acceptable given market size or competitors',
-    L: 'Low: High barriers, no clear advantage, risk of being a marginal player',
-    '?': 'Not sure: Insufficient evidence to score yet'
+function rtwOptionDesc(dim, qIdx, val){
+  if(val === '?') return 'Not sure — insufficient evidence to score yet';
+  if(qIdx === 0){
+    const opt = (dim.overallOptions || []).find(o => o.v === val);
+    return opt ? `${opt.label} — ${opt.desc}` : '';
   }
+  const q = dim.questions[qIdx - 1];
+  if(!q) return '';
+  const opt = (q.options || []).find(o => o.v === val);
+  return opt ? `${opt.label} — ${opt.desc}` : '';
+}
+function rtwOptionLabel(dim, qIdx, val){
+  if(val === '?') return 'Not sure';
+  if(qIdx === 0){
+    const opt = (dim.overallOptions || []).find(o => o.v === val);
+    return opt ? opt.label : val;
+  }
+  const q = dim.questions[qIdx - 1];
+  if(!q) return val;
+  const opt = (q.options || []).find(o => o.v === val);
+  return opt ? opt.label : val;
+}
+// Legacy compatibility — kept so any other code paths still work
+const rtwScoreDescriptions = {
+  tech:  { H:'Ready to deploy', M:'Closable gap', L:'Significant build', '?':'Not sure' },
+  comm:  { H:'Clear entry path', M:'Viable, follower', L:'High barriers', '?':'Not sure' },
+  brand: { H:'Equity transfers', M:'Adjacent fit',     L:'New category', '?':'Not sure' }
 };
 function rtwTooltip(dimId, score){
   return (rtwScoreDescriptions[dimId] && rtwScoreDescriptions[dimId][score]) || '';
@@ -4337,7 +4472,11 @@ function buildWSRTWPanels(){
         <span style="background:${t.color};color:#fff;border-radius:4px;padding:2px 8px;font-size:11px">${t.id}</span>${t.label}
       </div>
       <div class="rtw-dim-grid">
-        ${rtwDims.map(dim=>`
+        ${rtwDims.map(dim=>{
+          const overallBtns = (dim.overallOptions || []).map(opt =>
+            `<button class="rtw-btn rtw-btn-opt ${opt.v.toLowerCase()}" data-tooltip="${opt.desc}" title="${opt.label} — ${opt.desc}" onclick="wsScore(${id},'${dim.id}',0,'${opt.v}',this)">${opt.label}</button>`
+          ).join('');
+          return `
         <div class="rtw-dim-card">
           <div class="rtw-dim-title" style="border-color:${dim.color}">
             <span style="width:8px;height:8px;border-radius:50%;background:${dim.color};display:inline-block"></span>
@@ -4346,25 +4485,27 @@ function buildWSRTWPanels(){
           <div class="rtw-q rtw-overall">
             <div class="rtw-q-text">${dim.overallQuestion}</div>
             <div class="rtw-btn-row">
-              <button class="rtw-btn h" data-tooltip="${rtwTooltip(dim.id,'H')}" title="${rtwTooltip(dim.id,'H')}" onclick="wsScore(${id},'${dim.id}',0,'H',this)">H</button>
-              <button class="rtw-btn m" data-tooltip="${rtwTooltip(dim.id,'M')}" title="${rtwTooltip(dim.id,'M')}" onclick="wsScore(${id},'${dim.id}',0,'M',this)">M</button>
-              <button class="rtw-btn l" data-tooltip="${rtwTooltip(dim.id,'L')}" title="${rtwTooltip(dim.id,'L')}" onclick="wsScore(${id},'${dim.id}',0,'L',this)">L</button>
-              <button class="rtw-btn u" data-tooltip="${rtwTooltip(dim.id,'?')}" title="${rtwTooltip(dim.id,'?')}" onclick="wsScore(${id},'${dim.id}',0,'?',this)">Not sure</button>
+              ${overallBtns}
+              <button class="rtw-btn u" data-tooltip="Not sure — insufficient evidence to score yet" title="Not sure — insufficient evidence to score yet" onclick="wsScore(${id},'${dim.id}',0,'?',this)">Not sure</button>
             </div>
           </div>
           <div class="rtw-subqs">
-          ${dim.questions.map((q,qi)=>`
+          ${dim.questions.map((q,qi)=>{
+            const optBtns = q.options.map(opt =>
+              `<button class="rtw-btn rtw-btn-opt ${opt.v.toLowerCase()}" data-tooltip="${opt.desc}" title="${opt.label} — ${opt.desc}" onclick="wsScore(${id},'${dim.id}',${qi+1},'${opt.v}',this)">${opt.label}</button>`
+            ).join('');
+            return `
           <div class="rtw-q">
-            <div class="rtw-q-text">${q}</div>
+            <div class="rtw-q-text">${q.q}</div>
             <div class="rtw-btn-row">
-              <button class="rtw-btn h" onclick="wsScore(${id},'${dim.id}',${qi+1},'H',this)">H</button>
-              <button class="rtw-btn m" onclick="wsScore(${id},'${dim.id}',${qi+1},'M',this)">M</button>
-              <button class="rtw-btn l" onclick="wsScore(${id},'${dim.id}',${qi+1},'L',this)">L</button>
-              <button class="rtw-btn u" onclick="wsScore(${id},'${dim.id}',${qi+1},'?',this)">Not sure</button>
+              ${optBtns}
+              <button class="rtw-btn u" data-tooltip="Not sure — insufficient evidence to score yet" title="Not sure" onclick="wsScore(${id},'${dim.id}',${qi+1},'?',this)">?</button>
             </div>
-          </div>`).join('')}
+          </div>`;
+          }).join('')}
           </div>
-        </div>`).join('')}
+        </div>`;
+        }).join('')}
       </div>
     </div>`;
   }).join('');
