@@ -542,11 +542,12 @@ document.body.style.overflow = 'hidden';
 .rtw-dim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
 .rtw-dim-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px}
 .rtw-dim-title{font-size:11px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--h-green);display:flex;align-items:center;gap:6px}
-.rtw-q{margin-bottom:10px}
-.rtw-q-text{font-size:10.5px;color:#333;line-height:1.4;margin-bottom:5px}
-.rtw-btn-row{display:flex;gap:4px;flex-wrap:wrap}
-.rtw-btn{flex:1 1 auto;min-width:0;padding:5px 6px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .15s;position:relative;line-height:1.2;text-align:center}
-.rtw-btn-opt{font-size:9.5px;font-weight:600;padding:6px 4px;letter-spacing:.1px}
+.rtw-q{margin-bottom:12px}
+.rtw-q:last-child{margin-bottom:0}
+.rtw-q-text{font-size:10.5px;color:#333;line-height:1.4;margin-bottom:6px;min-height:30px}
+.rtw-btn-row{display:grid;grid-template-columns:1fr 1fr 1fr 44px;gap:4px;align-items:stretch}
+.rtw-btn{padding:6px 4px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .15s;position:relative;line-height:1.2;text-align:center;width:100%;box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rtw-btn-opt{font-size:10px;font-weight:600;letter-spacing:.1px}
 .rtw-overall{background:#f7fcf2;border:1px solid #d6e9c5;border-radius:6px;padding:10px;margin-bottom:12px}
 .rtw-overall .rtw-q-text{font-weight:700;color:#1a3a08}
 .rtw-subqs{border-top:1px solid #f0f0ee;padding-top:8px}
@@ -560,6 +561,72 @@ document.body.style.overflow = 'hidden';
 .rtw-btn.sel-m{background:#a65c00;color:#fff;border-color:#a65c00}
 .rtw-btn.sel-l{background:#791f1f;color:#fff;border-color:#791f1f}
 .rtw-btn.sel-u{background:#555;color:#fff;border-color:#555}
+/* Brand multi-select */
+.rtw-q-brand{position:relative}
+.rtw-q-helper{font-size:9.5px;color:var(--muted);font-style:italic;margin-bottom:6px;line-height:1.4}
+.rtw-brand-row{display:grid;grid-template-columns:1fr 1fr 1fr 44px;gap:4px;align-items:stretch}
+.rtw-brand-select{position:relative;grid-column:1 / span 3;min-width:0}
+.rtw-brand-display{display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--border);border-radius:4px;padding:4px 6px 4px 8px;cursor:pointer;transition:border-color .15s;min-height:30px;height:100%;box-sizing:border-box}
+.rtw-brand-display:hover{border-color:#999}
+.rtw-brand-chips{flex:1;display:flex;flex-wrap:wrap;gap:3px;align-items:center;min-width:0;overflow:hidden}
+.rtw-brand-empty{font-size:10px;color:#999;font-style:italic;white-space:nowrap}
+.rtw-brand-chip{display:inline-flex;align-items:center;gap:3px;padding:1px 4px 1px 7px;border-radius:99px;font-size:9.5px;font-weight:600;border:1px solid #d0d0d0;background:#f5f5f5;color:#333;white-space:nowrap;line-height:1.4}
+.rtw-brand-chip-x{cursor:pointer;font-weight:700;font-size:11px;line-height:1;opacity:.6;padding:0 1px}
+.rtw-brand-chip-x:hover{opacity:1}
+.rtw-brand-score-cell{display:flex;align-items:center;justify-content:center;padding:6px 4px;border-radius:4px;font-size:10px;font-weight:700;line-height:1.2;background:#f5f5f5;border:1.5px solid #ccc;color:#888;width:100%;box-sizing:border-box}
+.rtw-brand-score-cell.fit-h{background:#e2f0d0;border-color:#aad87a;color:#27500a}
+.rtw-brand-score-cell.fit-m{background:#faeeda;border-color:#f5c842;color:#633806}
+.rtw-brand-score-cell.fit-l{background:#fce4e4;border-color:#f09595;color:#791f1f}
+.rtw-brand-caret{font-size:10px;opacity:.5;flex-shrink:0;margin-left:2px}
+.rtw-brand-dropdown{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.12);max-height:340px;overflow-y:auto;z-index:50;padding:6px}
+.rtw-brand-dropdown.open{display:block}
+.rtw-brand-group{margin-bottom:6px}
+.rtw-brand-group:last-child{margin-bottom:0}
+.rtw-brand-group-hdr{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;padding:6px 8px 3px;border-bottom:1px solid #f0f0ee;margin-bottom:2px}
+.rtw-brand-opt{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:4px;cursor:pointer;font-size:11px;transition:background .12s}
+.rtw-brand-opt:hover{background:#f7f7f5}
+.rtw-brand-opt.sel{background:#f4f9ec}
+.rtw-brand-opt input{margin:0;flex-shrink:0}
+.rtw-brand-name{flex:1;color:var(--text);font-weight:500}
+
+/* ─── Step 2 mode toggle + conjoint UI ─── */
+.ws-mode-btn{font-size:11px;font-weight:600;padding:6px 14px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .12s}
+.ws-mode-btn:hover{color:var(--text)}
+.ws-mode-btn.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.cj-progress{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.cj-bar{flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden}
+.cj-fill{height:100%;background:#534AB7;transition:width .3s;width:0%}
+.cj-count{font-size:10px;color:var(--muted);white-space:nowrap;min-width:55px;text-align:right;font-variant-numeric:tabular-nums}
+.cj-legend{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap;font-size:10.5px;color:var(--muted)}
+.cj-legend-item{display:flex;align-items:center;gap:5px}
+.cj-pair{display:grid;grid-template-columns:1fr 36px 1fr;gap:10px;align-items:stretch;margin-bottom:1rem}
+.cj-card{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:all .15s;text-align:left;font-family:inherit;color:var(--text)}
+.cj-card:hover{border-color:#999;background:#fafaf7}
+.cj-card.sel{border:2px solid #534AB7;padding:15px;background:#fafaff}
+.cj-card-title{font-size:10.5px;font-weight:700;color:var(--muted);margin-bottom:12px;letter-spacing:.05em;text-transform:uppercase}
+.cj-vs{display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:var(--muted)}
+.cj-needs-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.cj-need-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4}
+.cj-mark{flex-shrink:0;width:18px;height:18px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;margin-top:1px}
+.cj-yes{background:#eaf3de;color:#27500a}
+.cj-partial{background:#faeeda;color:#854f0b}
+.cj-no{background:#fcebeb;color:#791f1f}
+.cj-unclear{background:#f0f0ee;color:#888}
+.cj-need-text{flex:1;color:var(--text)}
+.cj-need-text.faded{color:#999}
+.cj-controls{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;gap:8px}
+.cj-nav-btn{font-size:11px;padding:7px 14px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer;font-family:inherit;transition:all .12s}
+.cj-nav-btn:hover:not(:disabled){border-color:#999;background:#fafaf7}
+.cj-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.cj-result-bar-row{display:grid;grid-template-columns:1fr 30px;align-items:center;gap:8px;margin-bottom:6px;font-size:10.5px}
+.cj-result-bar-label{color:var(--text);line-height:1.3;display:flex;align-items:center;gap:6px;font-weight:500}
+.cj-result-bar-track{height:8px;background:#f0f0ee;border-radius:2px;overflow:hidden;margin-top:3px}
+.cj-result-bar-fill{height:100%;background:#534AB7;border-radius:2px;transition:width .4s}
+.cj-result-bar-val{font-size:10.5px;font-weight:700;color:var(--text);text-align:right;font-variant-numeric:tabular-nums}
+.cj-tech-rec-row{display:flex;align-items:center;gap:8px;font-size:10.5px;padding:4px 0}
+.cj-tech-rec-rank{font-weight:700;color:#888;min-width:14px}
+.cj-tech-rec-name{flex:1;color:var(--text);font-weight:600}
+.cj-tech-rec-pct{font-weight:700;color:#27500a;font-variant-numeric:tabular-nums}
 
 /* Step 4 - Live tracker */
 .tracker-table{width:100%;border-collapse:collapse;font-size:11px}
@@ -827,8 +894,20 @@ document.body.style.overflow = 'hidden';
     <!-- ── STEP 2: Consumer Needs Trade-offs ── -->
     <div id="ws-panel-2" style="display:none">
       <div style="font-size:18px;font-weight:700;margin-bottom:4px">Consumer Needs — What matters most?</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:20px">For each pair below, choose which consumer need should take priority. There are no right answers — this is your group's view. Your choices will surface the 1–2 technologies best matched to what your consumers care about most.</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">For each pair below, choose which consumer need should take priority. There are no right answers — this is your group's view. Your choices will surface the 1–2 technologies best matched to what your consumers care about most.</div>
 
+      <!-- Mode toggle -->
+      <div style="display:inline-flex;background:#f7f7f5;border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:18px;gap:2px">
+        <button id="ws-mode-pairwise" class="ws-mode-btn active" onclick="wsSwitchMode('pairwise')">Pairwise ranking</button>
+        <button id="ws-mode-conjoint" class="ws-mode-btn"        onclick="wsSwitchMode('conjoint')">Conjoint trade-off</button>
+      </div>
+      <div style="font-size:10.5px;color:var(--muted);margin-bottom:18px;line-height:1.5">
+        <strong style="color:var(--text)">Pairwise ranking</strong> — pick which consumer need matters more, one need at a time. Fast and simple, ranks needs in isolation.<br>
+        <strong style="color:var(--text)">Conjoint trade-off</strong> — pick between anonymous product profiles described by 3 needs each. Captures real trade-offs and infers technology preference.
+      </div>
+
+      <!-- ── Pairwise mode ── -->
+      <div id="ws-mode-panel-pairwise">
       <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start">
         <!-- Left: trade-off cards -->
         <div>
@@ -863,6 +942,42 @@ document.body.style.overflow = 'hidden';
             <div id="tradeoff-tech-list" style="display:flex;flex-direction:column;gap:6px"></div>
           </div>
           <div id="needs-agg-preview" style="display:none"></div>
+        </div>
+      </div>
+      </div>
+
+      <!-- ── Conjoint mode ── -->
+      <div id="ws-mode-panel-conjoint" style="display:none">
+        <div class="cj-legend">
+          <div class="cj-legend-item"><span class="cj-mark cj-yes">✓</span> Addresses</div>
+          <div class="cj-legend-item"><span class="cj-mark cj-partial">›</span> Partial</div>
+          <div class="cj-legend-item"><span class="cj-mark cj-unclear">?</span> Unclear</div>
+          <div class="cj-legend-item"><span class="cj-mark cj-no">✗</span> Doesn't</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start">
+          <!-- Left: conjoint cards -->
+          <div>
+            <div class="cj-progress">
+              <div class="cj-bar"><div class="cj-fill" id="cj-fill"></div></div>
+              <div class="cj-count" id="cj-count">0 / 12</div>
+            </div>
+            <div id="cj-area"></div>
+            <div class="cj-controls">
+              <button class="cj-nav-btn" onclick="cjPrev()" id="cj-prev-btn">← Previous</button>
+              <button class="cj-nav-btn" onclick="cjNext()" id="cj-next-btn">Next →</button>
+            </div>
+          </div>
+          <!-- Right: live results -->
+          <div style="position:sticky;top:16px">
+            <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
+              <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">Derived need weights:</div>
+              <div id="cj-need-results" style="font-size:11px;color:var(--muted);font-style:italic">Complete at least 3 trade-offs to see results…</div>
+            </div>
+            <div id="cj-tech-results" style="display:none;background:#eaf3de;border:1px solid #c5e0a0;border-radius:8px;padding:14px">
+              <div style="font-size:11px;font-weight:700;color:#1a3a08;margin-bottom:8px">🎯 Predicted technology preference:</div>
+              <div id="cj-tech-list" style="display:flex;flex-direction:column;gap:6px"></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3489,41 +3604,49 @@ const rtwDims = [
     id:'tech', label:'Tech RTW', color:'#185FA5',
     overallQuestion:'Overall, how ready-to-win are we technically for this opportunity?',
     overallOptions:[
-      {v:'H', label:'High',   desc:'Capability exists today or is actively being built — deployable in the near term'},
-      {v:'M', label:'Medium', desc:'Gap closable via partnership, licence, or moderate internal build'},
-      {v:'L', label:'Low',    desc:'Requires M&A or long-term R&D build before deployment is feasible'}
+      {v:'H', label:'High',   desc:'Technology exists or is under development within Haleon for near-term deployment'},
+      {v:'M', label:'Medium', desc:'Technology exists today via potential acquisition targets or partnership opportunities'},
+      {v:'L', label:'Low',    desc:'Technology needs to be developed from scratch — no synergies with current Haleon R&D activities'}
     ],
     questions:[
       {
         q:'Do we have a validated solution or technology ready to deploy?',
         options:[
-          {v:'H', label:'Short-term', desc:'Validated and deployable today, with no further R&D required'},
-          {v:'M', label:'Mid-term',   desc:'In active development; deployable within 2–3 years'},
-          {v:'L', label:'Long-term',  desc:'Requires new research, novel platform, or external partnership'}
+          {v:'H', label:'Short-term', desc:'Short-term (0–3 years) — validated and deployable today or in active development'},
+          {v:'M', label:'Mid-term',   desc:'Mid-term (3–5 years) — solution achievable through partnership, licensing or accelerated build'},
+          {v:'L', label:'Long-term',  desc:'Long-term (5+ years) — requires new research, novel platform, or significant capability build'}
         ]
       },
       {
-        q:'Do we have clinical evidence or IP protecting this solution?',
+        q:'Do we have clinical evidence supporting this solution?',
         options:[
-          {v:'H', label:'High',   desc:'IP filed and/or clinical data in hand — protectable from launch'},
-          {v:'M', label:'Medium', desc:'Some evidence in place; IP filings or trials in progress'},
-          {v:'L', label:'Low',    desc:'No protection — open to immediate competitive replication'}
+          {v:'H', label:'High',   desc:'Strong clinical evidence in hand — published trials or robust internal data ready to support claims'},
+          {v:'M', label:'Medium', desc:'Some evidence exists; trials or proof-points in progress but not yet conclusive'},
+          {v:'L', label:'Low',    desc:'Limited or no clinical evidence — would require new studies before launch-ready claims'}
         ]
       },
       {
-        q:'Can our existing manufacturing or delivery infrastructure support this at scale?',
+        q:'How defensible is this solution from an IP perspective?',
         options:[
-          {v:'H', label:'High',   desc:'Existing setup supports it with only minor changes'},
-          {v:'M', label:'Medium', desc:'Requires moderate investment or a third-party partner'},
-          {v:'L', label:'Low',    desc:'Requires significant new infrastructure, technology, or capability'}
+          {v:'H', label:'High',   desc:'IP filed and granted — strong patent or know-how moat protectable from launch'},
+          {v:'M', label:'Medium', desc:'IP filings in progress or partial protection — defensibility achievable with further work'},
+          {v:'L', label:'Low',    desc:'No meaningful IP — solution is open to immediate competitive replication'}
+        ]
+      },
+      {
+        q:'Can our existing manufacturing or delivery infrastructure support this at scale, without significant CAPEX?',
+        options:[
+          {v:'H', label:'High',   desc:'Existing infrastructure supports it with only minor changes — no significant CAPEX required'},
+          {v:'M', label:'Medium', desc:'Requires moderate CAPEX or a third-party manufacturing partner to scale'},
+          {v:'L', label:'Low',    desc:'Requires significant CAPEX investment in new infrastructure, technology, or capability'}
         ]
       },
       {
         q:'How quickly can we reach regulatory approval or compliance in key markets?',
         options:[
-          {v:'H', label:'Short-term', desc:'Low regulatory risk, precedent exists — under 18 months'},
-          {v:'M', label:'Mid-term',   desc:'Moderate complexity, no major blockers — 2–3 years'},
-          {v:'L', label:'Long-term',  desc:'Novel claim or ingredient requiring full dossier — 3+ years'}
+          {v:'H', label:'Short-term', desc:'Short-term (0–3 years) — low regulatory risk, precedent exists in our priority markets'},
+          {v:'M', label:'Mid-term',   desc:'Mid-term (3–5 years) — moderate regulatory complexity but no major blockers foreseen'},
+          {v:'L', label:'Long-term',  desc:'Long-term (5+ years) — novel claim or ingredient requiring a full regulatory dossier'}
         ]
       }
     ]
@@ -3533,40 +3656,48 @@ const rtwDims = [
     overallQuestion:'Overall, how ready-to-win are we commercially for this opportunity?',
     overallOptions:[
       {v:'H', label:'High',   desc:'Clear entry path, differentiated advantage, credible market leader position'},
-      {v:'M', label:'Medium', desc:'Viable entry; followership position acceptable given market or competitor dynamics'},
+      {v:'M', label:'Medium', desc:'Viable entry; followership position likely given market or competitor dynamics'},
       {v:'L', label:'Low',    desc:'High barriers to entry, no clear advantage, risk of being a marginal player'}
     ],
     questions:[
       {
-        q:'Can we enter in our core / priority markets?',
+        q:'Do we see a viable path to entry and growth in our core / priority markets (EU, US, China, India)?',
         options:[
-          {v:'H', label:'High',   desc:'Clear path into our core / priority markets — distribution, regulatory and channel access in place'},
-          {v:'M', label:'Medium', desc:'Entry possible but requires meaningful effort on distribution, channel or regulatory readiness'},
-          {v:'L', label:'Low',    desc:'Significant barriers — regulatory, channel or distribution gaps make entry difficult'}
+          {v:'H', label:'High',   desc:'Clear path to entry and meaningful growth across EU, US, China and India — strong commercial logic and revenue runway in our priority markets'},
+          {v:'M', label:'Medium', desc:'Path to entry exists in some priority markets (EU, US, China, India) but growth potential is moderate — meaningful effort needed to build a commercial case'},
+          {v:'L', label:'Low',    desc:'No clear commercial path in our priority markets (EU, US, China, India) — limited revenue opportunity or unclear route to scale'}
         ]
       },
       {
-        q:'What is the realistic timeline to meaningful revenue?',
+        q:'What is the realistic timeline to meaningful revenue (≥$10M USD net sales/year)?',
         options:[
-          {v:'H', label:'Short-term', desc:'Launch and capture meaningful share within the next 2 years'},
-          {v:'M', label:'Mid-term',   desc:'Requires market development or channel build — 2–4 years to meaningful revenue'},
-          {v:'L', label:'Long-term',  desc:'Long adoption cycle or infrastructure build — 4+ years to material revenue'}
+          {v:'H', label:'Short-term', desc:'Short-term (0–3 years) — reach ≥$10M USD net sales/year within the next 3 years'},
+          {v:'M', label:'Mid-term',   desc:'Mid-term (3–5 years) — reach ≥$10M USD net sales/year requires market development or channel build'},
+          {v:'L', label:'Long-term',  desc:'Long-term (5+ years) — reaching ≥$10M USD net sales/year requires a long adoption cycle or major infrastructure build'}
         ]
       },
       {
-        q:'How does our position compare to the leading competitor today?',
+        q:'How does our position compare to the main competitor today?',
         options:[
-          {v:'H', label:'Ahead',  desc:'Clear advantage or first-mover position vs. competitors'},
-          {v:'M', label:'On par', desc:'Competitive parity — no meaningful differentiation either way'},
-          {v:'L', label:'Behind', desc:'Competitors already have an established advantage to overcome'}
+          {v:'H', label:'Ahead',  desc:'Clear advantage or first-mover position vs. main competitors'},
+          {v:'M', label:'On par', desc:'Competitive parity with main competitors — no meaningful differentiation either way'},
+          {v:'L', label:'Behind', desc:'Main competitors already have an established advantage to overcome'}
         ]
       },
       {
-        q:'Is the market large and growing enough to justify the investment?',
+        q:'Do we expect this to be a high-margin or low-margin play?',
         options:[
-          {v:'H', label:'High',   desc:'Large category, strong growth (>5% p.a.), clear ROI case for full investment'},
-          {v:'M', label:'Medium', desc:'Viable but requires careful prioritisation against other investment options'},
-          {v:'L', label:'Low',    desc:'Niche or declining category — hard to build a compelling ROI case'}
+          {v:'H', label:'High',   desc:'High-margin play — premium pricing potential, differentiated value, strong gross margin profile expected'},
+          {v:'M', label:'Medium', desc:'Mid-margin play — typical category margin profile, competitive pricing pressure expected'},
+          {v:'L', label:'Low',    desc:'Low-margin play — commodity dynamics, price-sensitive category, limited margin upside'}
+        ]
+      },
+      {
+        q:'Does this fit our channel strengths (retail, pharmacy), or require new go-to-market models (DTC, subscription)?',
+        options:[
+          {v:'H', label:'High',   desc:'Strong fit with our existing channel strengths (retail, pharmacy) — no new go-to-market capability required'},
+          {v:'M', label:'Medium', desc:'Partial fit — primarily existing channels but with some new go-to-market elements (e.g. hybrid DTC, light subscription)'},
+          {v:'L', label:'Low',    desc:'Requires substantially new go-to-market models (DTC, subscription, digital-first) where we have limited capability today'}
         ]
       }
     ]
@@ -3581,22 +3712,6 @@ const rtwDims = [
     ],
     questions:[
       {
-        q:'Do we have a Haleon brand consumers would trust here?',
-        options:[
-          {v:'H', label:'High',   desc:'Strong existing brand equity in this space — consumers would trust us immediately'},
-          {v:'M', label:'Medium', desc:'Credible stretch — may need repositioning or a new sub-brand'},
-          {v:'L', label:'Low',    desc:'Significant brand equity mismatch or consumer credibility gap'}
-        ]
-      },
-      {
-        q:'Does this reinforce our science-backed OTC positioning?',
-        options:[
-          {v:'H', label:'High',   desc:'Directly reinforces our brand purpose and science-backed positioning'},
-          {v:'M', label:'Medium', desc:'Neutral — neither reinforces nor conflicts with existing positioning'},
-          {v:'L', label:'Low',    desc:'Risk of diluting or conflicting with existing brand perceptions'}
-        ]
-      },
-      {
         q:'Does this fall within an existing Haleon category?',
         options:[
           {v:'H', label:'High',   desc:'Sits squarely within an existing Haleon category where we already operate at scale'},
@@ -3605,11 +3720,63 @@ const rtwDims = [
         ]
       },
       {
+        type:'multiSelectBrand',
+        q:'Which Haleon brand(s) have permission to play here, and how strong is the stretch?',
+        helper:'Select all brands that could credibly stretch into this opportunity. The overall score reflects the strongest fit selected — leave empty if no Haleon brand fits.',
+        brands:[
+          // Pain relief
+          {id:'panadol',   name:'Panadol',    cat:'Pain relief', fit:'H', desc:'Global #1 paracetamol brand — strong everyday wellness equity'},
+          {id:'advil',     name:'Advil',      cat:'Pain relief', fit:'H', desc:'Leading ibuprofen brand — fast effective pain relief equity'},
+          {id:'voltaren',  name:'Voltaren',   cat:'Pain relief', fit:'H', desc:'Topical pain expert — strong musculoskeletal equity'},
+          {id:'excedrin',  name:'Excedrin',   cat:'Pain relief', fit:'M', desc:'Headache and migraine specialist — narrower fit'},
+          // Respiratory & cold/flu
+          {id:'theraflu',  name:'Theraflu',    cat:'Respiratory', fit:'H', desc:'Cold and flu treatment equity — strong seasonal credibility'},
+          {id:'robitussin',name:'Robitussin',  cat:'Respiratory', fit:'H', desc:'Cough relief specialist — strong respiratory equity'},
+          {id:'otrivin',   name:'Otrivin',     cat:'Respiratory', fit:'M', desc:'Nasal congestion brand — fit depends on adjacency'},
+          // Digestive
+          {id:'tums',      name:'Tums',        cat:'Digestive',   fit:'H', desc:'Antacid leader — strong digestive comfort equity'},
+          {id:'eno',       name:'Eno',         cat:'Digestive',   fit:'M', desc:'Fast-acting antacid heritage — emerging-market strength'},
+          {id:'nexium24',  name:'Nexium 24HR', cat:'Digestive',   fit:'M', desc:'PPI heartburn brand — narrower clinical positioning'},
+          // Oral health
+          {id:'sensodyne', name:'Sensodyne',    cat:'Oral health', fit:'H', desc:'Sensitivity specialist — high consumer trust in dental science'},
+          {id:'parodontax',name:'Parodontax',   cat:'Oral health', fit:'M', desc:'Gum health specialist — credible stretch within oral category'},
+          {id:'aquafresh', name:'Aquafresh',    cat:'Oral health', fit:'M', desc:'Family oral care — broader but less specialist equity'},
+          {id:'polident',  name:'Polident',     cat:'Oral health', fit:'L', desc:'Denture care — narrow demographic, limited stretch'},
+          {id:'corsodyl',  name:'Corsodyl',     cat:'Oral health', fit:'M', desc:'Therapeutic gum care — credible for clinical-grade stretches'},
+          // VMS & wellness
+          {id:'centrum',   name:'Centrum',      cat:'VMS & wellness', fit:'H', desc:'Multivitamin leader — broad daily wellness equity'},
+          {id:'caltrate',  name:'Caltrate',     cat:'VMS & wellness', fit:'M', desc:'Bone health specialist — credible mineral stretch'},
+          {id:'emergenc',  name:'Emergen-C',    cat:'VMS & wellness', fit:'M', desc:'Immunity boost — narrower seasonal positioning'},
+          // Allergy & skin
+          {id:'flonase',   name:'Flonase',      cat:'Allergy & skin', fit:'M', desc:'Nasal allergy leader — narrower indication fit'},
+          {id:'abreva',    name:'Abreva',       cat:'Allergy & skin', fit:'L', desc:'Cold sore treatment — narrow indication-specific equity'},
+          // Other
+          {id:'preph',     name:'Preparation H', cat:'Other', fit:'L', desc:'Haemorrhoid treatment — very narrow indication fit'},
+          {id:'chapstick', name:'ChapStick',     cat:'Other', fit:'L', desc:'Lip care — limited stretch into health categories'},
+        ]
+      },
+      {
+        q:'Is the platform in line with our category and brand portfolio strategy?',
+        options:[
+          {v:'H', label:'High',   desc:'Directly aligned with our category and brand portfolio strategy — strengthens our strategic direction'},
+          {v:'M', label:'Medium', desc:'Partially aligned — fits some elements of our portfolio strategy but not a clear strategic priority'},
+          {v:'L', label:'Low',    desc:'Not aligned with our category or brand portfolio strategy — would pull us off strategic direction'}
+        ]
+      },
+      {
         q:'Do we have an existing consumer base, or must we build from scratch?',
         options:[
           {v:'H', label:'High',   desc:'Strong existing loyalty base — current users are a ready audience to activate'},
           {v:'M', label:'Medium', desc:'Some base — meaningful but with significant non-users to convert'},
           {v:'L', label:'Low',    desc:'Starting cold — fragmented category, must win new consumers entirely from scratch'}
+        ]
+      },
+      {
+        q:'What is the risk of cannibalising our existing portfolio?',
+        options:[
+          {v:'H', label:'High',   desc:'Low cannibalisation risk — primarily incremental sales from new consumers or occasions'},
+          {v:'M', label:'Medium', desc:'Moderate cannibalisation risk — some sales shift from existing SKUs but net portfolio growth expected'},
+          {v:'L', label:'Low',    desc:'High cannibalisation risk — meaningful sales likely shift from our existing portfolio rather than incremental'}
         ]
       }
     ]
@@ -3671,6 +3838,7 @@ function wsSelectPlatform(idx){
   toAnswers = {};
   toScores = {};
   toMatchups = [];
+  cjPairs = []; cjVotes = {}; cjIdx = 0;
   // Load platform-specific tech options and consumer needs
   techOptions = platformTechOptions[idx] || platformTechOptions[0];
   consumerNeeds = platformConsumerNeeds[idx] || platformConsumerNeeds[0];
@@ -3704,7 +3872,11 @@ function wsGoStep(n){
     const curIdx = order.indexOf(n);
     stepEl.classList.toggle('done', myIdx < curIdx);
   });
-  if(n===2)  buildWSNeedsPanel();
+  if(n===2){
+    buildWSNeedsPanel();
+    // Restore mode UI (default 'pairwise' on first visit)
+    wsSwitchMode(wsMode || 'pairwise');
+  }
   if(n===25){ loadNeedsFromStorage(); buildWSCalibration(); startVotePolling(); }
   if(n===3)  buildWSTechBank();
   if(n===4)  buildWSRTWPanels();
@@ -3919,6 +4091,248 @@ let wsNeedsResponses = [];   // all submitted {needId, label}
 let toMatchups = [];         // [{a, b}] — the pairs to compare
 let toAnswers  = {};         // {pairKey: winnerId}
 let toScores   = {};         // {needId: win count}
+
+// ────────────────────────────────────────────────────────────────────────────
+// CONJOINT MODE — tech-agnostic pairwise trade-off (alternative to ranking)
+// ────────────────────────────────────────────────────────────────────────────
+let wsMode = 'pairwise';            // 'pairwise' | 'conjoint'
+let cjPairs = [];                   // [{a:techId, b:techId, profileA, profileB}]
+let cjIdx = 0;
+let cjVotes = {};                   // {pairIdx: 'a'|'b'}
+const CJ_NEEDS_PER_CARD = 3;
+const CJ_PAIRS_PER_SESSION = 12;
+// Map matrix tag → numeric weight for math
+function cjMatrixVal(tag){
+  if(tag === 'yes')     return 1;
+  if(tag === 'partial') return 0.5;
+  if(tag === 'unclear') return 0.25;
+  return 0;  // 'no' or anything else
+}
+// Build a profile (subset of needs with their values) for a given tech,
+// always including ≥1 addressed need.
+function cjGenProfile(techId, seed){
+  const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+  // Only include needs that have a defined value for this tech
+  const scored = allNeeds.filter(n => n.techs && n.techs[techId] !== undefined)
+    .map(n => ({ ...n, val: cjMatrixVal(n.techs[techId]) }));
+  if(!scored.length) return [];
+  const addresses    = scored.filter(n => n.val >= 0.5);
+  const doesntAddress= scored.filter(n => n.val < 0.5);
+  function shuffle(arr, s){
+    const out = arr.slice();
+    for(let i=out.length-1; i>0; i--){
+      const r = Math.abs(Math.sin(s + i*13.7)) % 1;
+      const k = Math.floor(r*(i+1));
+      [out[i], out[k]] = [out[k], out[i]];
+    }
+    return out;
+  }
+  const sA = shuffle(addresses, seed);
+  const sD = shuffle(doesntAddress, seed + 99);
+  const numAddressed = Math.min(addresses.length, Math.max(1, CJ_NEEDS_PER_CARD - 1));
+  const numOther     = CJ_NEEDS_PER_CARD - numAddressed;
+  let picked = [...sA.slice(0, numAddressed), ...sD.slice(0, numOther)];
+  // Top up from whichever pool still has items
+  while(picked.length < CJ_NEEDS_PER_CARD){
+    const next = sA.find(n=>!picked.includes(n)) || sD.find(n=>!picked.includes(n));
+    if(!next) break; picked.push(next);
+  }
+  return shuffle(picked, seed + 17).slice(0, CJ_NEEDS_PER_CARD);
+}
+
+function cjBuildPairs(){
+  const techs = (techOptions || []).slice();
+  if(techs.length < 2){ cjPairs = []; return; }
+  // Round-robin
+  const tps = [];
+  for(let i=0; i<techs.length; i++){
+    for(let j=i+1; j<techs.length; j++){
+      tps.push({a:techs[i].id, b:techs[j].id});
+      tps.push({a:techs[j].id, b:techs[i].id});
+    }
+  }
+  // Shuffle deterministically (same per workshop session to allow Previous nav)
+  for(let i=tps.length-1; i>0; i--){
+    const r = Math.abs(Math.sin(i*37.2)) % 1;
+    const k = Math.floor(r*(i+1));
+    [tps[i], tps[k]] = [tps[k], tps[i]];
+  }
+  cjPairs = tps.slice(0, CJ_PAIRS_PER_SESSION).map((p,i) => ({
+    a: p.a, b: p.b,
+    profileA: cjGenProfile(p.a, i*31+7),
+    profileB: cjGenProfile(p.b, i*31+19)
+  }));
+}
+
+function cjMark(v){
+  if(v >= 1)   return {cls:'cj-yes',     char:'✓'};
+  if(v >= 0.5) return {cls:'cj-partial', char:'›'};
+  if(v >= 0.25)return {cls:'cj-unclear', char:'?'};
+  return                {cls:'cj-no',      char:'✗'};
+}
+
+function cjRenderCard(profile, side, label){
+  const selected = cjVotes[cjIdx] === side ? 'sel' : '';
+  return `<button class="cj-card ${selected}" onclick="cjVote('${side}')">
+    <div class="cj-card-title">Product ${label}</div>
+    <ul class="cj-needs-list">
+      ${profile.map(n=>{
+        const mk = cjMark(n.val);
+        const faded = n.val < 0.5 ? 'faded' : '';
+        return `<li class="cj-need-row"><span class="cj-mark ${mk.cls}">${mk.char}</span><span class="cj-need-text ${faded}">${n.label}</span></li>`;
+      }).join('')}
+    </ul>
+  </button>`;
+}
+
+function cjRender(){
+  if(!cjPairs.length) cjBuildPairs();
+  const area = document.getElementById('cj-area');
+  const fill = document.getElementById('cj-fill');
+  const cnt  = document.getElementById('cj-count');
+  if(!area || !fill || !cnt) return;  // panel not visible
+  const total = cjPairs.length;
+  const done  = Object.keys(cjVotes).length;
+  fill.style.width = total ? ((done/total)*100)+'%' : '0%';
+  cnt.textContent = done+' / '+total;
+  if(cjIdx >= total){
+    area.innerHTML = '<div style="font-size:11px;color:var(--muted);font-style:italic;text-align:center;padding:1.5rem 0">All trade-offs complete — see results on the right. Click Previous to revise.</div>';
+    const np = document.getElementById('cj-prev-btn'); if(np) np.disabled = false;
+    const nn = document.getElementById('cj-next-btn'); if(nn) nn.disabled = true;
+  } else {
+    const p = cjPairs[cjIdx];
+    area.innerHTML = `
+      <div style="font-size:10.5px;color:var(--muted);margin-bottom:8px">Trade-off ${cjIdx+1} of ${total}</div>
+      <div class="cj-pair">
+        ${cjRenderCard(p.profileA, 'a', 'A')}
+        <div class="cj-vs">vs</div>
+        ${cjRenderCard(p.profileB, 'b', 'B')}
+      </div>`;
+    const np = document.getElementById('cj-prev-btn'); if(np) np.disabled = (cjIdx===0);
+    const nn = document.getElementById('cj-next-btn'); if(nn) nn.disabled = !cjVotes[cjIdx];
+  }
+  cjRenderResults();
+  cjSyncToWsNeedsOrder();
+}
+
+function cjVote(side){
+  cjVotes[cjIdx] = side;
+  cjRender();
+  setTimeout(()=>{
+    if(cjIdx < cjPairs.length-1){ cjIdx++; cjRender(); }
+    else { cjIdx = cjPairs.length; cjRender(); }
+  }, 240);
+}
+function cjPrev(){ if(cjIdx>0){ cjIdx--; cjRender(); } }
+function cjNext(){ if(cjIdx<cjPairs.length){ cjIdx++; cjRender(); } }
+
+function cjComputeImportance(){
+  const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+  const net = {}; allNeeds.forEach(n=> net[n.id]=0);
+  cjPairs.forEach((p,i)=>{
+    const choice = cjVotes[i]; if(!choice) return;
+    const win = choice==='a' ? p.profileA : p.profileB;
+    const los = choice==='a' ? p.profileB : p.profileA;
+    const wMap = {}; win.forEach(n=> wMap[n.id]=n.val);
+    const lMap = {}; los.forEach(n=> lMap[n.id]=n.val);
+    allNeeds.forEach(n=>{
+      const wv = wMap[n.id], lv = lMap[n.id];
+      if(wv === undefined && lv === undefined) return;
+      const w = wv !== undefined ? wv : 0.5;
+      const l = lv !== undefined ? lv : 0.5;
+      net[n.id] += (w - l);
+    });
+  });
+  const posSum = allNeeds.reduce((s,n)=> s + Math.max(0, net[n.id]), 0) || 1;
+  const imp = {}; allNeeds.forEach(n=> imp[n.id] = Math.max(0, net[n.id]) / posSum * 100);
+  return imp;
+}
+
+function cjRenderResults(){
+  const needEl = document.getElementById('cj-need-results');
+  const techWrap = document.getElementById('cj-tech-results');
+  const techList = document.getElementById('cj-tech-list');
+  if(!needEl) return;
+  const done = Object.keys(cjVotes).length;
+  if(done < 3){
+    needEl.innerHTML = '<span style="font-style:italic;color:var(--muted)">Complete at least 3 trade-offs to see derived weights…</span>';
+    if(techWrap) techWrap.style.display = 'none';
+    return;
+  }
+  const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+  const imp = cjComputeImportance();
+  const ranked = allNeeds.slice().sort((a,b)=> imp[b.id]-imp[a.id]).filter(n=> imp[n.id]>0.5).slice(0,6);
+  const maxImp = Math.max(...ranked.map(n=> imp[n.id]), 1);
+  if(!ranked.length){
+    needEl.innerHTML = '<span style="font-style:italic;color:var(--muted)">No clear pattern yet — keep going.</span>';
+    if(techWrap) techWrap.style.display = 'none';
+    return;
+  }
+  needEl.innerHTML = ranked.map(n => `
+    <div class="cj-result-bar-row">
+      <div>
+        <div class="cj-result-bar-label">${n.label}</div>
+        <div class="cj-result-bar-track"><div class="cj-result-bar-fill" style="width:${(imp[n.id]/maxImp)*100}%"></div></div>
+      </div>
+      <div class="cj-result-bar-val">${Math.round(imp[n.id])}%</div>
+    </div>`).join('');
+
+  // Tech ranking — sum (tech val × importance)
+  const techs = techOptions || [];
+  const util = {};
+  techs.forEach(t=>{
+    let u = 0;
+    allNeeds.forEach(n=>{
+      if(n.techs && n.techs[t.id]!==undefined) u += cjMatrixVal(n.techs[t.id]) * imp[n.id];
+    });
+    util[t.id] = u;
+  });
+  const expSum = techs.reduce((s,t)=> s + Math.exp(util[t.id]/12), 0) || 1;
+  const share = {}; techs.forEach(t=> share[t.id] = Math.exp(util[t.id]/12)/expSum * 100);
+  const techRanked = techs.slice().sort((a,b)=> share[b.id]-share[a.id]);
+  if(techList){
+    techList.innerHTML = techRanked.map((t,i) => `
+      <div class="cj-tech-rec-row">
+        <span class="cj-tech-rec-rank">${i+1}.</span>
+        <span class="cj-tech-rec-name">${t.short || t.label}</span>
+        <span class="cj-tech-rec-pct">${Math.round(share[t.id])}%</span>
+      </div>`).join('');
+  }
+  if(techWrap) techWrap.style.display = '';
+}
+
+// Push conjoint output into wsNeedsOrder + toScores so downstream submit flow works
+function cjSyncToWsNeedsOrder(){
+  if(wsMode !== 'conjoint') return;
+  const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
+  const done = Object.keys(cjVotes).length;
+  if(done < 3) return;
+  const imp = cjComputeImportance();
+  // Convert importance to a fake "wins" count so existing logic (which uses toScores) still works
+  toScores = {}; allNeeds.forEach(n=>{ toScores[n.id] = Math.round(imp[n.id]); });
+  wsNeedsOrder = allNeeds.slice().sort((a,b)=> imp[b.id]-imp[a.id]).map(n=>n.id);
+  const next2 = document.getElementById('ws-next-2');
+  if(next2) next2.disabled = (wsNeedsOrder.length===0) || (imp[wsNeedsOrder[0]] || 0) < 1;
+}
+
+function wsSwitchMode(mode){
+  wsMode = mode;
+  const pBtn = document.getElementById('ws-mode-pairwise');
+  const cBtn = document.getElementById('ws-mode-conjoint');
+  const pPanel = document.getElementById('ws-mode-panel-pairwise');
+  const cPanel = document.getElementById('ws-mode-panel-conjoint');
+  if(pBtn) pBtn.classList.toggle('active', mode==='pairwise');
+  if(cBtn) cBtn.classList.toggle('active', mode==='conjoint');
+  if(pPanel) pPanel.style.display = (mode==='pairwise') ? '' : 'none';
+  if(cPanel) cPanel.style.display = (mode==='conjoint') ? '' : 'none';
+  if(mode === 'conjoint'){
+    if(!cjPairs.length){ cjBuildPairs(); cjIdx = 0; cjVotes = {}; }
+    cjRender();
+  } else {
+    // Restore pairwise scoring as source of truth
+    buildWSNeedsPanel();
+  }
+}
 
 function buildWSNeedsPanel(){
   const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
@@ -4486,11 +4900,14 @@ function buildWSRTWPanels(){
             <div class="rtw-q-text">${dim.overallQuestion}</div>
             <div class="rtw-btn-row">
               ${overallBtns}
-              <button class="rtw-btn u" data-tooltip="Not sure — insufficient evidence to score yet" title="Not sure — insufficient evidence to score yet" onclick="wsScore(${id},'${dim.id}',0,'?',this)">Not sure</button>
+              <button class="rtw-btn u" data-tooltip="Not sure — insufficient evidence to score yet" title="Not sure — insufficient evidence to score yet" onclick="wsScore(${id},'${dim.id}',0,'?',this)">?</button>
             </div>
           </div>
           <div class="rtw-subqs">
           ${dim.questions.map((q,qi)=>{
+            if(q.type === 'multiSelectBrand'){
+              return renderBrandMultiSelect(id, dim.id, qi+1, q);
+            }
             const optBtns = q.options.map(opt =>
               `<button class="rtw-btn rtw-btn-opt ${opt.v.toLowerCase()}" data-tooltip="${opt.desc}" title="${opt.label} — ${opt.desc}" onclick="wsScore(${id},'${dim.id}',${qi+1},'${opt.v}',this)">${opt.label}</button>`
             ).join('');
@@ -4527,6 +4944,123 @@ function wsShowTechPanel(id){
   document.getElementById('rtw-panel-'+id).classList.add('active');
 }
 
+// ── Brand multi-select picker ─────────────────────────────────────────────────
+function renderBrandMultiSelect(techId, dimId, qIdx, q){
+  const stored = wsScores[techId] && wsScores[techId][dimId] && wsScores[techId][dimId][qIdx];
+  const selectedIds = (typeof stored === 'object' && stored && stored.brands) ? stored.brands : [];
+  // Build dropdown options grouped by category
+  const cats = {};
+  q.brands.forEach(b=>{ if(!cats[b.cat]) cats[b.cat]=[]; cats[b.cat].push(b); });
+  const optionsHtml = Object.keys(cats).map(cat=>{
+    return `<div class="rtw-brand-group"><div class="rtw-brand-group-hdr">${cat}</div>${
+      cats[cat].map(b=>{
+        const isSel = selectedIds.includes(b.id);
+        return `<label class="rtw-brand-opt ${isSel?'sel':''}" title="${b.desc}">
+          <input type="checkbox" ${isSel?'checked':''} onchange="wsBrandToggle(${techId},'${dimId}',${qIdx},'${b.id}',this.checked)"/>
+          <span class="rtw-brand-name">${b.name}</span>
+        </label>`;
+      }).join('')
+    }</div>`;
+  }).join('');
+  // Selected summary chips
+  const chipHtml = selectedIds.length ? selectedIds.map(bid=>{
+    const b = q.brands.find(x=>x.id===bid); if(!b) return '';
+    return `<span class="rtw-brand-chip" title="${b.desc}">${b.name}<span class="rtw-brand-chip-x" onclick="event.stopPropagation();wsBrandToggle(${techId},'${dimId}',${qIdx},'${b.id}',false)">×</span></span>`;
+  }).join('') : '<span class="rtw-brand-empty">Select brand(s)…</span>';
+  // Computed score
+  const score = brandMultiSelectScore(selectedIds, q.brands);
+  const scoreLabel = score==='H'?'H':score==='M'?'M':score==='L'?'L':'—';
+  const scoreCls = score==='H'?'fit-h':score==='M'?'fit-m':score==='L'?'fit-l':'';
+  return `
+  <div class="rtw-q rtw-q-brand">
+    <div class="rtw-q-text">${q.q}</div>
+    ${q.helper?`<div class="rtw-q-helper">${q.helper}</div>`:''}
+    <div class="rtw-brand-row">
+      <div class="rtw-brand-select" id="brand-select-${techId}-${dimId}-${qIdx}">
+        <div class="rtw-brand-display" onclick="wsBrandToggleDropdown('${techId}-${dimId}-${qIdx}')">
+          <div class="rtw-brand-chips">${chipHtml}</div>
+          <span class="rtw-brand-caret">▾</span>
+        </div>
+        <div class="rtw-brand-dropdown" id="brand-dropdown-${techId}-${dimId}-${qIdx}">${optionsHtml}</div>
+      </div>
+      <div class="rtw-brand-score-cell ${scoreCls}">${scoreLabel}</div>
+    </div>
+  </div>`;
+}
+
+function brandMultiSelectScore(selectedIds, brands){
+  if(!selectedIds || !selectedIds.length) return '?';
+  // Score = strongest fit among the selected brands
+  let best = 'L';
+  selectedIds.forEach(id=>{
+    const b = brands.find(x=>x.id===id);
+    if(!b) return;
+    if(b.fit==='H') best='H';
+    else if(b.fit==='M' && best!=='H') best='M';
+  });
+  return best;
+}
+
+function wsBrandToggle(techId, dimId, qIdx, brandId, isChecked){
+  // Find the question definition
+  const dim = rtwDims.find(d=>d.id===dimId);
+  const q   = dim && dim.questions[qIdx-1];
+  if(!q) return;
+  // Get / init the stored selection
+  if(!wsScores[techId]) wsScores[techId] = {tech:[null],comm:[null],brand:[null]};
+  if(!wsScores[techId][dimId]) wsScores[techId][dimId] = [];
+  let cur = wsScores[techId][dimId][qIdx];
+  if(typeof cur !== 'object' || !cur || !cur.brands) cur = {brands:[]};
+  const idx = cur.brands.indexOf(brandId);
+  if(isChecked){ if(idx<0) cur.brands.push(brandId); }
+  else { if(idx>=0) cur.brands.splice(idx,1); }
+  // Recompute the H/M/L score and store both
+  cur.score = brandMultiSelectScore(cur.brands, q.brands);
+  wsScores[techId][dimId][qIdx] = cur;
+  // Re-render this single question (simplest = re-render whole panel)
+  const panel = document.getElementById('rtw-panel-'+techId);
+  const wasOpen = document.getElementById(`brand-dropdown-${techId}-${dimId}-${qIdx}`);
+  const isOpen = wasOpen && wasOpen.classList.contains('open');
+  if(panel){
+    // Update the specific question DOM in place via re-render & restore open state
+    rerenderBrandQuestion(techId, dimId, qIdx);
+    if(isOpen){
+      const dd = document.getElementById(`brand-dropdown-${techId}-${dimId}-${qIdx}`);
+      if(dd) dd.classList.add('open');
+    }
+  }
+}
+
+function rerenderBrandQuestion(techId, dimId, qIdx){
+  const dim = rtwDims.find(d=>d.id===dimId);
+  const q   = dim && dim.questions[qIdx-1];
+  if(!q) return;
+  const newHTML = renderBrandMultiSelect(techId, dimId, qIdx, q);
+  // Find the old rtw-q-brand wrapper by walking up from the inner select element
+  const inner = document.getElementById(`brand-select-${techId}-${dimId}-${qIdx}`);
+  const oldWrapper = inner ? inner.closest('.rtw-q-brand') : null;
+  if(oldWrapper && oldWrapper.parentElement){
+    const tmp = document.createElement('div');
+    tmp.innerHTML = newHTML.trim();
+    const newNode = tmp.firstElementChild;
+    oldWrapper.parentElement.replaceChild(newNode, oldWrapper);
+  }
+}
+
+function wsBrandToggleDropdown(key){
+  const dd = document.getElementById('brand-dropdown-'+key);
+  if(!dd) return;
+  // Close any others
+  document.querySelectorAll('.rtw-brand-dropdown.open').forEach(el=>{ if(el!==dd) el.classList.remove('open'); });
+  dd.classList.toggle('open');
+}
+// Click outside to close
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.rtw-brand-select')){
+    document.querySelectorAll('.rtw-brand-dropdown.open').forEach(el=>el.classList.remove('open'));
+  }
+});
+
 function wsScore(techId, dim, qIdx, val, btn){
   wsScores[techId][dim][qIdx] = val;
   // Deselect siblings
@@ -4538,11 +5072,21 @@ function wsScore(techId, dim, qIdx, val, btn){
 }
 
 function wsGetOverall(scores){
-  // If the new overall RTW question has been answered, use it as the dimension score.
-  if(scores && scores.length && scores[0] !== null && scores[0] !== undefined) return scores[0];
+  // Helper to extract H/M/L/?/null from a score slot (handles brand-multi-select objects)
+  const extract = (v) => {
+    if(v===null||v===undefined) return null;
+    if(typeof v === 'object'){
+      return (v.brands && v.brands.length) ? (v.score || null) : null;
+    }
+    return v;
+  };
+  const first = scores && scores.length ? extract(scores[0]) : null;
+  // If the overall RTW question has been answered, use it as the dimension score.
+  if(first !== null && first !== undefined) return first;
   // Otherwise fall back to the sub-questions only.
   let h=0,l=0,valid=0;
-  for(const v of (scores || []).slice(1)){
+  for(const raw of (scores || []).slice(1)){
+    const v = extract(raw);
     if(v===null||v==='?') continue;
     valid++;
     if(v==='H') h++; else if(v==='L') l++;
