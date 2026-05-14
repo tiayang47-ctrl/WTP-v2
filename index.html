@@ -618,6 +618,9 @@ document.body.style.overflow = 'hidden';
 .cj-nav-btn{font-size:11px;padding:7px 14px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer;font-family:inherit;transition:all .12s}
 .cj-nav-btn:hover:not(:disabled){border-color:#999;background:#fafaf7}
 .cj-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.cj-unsure-btn{font-size:11px;padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .12s;font-weight:500}
+.cj-unsure-btn:hover{border-color:#999;background:#fafaf7;color:var(--text)}
+.cj-unsure-btn.sel{background:#fef6e4;border-color:#E8A020;color:#7a4d00;font-weight:600}
 .cj-result-bar-row{display:grid;grid-template-columns:1fr 30px;align-items:center;gap:8px;margin-bottom:6px;font-size:10.5px}
 .cj-result-bar-label{color:var(--text);line-height:1.3;display:flex;align-items:center;gap:6px;font-weight:500}
 .cj-result-bar-track{height:8px;background:#f0f0ee;border-radius:2px;overflow:hidden;margin-top:3px}
@@ -894,33 +897,30 @@ document.body.style.overflow = 'hidden';
     <!-- ── STEP 2: Consumer Needs Trade-offs ── -->
     <div id="ws-panel-2" style="display:none">
       <div style="font-size:18px;font-weight:700;margin-bottom:4px">Consumer Needs — What matters most?</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">For each pair below, choose which consumer need should take priority. There are no right answers — this is your group's view. Your choices will surface the 1–2 technologies best matched to what your consumers care about most.</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:18px">For each pair below, pick which anonymous product profile consumers would prefer. Your choices reveal which consumer needs are driving preference — and surface the technology platform best matched to those needs.</div>
 
-      <!-- Mode toggle -->
-      <div style="display:inline-flex;background:#f7f7f5;border:1px solid var(--border);border-radius:8px;padding:3px;margin-bottom:18px;gap:2px">
-        <button id="ws-mode-pairwise" class="ws-mode-btn active" onclick="wsSwitchMode('pairwise')">Pairwise ranking</button>
-        <button id="ws-mode-conjoint" class="ws-mode-btn"        onclick="wsSwitchMode('conjoint')">Conjoint trade-off</button>
-      </div>
-      <div style="font-size:10.5px;color:var(--muted);margin-bottom:18px;line-height:1.5">
-        <strong style="color:var(--text)">Pairwise ranking</strong> — pick which consumer need matters more, one need at a time. Fast and simple, ranks needs in isolation.<br>
-        <strong style="color:var(--text)">Conjoint trade-off</strong> — pick between anonymous product profiles described by 3 needs each. Captures real trade-offs and infers technology preference.
+      <div class="cj-legend">
+        <div class="cj-legend-item"><span class="cj-mark cj-yes">✓</span> Addresses</div>
+        <div class="cj-legend-item"><span class="cj-mark cj-partial">›</span> Partial</div>
+        <div class="cj-legend-item"><span class="cj-mark cj-unclear">?</span> Unclear</div>
+        <div class="cj-legend-item"><span class="cj-mark cj-no">✗</span> Doesn't</div>
       </div>
 
-      <!-- ── Pairwise mode ── -->
-      <div id="ws-mode-panel-pairwise">
       <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start">
         <!-- Left: trade-off cards -->
         <div>
-          <div id="tradeoff-progress" style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-            <div style="flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden">
-              <div id="tradeoff-bar" style="height:100%;background:var(--h-green);border-radius:3px;transition:width .3s;width:0%"></div>
-            </div>
-            <span id="tradeoff-count" style="font-size:10px;color:var(--muted);white-space:nowrap">0 / 0</span>
+          <div class="cj-progress">
+            <div class="cj-bar"><div class="cj-fill" id="cj-fill"></div></div>
+            <div class="cj-count" id="cj-count">0 / 12</div>
           </div>
-          <div id="tradeoff-area"></div>
+          <div id="cj-area"></div>
+          <div class="cj-controls">
+            <button class="cj-nav-btn" onclick="cjPrev()" id="cj-prev-btn">← Previous</button>
+            <button class="cj-nav-btn" onclick="cjNext()" id="cj-next-btn">Next →</button>
+          </div>
 
           <!-- Add custom need -->
-          <div style="background:#f7f7f5;border:1px dashed #ccc;border-radius:8px;padding:12px;margin-top:14px">
+          <div style="background:#f7f7f5;border:1px dashed #ccc;border-radius:8px;padding:12px;margin-top:18px">
             <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">+ Add your own consumer need:</div>
             <div style="display:flex;gap:8px">
               <input id="custom-need-input" type="text" placeholder="e.g. Affordable daily format accessible in pharmacy..."
@@ -928,56 +928,21 @@ document.body.style.overflow = 'hidden';
                 onkeydown="if(event.key==='Enter') wsAddCustomNeed()"/>
               <button onclick="wsAddCustomNeed()" style="background:var(--h-green);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">Add</button>
             </div>
+            <div style="font-size:10px;color:var(--muted);margin-top:6px;font-style:italic">Custom needs are added to the pool of profiles after refresh.</div>
           </div>
         </div>
 
-        <!-- Right: live results panel -->
+        <!-- Right: live results -->
         <div style="position:sticky;top:16px">
           <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
-            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">Priority emerging from your choices:</div>
-            <div id="tradeoff-summary" style="font-size:11px;color:var(--muted);font-style:italic">Complete some trade-offs to see results…</div>
+            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">Top consumer needs emerging from your choices:</div>
+            <div id="cj-need-results" style="font-size:11px;color:var(--muted);font-style:italic">Complete at least 3 trade-offs to see results…</div>
           </div>
-          <div id="tradeoff-tech-rec" style="display:none;background:#eaf3de;border:1px solid #c5e0a0;border-radius:8px;padding:14px">
-            <div style="font-size:11px;font-weight:700;color:#1a3a08;margin-bottom:8px">🎯 Recommended technologies:</div>
-            <div id="tradeoff-tech-list" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div id="cj-tech-results" style="display:none;background:#eaf3de;border:1px solid #c5e0a0;border-radius:8px;padding:14px">
+            <div style="font-size:11px;font-weight:700;color:#1a3a08;margin-bottom:8px">🎯 Best-matched technology platforms:</div>
+            <div id="cj-tech-list" style="display:flex;flex-direction:column;gap:6px"></div>
           </div>
           <div id="needs-agg-preview" style="display:none"></div>
-        </div>
-      </div>
-      </div>
-
-      <!-- ── Conjoint mode ── -->
-      <div id="ws-mode-panel-conjoint" style="display:none">
-        <div class="cj-legend">
-          <div class="cj-legend-item"><span class="cj-mark cj-yes">✓</span> Addresses</div>
-          <div class="cj-legend-item"><span class="cj-mark cj-partial">›</span> Partial</div>
-          <div class="cj-legend-item"><span class="cj-mark cj-unclear">?</span> Unclear</div>
-          <div class="cj-legend-item"><span class="cj-mark cj-no">✗</span> Doesn't</div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start">
-          <!-- Left: conjoint cards -->
-          <div>
-            <div class="cj-progress">
-              <div class="cj-bar"><div class="cj-fill" id="cj-fill"></div></div>
-              <div class="cj-count" id="cj-count">0 / 12</div>
-            </div>
-            <div id="cj-area"></div>
-            <div class="cj-controls">
-              <button class="cj-nav-btn" onclick="cjPrev()" id="cj-prev-btn">← Previous</button>
-              <button class="cj-nav-btn" onclick="cjNext()" id="cj-next-btn">Next →</button>
-            </div>
-          </div>
-          <!-- Right: live results -->
-          <div style="position:sticky;top:16px">
-            <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
-              <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px">Derived need weights:</div>
-              <div id="cj-need-results" style="font-size:11px;color:var(--muted);font-style:italic">Complete at least 3 trade-offs to see results…</div>
-            </div>
-            <div id="cj-tech-results" style="display:none;background:#eaf3de;border:1px solid #c5e0a0;border-radius:8px;padding:14px">
-              <div style="font-size:11px;font-weight:700;color:#1a3a08;margin-bottom:8px">🎯 Predicted technology preference:</div>
-              <div id="cj-tech-list" style="display:flex;flex-direction:column;gap:6px"></div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -3873,9 +3838,7 @@ function wsGoStep(n){
     stepEl.classList.toggle('done', myIdx < curIdx);
   });
   if(n===2){
-    buildWSNeedsPanel();
-    // Restore mode UI (default 'pairwise' on first visit)
-    wsSwitchMode(wsMode || 'pairwise');
+    wsActivateNeedsPanel();
   }
   if(n===25){ loadNeedsFromStorage(); buildWSCalibration(); startVotePolling(); }
   if(n===3)  buildWSTechBank();
@@ -3886,25 +3849,89 @@ function wsGoStep(n){
 }
 
 // ── ACTION PLAN DATA ──
+// ── ACTION PLAN — Discussion prompts (themed, score-calibrated) ──
+// 4 universal themes per cell: Stakeholders / Partners / Risks / Timeline.
+// Framing is EXPLORATORY — questions probe what we'd need to learn / test / scope next,
+// rather than what to deploy. Score nudges the focus but doesn't presume a go decision.
 const actionPlanData = {
   tech: {
-    H: { label:'Proceed',        actions:['Map existing Haleon patents & R&D capabilities','Assign internal R&D lead','Define clinical evidence needed for claims'] },
-    M: { label:'Partner / license', actions:['Identify 3–5 relevant universities / labs','Define partnership model (co-dev, sponsored research, in-licensing)','Initiate outreach'] },
-    L: { label:'Acquire',        actions:['Build M&A target list based on capability fit','Prioritize by strategic fit & feasibility','Align with BD&L; draft screening memos for top 3'] },
-    '?':{ label:'For discussion', actions:['For discussion; what is the "unknown" and how do we close the gap?'] },
+    H: { label:'Proceed', prompts:[
+      {theme:'Stakeholders', q:'Who inside Haleon (R&D, regulatory, brand) should we talk to first to test the hypothesis?'},
+      {theme:'Partners',     q:'Which existing relationships could give us early signal — or who else in the field is worth scoping?'},
+      {theme:'Risks',        q:'What assumption are we most reliant on, and what would make us question it?'},
+      {theme:'Timeline',     q:'What would the first 3–6 months of exploration look like?'}
+    ]},
+    M: { label:'Partner / license', prompts:[
+      {theme:'Stakeholders', q:'Who internally could help us map the capability gap more precisely?'},
+      {theme:'Partners',     q:'Are there partners (academic, biotech, licensors) we should scout to understand what\'s really out there?'},
+      {theme:'Risks',        q:'What would tell us this gap is bigger or smaller than we think today?'},
+      {theme:'Timeline',     q:'What\'s a sensible window to explore options before committing to a path?'}
+    ]},
+    L: { label:'Acquire / long-term build', prompts:[
+      {theme:'Stakeholders', q:'Who could help us understand the realistic feasibility — internal experts or external advisors?'},
+      {theme:'Partners',     q:'Which players in the space are worth a deeper look (capability, IP, fit)?'},
+      {theme:'Risks',        q:'What would make this a real bet vs. an academic curiosity?'},
+      {theme:'Timeline',     q:'What needs to happen in 6–12 months for us to revisit this with more conviction?'}
+    ]},
+    '?': { label:'For discussion', prompts:[
+      {theme:'Stakeholders', q:'Who has the most informed view on this — and how do we get them into the conversation?'},
+      {theme:'Partners',     q:'Whose expertise (inside or outside Haleon) could close the gap fastest?'},
+      {theme:'Risks',        q:'What\'s the biggest unknown, and what\'s the cheapest way to learn about it?'},
+      {theme:'Timeline',     q:'When do we want to come back to this with a clearer answer?'}
+    ]}
   },
   brand: {
-    H: { label:'Proceed',        actions:['Confirm best Haleon brand fit for platform','Align claims architecture with regulatory','Coordinate with brand team'] },
-    M: { label:'Extend brand',   actions:['Run consumer research on brand permission','Define sub-brand / endorsed architecture','Build option space and identify decision-makers'] },
-    L: { label:'Acquire or build brand', actions:['Build an acquisition longlist of DTC or OTC brands with existing consumer equity','Define new brand incubation brief (naming, positioning, investment)'] },
-    '?':{ label:'For discussion', actions:['For discussion; what is the "unknown" and how do we close the gap?'] },
+    H: { label:'Proceed', prompts:[
+      {theme:'Stakeholders', q:'Which brand team(s) should we engage to test fit and willingness to play?'},
+      {theme:'Partners',     q:'Are there internal brand collaborators or consumer-insight teams to involve early?'},
+      {theme:'Risks',        q:'What would tell us the brand permission is weaker than we assume?'},
+      {theme:'Timeline',     q:'What initial brand-fit exploration would we want in the next quarter?'}
+    ]},
+    M: { label:'Extend brand', prompts:[
+      {theme:'Stakeholders', q:'Who inside marketing / brand strategy should help us shape the question?'},
+      {theme:'Partners',     q:'Which consumer-research partners or agencies could help us scope brand permission?'},
+      {theme:'Risks',        q:'What signal would tell us the stretch is too far — or that we should rethink the brand approach entirely?'},
+      {theme:'Timeline',     q:'How much exploration time do we need before we can frame a brand recommendation?'}
+    ]},
+    L: { label:'Acquire or build brand', prompts:[
+      {theme:'Stakeholders', q:'Who could help us assess the build-vs-acquire question honestly?'},
+      {theme:'Partners',     q:'Which DTC, OTC or adjacent brand players are interesting to study — even if not to acquire?'},
+      {theme:'Risks',        q:'What would make us walk away from this category entirely?'},
+      {theme:'Timeline',     q:'What\'s a realistic period to develop a point of view on the brand strategy?'}
+    ]},
+    '?': { label:'For discussion', prompts:[
+      {theme:'Stakeholders', q:'Whose perspective on brand permission would most change our view?'},
+      {theme:'Partners',     q:'What consumer or category research would help us decide?'},
+      {theme:'Risks',        q:'What\'s the cost of guessing wrong on brand fit at this stage?'},
+      {theme:'Timeline',     q:'What\'s a reasonable point to revisit this with more clarity?'}
+    ]}
   },
   comm: {
-    H: { label:'Proceed',        actions:['Define priority market entry (e.g. US → UK/CN)','Build business case & set targets','Align with commercial team in prioritized regions on GTM'] },
-    M: { label:'Partner / JDA',  actions:['Identify 2–3 commercial / distribution partners present in priority markets','Define Haleon vs. partner roles','Identify potential pilot with clear go/no-go criteria at 12 months'] },
-    L: { label:'M&A / JV',       actions:['Identify 2–3 JV partners with market presence','Conduct win/loss analysis vs competitors','Define JV structure, value split, and terms'] },
-    '?':{ label:'For discussion', actions:['For discussion; what is the "unknown" and how do we close the gap?'] },
-  },
+    H: { label:'Proceed', prompts:[
+      {theme:'Stakeholders', q:'Which commercial / market teams should we engage to test the opportunity?'},
+      {theme:'Partners',     q:'Are there channel partners or distributors worth early conversations with?'},
+      {theme:'Risks',        q:'What competitor or market move would meaningfully change our view?'},
+      {theme:'Timeline',     q:'What does a credible exploration phase look like — markets, evidence, milestones?'}
+    ]},
+    M: { label:'Partner / JDA', prompts:[
+      {theme:'Stakeholders', q:'Who inside commercial / strategy could help map the entry options?'},
+      {theme:'Partners',     q:'Which partners (channel, distribution, joint dev) would be worth scoping?'},
+      {theme:'Risks',        q:'What might make a follower position no longer viable?'},
+      {theme:'Timeline',     q:'What\'s a realistic pilot or learning experiment we could imagine over 12 months?'}
+    ]},
+    L: { label:'M&A / JV', prompts:[
+      {theme:'Stakeholders', q:'Who could help size whether this is worth pursuing at all?'},
+      {theme:'Partners',     q:'Which players in the market are interesting to learn from (whether or not we ever partner)?'},
+      {theme:'Risks',        q:'What would shift this from a long-shot to a serious bet?'},
+      {theme:'Timeline',     q:'When should we revisit with more market evidence?'}
+    ]},
+    '?': { label:'For discussion', prompts:[
+      {theme:'Stakeholders', q:'Whose market view do we trust most — and how do we get it into the conversation?'},
+      {theme:'Partners',     q:'What external sources or experts could give us a more grounded read?'},
+      {theme:'Risks',        q:'What\'s the riskiest assumption embedded in our current view?'},
+      {theme:'Timeline',     q:'What evidence over the next 3–6 months would shift our confidence?'}
+    ]}
+  }
 };
 
 // Per-tech score overrides for action plan
@@ -3937,29 +3964,26 @@ function apSeedActions(techId, dim){
   const dimId = ['tech','brand','comm'].find(d=>d===dim)||dim;
   const plan = (actionPlanData[dimId]&&actionPlanData[dimId][cur]) || actionPlanData[dimId]['?'];
   const existing = apActions[key] || [];
-  // Keep custom actions; replace preset ones
+  // Keep custom prompts; replace preset ones (preserve action/owner/deadline if same q reappears)
   const custom = existing.filter(a=>a.isCustom);
-  apActions[key] = plan.actions.map(text=>{
-    const prev = existing.find(a=>a.text===text&&!a.isCustom);
-    return {text, selected: prev?prev.selected:false, owner:prev?prev.owner:'', deadline:prev?prev.deadline:'', isCustom:false};
+  apActions[key] = plan.prompts.map(p=>{
+    const prev = existing.find(a=>a.q===p.q && !a.isCustom);
+    return {
+      theme:p.theme, q:p.q,
+      action:   prev ? (prev.action   || '') : '',
+      owner:    prev ? (prev.owner    || '') : '',
+      deadline: prev ? (prev.deadline || '') : '',
+      isCustom:false
+    };
   }).concat(custom);
 }
 function apEnsureActions(techId, dim){
   const key = apKey(techId, dim);
   if(!apActions[key]) apSeedActions(techId, dim);
 }
-function apToggleAction(techId, dim, idx){
+function apSetActionField(techId, dim, idx, field, val){
   const key = apKey(techId, dim);
-  if(apActions[key]&&apActions[key][idx]) apActions[key][idx].selected = !apActions[key][idx].selected;
-  buildWSActionPlan();
-}
-function apSetOwner(techId, dim, idx, val){
-  const key = apKey(techId, dim);
-  if(apActions[key]&&apActions[key][idx]) apActions[key][idx].owner = val;
-}
-function apSetDeadline(techId, dim, idx, val){
-  const key = apKey(techId, dim);
-  if(apActions[key]&&apActions[key][idx]) apActions[key][idx].deadline = val;
+  if(apActions[key]&&apActions[key][idx]) apActions[key][idx][field] = val;
 }
 function apAddCustom(techId, dim){
   const inputId = 'ap-custom-'+techId+'-'+dim;
@@ -3967,7 +3991,7 @@ function apAddCustom(techId, dim){
   if(!el||!el.value.trim()) return;
   const key = apKey(techId, dim);
   if(!apActions[key]) apSeedActions(techId, dim);
-  apActions[key].push({text:el.value.trim(), selected:true, owner:'', deadline:'', isCustom:true});
+  apActions[key].push({theme:'Custom', q:el.value.trim(), action:'', owner:'', deadline:'', isCustom:true});
   el.value='';
   buildWSActionPlan();
 }
@@ -4036,39 +4060,56 @@ function buildWSActionPlan(){
           const acColor=scoreColors[cur];
           const acBg=scoreBg[cur];
 
+          const themeColors = {
+            'Stakeholders':'#185FA5',
+            'Partners':    '#1D9E75',
+            'Risks':       '#993C1D',
+            'Timeline':    '#7F4D17',
+            'Custom':      '#534AB7'
+          };
+
           const actionRows = actions.map((a,i)=>{
-            const chkId=`ap-chk-${tech.id}-${d.id}-${i}`;
-            return `<div style="border-bottom:1px solid #f0f0ee;padding:8px 0;${a.selected?'background:'+acBg+'22':''}">
-              <div style="display:flex;align-items:flex-start;gap:8px;padding:0 4px">
-                <input type="checkbox" id="${chkId}" ${a.selected?'checked':''} onchange="apToggleAction(${tech.id},'${d.id}',${i})"
-                  style="margin-top:2px;accent-color:${acColor};width:14px;height:14px;flex-shrink:0;cursor:pointer"/>
-                <label for="${chkId}" style="font-size:10.5px;color:${a.selected?acColor:'#555'};line-height:1.5;cursor:pointer;flex:1;font-weight:${a.selected?600:400}">${a.text}</label>
+            const tagColor = themeColors[a.theme] || '#666';
+            return `<div style="border-bottom:1px solid #f0f0ee;padding:10px 4px">
+              <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:8px">
+                <span style="font-size:8.5px;font-weight:700;color:${tagColor};background:${tagColor}15;border-radius:3px;padding:2px 5px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;margin-top:1px">${a.theme}</span>
+                <div style="font-size:10.5px;color:var(--text);line-height:1.4;flex:1;font-weight:500">${a.q}</div>
                 ${a.isCustom?`<button onclick="apRemoveCustom(${tech.id},'${d.id}',${i})" title="Remove" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:14px;padding:0;line-height:1;flex-shrink:0" onmouseover="this.style.color='#e05050'" onmouseout="this.style.color='#ccc'">×</button>`:''}
               </div>
-              ${a.selected?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;padding:0 4px 0 26px">
+              <div style="display:flex;flex-direction:column;gap:5px">
                 <div>
-                  <div style="font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Owner</div>
-                  <input value="${a.owner||''}" placeholder="Name / team"
-                    onchange="apSetOwner(${tech.id},'${d.id}',${i},this.value)"
-                    style="width:100%;padding:5px 7px;border:1px solid #ddd;border-radius:4px;font-size:10px;font-family:inherit;outline:none"
-                    onfocus="this.style.borderColor='${acColor}'" onblur="this.style.borderColor='#ddd'"/>
+                  <div style="font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px">Action</div>
+                  <textarea
+                    onchange="apSetActionField(${tech.id},'${d.id}',${i},'action',this.value)"
+                    placeholder="What action do we commit to?"
+                    rows="2"
+                    style="width:100%;padding:5px 7px;border:1px solid #ddd;border-radius:4px;font-size:10px;font-family:inherit;outline:none;resize:vertical;line-height:1.4;color:var(--text);background:#fafafa"
+                    onfocus="this.style.borderColor='${acColor}';this.style.background='#fff'" onblur="this.style.borderColor='#ddd';this.style.background='#fafafa'">${a.action||''}</textarea>
                 </div>
-                <div>
-                  <div style="font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Deadline</div>
-                  <input type="date" value="${a.deadline||''}"
-                    onchange="apSetDeadline(${tech.id},'${d.id}',${i},this.value)"
-                    style="width:100%;padding:5px 7px;border:1px solid #ddd;border-radius:4px;font-size:10px;font-family:inherit;outline:none"
-                    onfocus="this.style.borderColor='${acColor}'" onblur="this.style.borderColor='#ddd'"/>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+                  <div>
+                    <div style="font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px">Owner</div>
+                    <input value="${a.owner||''}" placeholder="Name / team"
+                      onchange="apSetActionField(${tech.id},'${d.id}',${i},'owner',this.value)"
+                      style="width:100%;padding:5px 7px;border:1px solid #ddd;border-radius:4px;font-size:10px;font-family:inherit;outline:none;color:var(--text);background:#fafafa"
+                      onfocus="this.style.borderColor='${acColor}';this.style.background='#fff'" onblur="this.style.borderColor='#ddd';this.style.background='#fafafa'"/>
+                  </div>
+                  <div>
+                    <div style="font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px">Deadline</div>
+                    <input type="date" value="${a.deadline||''}"
+                      onchange="apSetActionField(${tech.id},'${d.id}',${i},'deadline',this.value)"
+                      style="width:100%;padding:5px 7px;border:1px solid #ddd;border-radius:4px;font-size:10px;font-family:inherit;outline:none;color:var(--text);background:#fafafa"
+                      onfocus="this.style.borderColor='${acColor}';this.style.background='#fff'" onblur="this.style.borderColor='#ddd';this.style.background='#fafafa'"/>
+                  </div>
                 </div>
-              </div>`:''}
+              </div>
             </div>`;
           }).join('');
 
           return `<div style="padding:12px 12px 10px;border-right:1px solid #eee;display:flex;flex-direction:column;gap:0">
-            <div style="font-size:11px;font-weight:700;color:${acColor};margin-bottom:8px">${plan.label}</div>
             ${actionRows}
             <div style="margin-top:10px;display:flex;gap:6px;align-items:center">
-              <input id="ap-custom-${tech.id}-${d.id}" placeholder="Add action…"
+              <input id="ap-custom-${tech.id}-${d.id}" placeholder="Add your own discussion prompt…"
                 onkeydown="if(event.key==='Enter')apAddCustom(${tech.id},'${d.id}')"
                 style="flex:1;padding:6px 8px;border:1px dashed #ccc;border-radius:5px;font-size:10px;font-family:inherit;outline:none;background:#fafafa"
                 onfocus="this.style.borderColor='${acColor}';this.style.background='#fff'"
@@ -4093,9 +4134,8 @@ let toAnswers  = {};         // {pairKey: winnerId}
 let toScores   = {};         // {needId: win count}
 
 // ────────────────────────────────────────────────────────────────────────────
-// CONJOINT MODE — tech-agnostic pairwise trade-off (alternative to ranking)
+// CONSUMER-NEED TRADE-OFFS — anonymous product-profile pairwise comparison
 // ────────────────────────────────────────────────────────────────────────────
-let wsMode = 'pairwise';            // 'pairwise' | 'conjoint'
 let cjPairs = [];                   // [{a:techId, b:techId, profileA, profileB}]
 let cjIdx = 0;
 let cjVotes = {};                   // {pairIdx: 'a'|'b'}
@@ -4201,12 +4241,16 @@ function cjRender(){
     const nn = document.getElementById('cj-next-btn'); if(nn) nn.disabled = true;
   } else {
     const p = cjPairs[cjIdx];
+    const unsureSel = cjVotes[cjIdx] === 'unsure' ? 'sel' : '';
     area.innerHTML = `
       <div style="font-size:10.5px;color:var(--muted);margin-bottom:8px">Trade-off ${cjIdx+1} of ${total}</div>
       <div class="cj-pair">
         ${cjRenderCard(p.profileA, 'a', 'A')}
         <div class="cj-vs">vs</div>
         ${cjRenderCard(p.profileB, 'b', 'B')}
+      </div>
+      <div style="display:flex;justify-content:center;margin-top:6px">
+        <button class="cj-unsure-btn ${unsureSel}" onclick="cjVote('unsure')">Not sure / both equal</button>
       </div>`;
     const np = document.getElementById('cj-prev-btn'); if(np) np.disabled = (cjIdx===0);
     const nn = document.getElementById('cj-next-btn'); if(nn) nn.disabled = !cjVotes[cjIdx];
@@ -4230,7 +4274,8 @@ function cjComputeImportance(){
   const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
   const net = {}; allNeeds.forEach(n=> net[n.id]=0);
   cjPairs.forEach((p,i)=>{
-    const choice = cjVotes[i]; if(!choice) return;
+    const choice = cjVotes[i];
+    if(!choice || choice === 'unsure') return;  // skip unsure — no signal
     const win = choice==='a' ? p.profileA : p.profileB;
     const los = choice==='a' ? p.profileB : p.profileA;
     const wMap = {}; win.forEach(n=> wMap[n.id]=n.val);
@@ -4253,9 +4298,9 @@ function cjRenderResults(){
   const techWrap = document.getElementById('cj-tech-results');
   const techList = document.getElementById('cj-tech-list');
   if(!needEl) return;
-  const done = Object.keys(cjVotes).length;
-  if(done < 3){
-    needEl.innerHTML = '<span style="font-style:italic;color:var(--muted)">Complete at least 3 trade-offs to see derived weights…</span>';
+  const definitiveVotes = Object.values(cjVotes).filter(v => v === 'a' || v === 'b').length;
+  if(definitiveVotes < 3){
+    needEl.innerHTML = '<span style="font-style:italic;color:var(--muted)">Complete at least 3 trade-offs (with a definitive choice) to see derived weights…</span>';
     if(techWrap) techWrap.style.display = 'none';
     return;
   }
@@ -4301,12 +4346,11 @@ function cjRenderResults(){
   if(techWrap) techWrap.style.display = '';
 }
 
-// Push conjoint output into wsNeedsOrder + toScores so downstream submit flow works
+// Push trade-off output into wsNeedsOrder + toScores so downstream submit flow works
 function cjSyncToWsNeedsOrder(){
-  if(wsMode !== 'conjoint') return;
   const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
-  const done = Object.keys(cjVotes).length;
-  if(done < 3) return;
+  const definitiveVotes = Object.values(cjVotes).filter(v => v === 'a' || v === 'b').length;
+  if(definitiveVotes < 3) return;
   const imp = cjComputeImportance();
   // Convert importance to a fake "wins" count so existing logic (which uses toScores) still works
   toScores = {}; allNeeds.forEach(n=>{ toScores[n.id] = Math.round(imp[n.id]); });
@@ -4315,23 +4359,10 @@ function cjSyncToWsNeedsOrder(){
   if(next2) next2.disabled = (wsNeedsOrder.length===0) || (imp[wsNeedsOrder[0]] || 0) < 1;
 }
 
-function wsSwitchMode(mode){
-  wsMode = mode;
-  const pBtn = document.getElementById('ws-mode-pairwise');
-  const cBtn = document.getElementById('ws-mode-conjoint');
-  const pPanel = document.getElementById('ws-mode-panel-pairwise');
-  const cPanel = document.getElementById('ws-mode-panel-conjoint');
-  if(pBtn) pBtn.classList.toggle('active', mode==='pairwise');
-  if(cBtn) cBtn.classList.toggle('active', mode==='conjoint');
-  if(pPanel) pPanel.style.display = (mode==='pairwise') ? '' : 'none';
-  if(cPanel) cPanel.style.display = (mode==='conjoint') ? '' : 'none';
-  if(mode === 'conjoint'){
-    if(!cjPairs.length){ cjBuildPairs(); cjIdx = 0; cjVotes = {}; }
-    cjRender();
-  } else {
-    // Restore pairwise scoring as source of truth
-    buildWSNeedsPanel();
-  }
+function wsActivateNeedsPanel(){
+  // Initialise if first visit; otherwise render with existing state
+  if(!cjPairs.length){ cjBuildPairs(); cjIdx = 0; cjVotes = {}; }
+  cjRender();
 }
 
 function buildWSNeedsPanel(){
@@ -4531,15 +4562,24 @@ function wsAddCustomNeed(){
   const txt = input.value.trim();
   if(!txt) return;
   const id = 'custom_'+Date.now();
-  wsCustomNeeds.push({id, roman:'★', label:txt, techs:{}});
+  // Default to 'partial' across all current techs so the need appears in trade-off profiles
+  // (Workshop participants can override these mappings later if needed.)
+  const defaultTechs = {};
+  (techOptions || []).forEach(t => { defaultTechs[t.id] = 'partial'; });
+  wsCustomNeeds.push({id, roman:'★', label:txt, techs:defaultTechs});
   input.value = '';
+  // Regenerate trade-off pairs and reset progress so the new need can appear
+  cjPairs = []; cjVotes = {}; cjIdx = 0;
   buildWSNeedsPanel();
+  cjRender();
 }
 
 function wsRemoveCustomNeed(id){
   wsCustomNeeds = wsCustomNeeds.filter(n=>n.id!==id);
   wsNeedsOrder  = wsNeedsOrder.filter(x=>x!==id);
+  cjPairs = []; cjVotes = {}; cjIdx = 0;
   buildWSNeedsPanel();
+  cjRender();
 }
 
 function wsSubmitNeeds(){
@@ -5330,25 +5370,62 @@ function stopVotePolling(){
 }
 
 function wsSubmitResults(){
-  const platform = platforms[wsSelectedPlatform];
-  const ts = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-  const submitter = window.PARTICIPANT_NAME || 'Anonymous';
-  wsSelectedTechs.forEach(id=>{
-    const tech = techOptions.find(t=>t.id===id);
-    const scores = wsScores[id];
-    const techScore  = wsGetOverall(scores.tech);
-    const commScore  = wsGetOverall(scores.comm);
-    const brandScore = wsGetOverall(scores.brand);
-    const overall    = wsGetOverall([null, techScore, commScore, brandScore]);
-    wsTracker.push({
-      platform: `#${platform.rank} ${platform.name}`,
-      tech, techOverall: overall,
-      scores: { tech: techScore, comm: commScore, brand: brandScore },
-      rawScores: scores, time: ts, submitter, isNew: true
+  try {
+    if(wsSelectedPlatform === null || wsSelectedPlatform === undefined){
+      alert('Please select a platform before submitting.'); return;
+    }
+    if(!wsSelectedTechs || !wsSelectedTechs.length){
+      alert('Please select at least one technology to score before submitting.'); return;
+    }
+    const platform = platforms[wsSelectedPlatform];
+    const ts = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    const submitter = window.PARTICIPANT_NAME || 'Anonymous';
+    let pushed = 0;
+    wsSelectedTechs.forEach(id=>{
+      const tech = techOptions.find(t=>t.id===id);
+      if(!tech) return;
+      const scores = (wsScores && wsScores[id]) ? wsScores[id] : {tech:[], comm:[], brand:[]};
+      const techArr  = Array.isArray(scores.tech)  ? scores.tech  : [];
+      const commArr  = Array.isArray(scores.comm)  ? scores.comm  : [];
+      const brandArr = Array.isArray(scores.brand) ? scores.brand : [];
+      const techScore  = wsGetOverall(techArr);
+      const commScore  = wsGetOverall(commArr);
+      const brandScore = wsGetOverall(brandArr);
+      const overall    = wsGetOverall([null, techScore, commScore, brandScore]);
+      // Build a plain-JSON-safe rawScores (the brand multi-select stores objects, so flatten safely)
+      const safeRaw = {
+        tech:  techArr.map(v => v),
+        comm:  commArr.map(v => v),
+        brand: brandArr.map(v => {
+          if(v && typeof v === 'object'){
+            return { brands: Array.isArray(v.brands) ? v.brands.slice() : [], score: v.score || null };
+          }
+          return v;
+        })
+      };
+      wsTracker.push({
+        platform: `#${platform.rank} ${platform.name}`,
+        tech: { id: tech.id, label: tech.label, short: tech.short, color: tech.color },
+        techOverall: overall,
+        scores: { tech: techScore, comm: commScore, brand: brandScore },
+        rawScores: safeRaw,
+        time: ts,
+        submitter,
+        isNew: true
+      });
+      pushed++;
     });
-  });
-  syncVotesToStorage();
-  wsGoStep(5);
+    if(!pushed){
+      alert('No valid technology scores to submit.');
+      return;
+    }
+    // Sync in background — don't block UI if sync fails
+    try { syncVotesToStorage(); } catch(e){ console.warn('Sync failed but submission saved locally', e); }
+    wsGoStep(5);
+  } catch(err){
+    console.error('Submit failed:', err);
+    alert('Something went wrong submitting your results: ' + (err && err.message ? err.message : 'unknown error') + '\n\nYour scores have not been lost — check the browser console (F12) for details, or try again.');
+  }
 }
 
 async function wsClearTracker(){
@@ -5396,8 +5473,8 @@ function wsExportCSV(){
     needsRows.push(row);
   });
 
-  // ── Sheet 3: Action Plan ──
-  const actionRows = [['Technology','Dimension','Score','Action','Owner','Deadline']];
+  // ── Sheet 3: Action Plan (discussion log) ──
+  const actionRows = [['Technology','Dimension','Score','Theme','Discussion prompt','Action','Owner','Deadline']];
   const dimLabels = {tech:'Tech RTW', brand:'Brand & Portfolio RTW', comm:'Commercial RTW'};
   const seen = new Set();
   wsTracker.forEach(r=>{
@@ -5407,11 +5484,13 @@ function wsExportCSV(){
       apEnsureActions(r.tech.id, dim);
       const key = r.tech.id+'__'+dim;
       const score = apGetScore(r.tech.id, dim);
-      const actions = apActions[key] || [];
-      actions.filter(a=>a.selected).forEach(a=>{
+      const items = apActions[key] || [];
+      // Export every prompt; rows with empty fields still preserve structure
+      items.forEach(a=>{
         actionRows.push([
           r.tech.label, dimLabels[dim], score,
-          a.text, a.owner||'', a.deadline||''
+          a.theme || '', a.q || '',
+          a.action || '', a.owner || '', a.deadline || ''
         ]);
       });
     });
@@ -5440,6 +5519,19 @@ function pillHTML(val){
 
 function buildWSTracker(){
   const el = document.getElementById('tracker-area');
+  if(!el) return;
+  try {
+    _buildWSTrackerInner(el);
+  } catch(err){
+    console.error('Tracker render failed:', err);
+    el.innerHTML = `<div class="tracker-empty" style="color:#a32d2d">
+      Tracker failed to render: ${(err && err.message) || 'unknown error'}<br>
+      <span style="font-size:11px;color:#666">Open the browser console (F12) for details.</span>
+    </div>`;
+  }
+}
+
+function _buildWSTrackerInner(el){
   const hasVotes = wsTracker.length > 0;
   const hasNeeds = wsNeedsResponses.length > 0;
 
@@ -5495,7 +5587,8 @@ function buildWSTracker(){
           <th style="min-width:60px">Time</th>`;
 
     // Column headers = rank numbers (max needs across all submissions)
-    const maxRanks = Math.max(...wsNeedsResponses.map(r=>(r.fullRanking||[]).length));
+    const rankCounts = wsNeedsResponses.map(r=>(r.fullRanking||[]).length);
+    const maxRanks = rankCounts.length ? Math.max(...rankCounts) : 0;
     for(let i=1;i<=maxRanks;i++) html+=`<th style="text-align:center;white-space:nowrap">#${i}</th>`;
     html += `</tr></thead><tbody>`;
 
@@ -5549,18 +5642,21 @@ function buildWSTracker(){
           <tbody>`;
       rows.forEach((r)=>{
         const rowClass = r.isNew ? 'submission-row-new' : '';
+        const techColor = (r.tech && r.tech.color) || '#5C9E1A';
+        const techId    = (r.tech && r.tech.id   ) || '?';
+        const techLabel = (r.tech && r.tech.label) || 'Unknown tech';
         html += `<tr class="${rowClass}">
           <td>
             <div style="display:flex;align-items:center;gap:8px">
-              <span style="background:${r.tech.color};color:#fff;border-radius:4px;padding:2px 7px;font-size:9px;font-weight:700">${r.tech.id}</span>
-              <span style="font-weight:600">${r.tech.label}</span>
+              <span style="background:${techColor};color:#fff;border-radius:4px;padding:2px 7px;font-size:9px;font-weight:700">${techId}</span>
+              <span style="font-weight:600">${techLabel}</span>
             </div>
           </td>
-          <td style="text-align:center">${pillHTML(r.scores.tech)}</td>
-          <td style="text-align:center">${pillHTML(r.scores.comm)}</td>
-          <td style="text-align:center">${pillHTML(r.scores.brand)}</td>
+          <td style="text-align:center">${pillHTML(r.scores && r.scores.tech)}</td>
+          <td style="text-align:center">${pillHTML(r.scores && r.scores.comm)}</td>
+          <td style="text-align:center">${pillHTML(r.scores && r.scores.brand)}</td>
           <td style="text-align:center;font-size:10.5px;font-weight:600;color:var(--text)">${r.submitter||'Anonymous'}</td>
-          <td style="text-align:center;color:var(--muted);font-size:10px">${r.time}</td>
+          <td style="text-align:center;color:var(--muted);font-size:10px">${r.time||''}</td>
         </tr>`;
         r.isNew = false;
       });
