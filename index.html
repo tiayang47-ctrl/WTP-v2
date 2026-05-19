@@ -6709,8 +6709,10 @@ function buildWSCalibration(){
   allIds.forEach(id => { if(!rankingSet.has(id)) wsNeedsRanking.push(id); });
   wsNeedsRanking = wsNeedsRanking.filter(id => allIds.includes(id));
 
-  // On first load, initialise order from conjoint weighted scores (best signal available)
-  if(!wsConfirmedNeedId && wsNeedsRanking.length > 0){
+  // Always order by conjoint weighted scores (descending) so the list reflects
+  // the latest group signal. Drag still works as a transient override but is
+  // reset on the next render (e.g. when new responses arrive via the 5s poll).
+  if(wsNeedsRanking.length > 0){
     if(wsNeedsResponses.length > 0){
       const agg = _wsAggregateForResponses(wsNeedsResponses);
       const labelToId = {};
