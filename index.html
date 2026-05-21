@@ -709,10 +709,10 @@ body.user-mode .rtw-notes-ta{pointer-events:none;background:#f9f9f9;color:#666}
 .cj-needs-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
 .cj-need-row{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.4}
 .cj-mark{flex-shrink:0;width:22px;height:22px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px}
-.cj-yes{background:#eaf3de;color:#27500a}
-.cj-partial{background:#faeeda;color:#854f0b}
-.cj-no{background:#fcebeb;color:#791f1f}
-.cj-unclear{background:#f0f0ee;color:#888}
+.cj-yes{background:var(--h-green);color:#fff}
+.cj-partial{background:#B0D880;color:#27500a}
+.cj-no{background:#555;color:#fff}
+.cj-unclear{background:#888;color:#fff}
 .cj-need-text{flex:1;color:var(--text)}
 .cj-need-text.faded{color:#999}
 .cj-controls{display:flex;justify-content:space-between;align-items:center;margin-top:1.2rem;gap:8px}
@@ -1041,9 +1041,9 @@ body.user-mode .rtw-notes-ta{pointer-events:none;background:#f9f9f9;color:#666}
 
       <div class="cj-legend">
         <div class="cj-legend-item"><span class="cj-mark cj-yes">✓</span> Addresses</div>
-        <div class="cj-legend-item"><span class="cj-mark cj-partial">›</span> Partial</div>
-        <div class="cj-legend-item"><span class="cj-mark cj-unclear">?</span> Unclear</div>
-        <div class="cj-legend-item"><span class="cj-mark cj-no">✗</span> Doesn't</div>
+        <div class="cj-legend-item"><span class="cj-mark cj-partial">›</span> Partially</div>
+        <div class="cj-legend-item"><span class="cj-mark cj-no">✗</span> Doesn't address</div>
+        <div class="cj-legend-item"><span class="cj-mark cj-unclear">?</span> TBD</div>
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start">
@@ -7049,7 +7049,7 @@ function wsGoStep(n){
   if(n===2){
     wsActivateNeedsPanel();
   }
-  if(n===25){ loadNeedsFromStorage(); buildWSCalibration(); startVotePolling(); }
+  if(n===25){ buildWSCalibration(); loadNeedsFromStorage().then(()=>buildWSCalibration()); startVotePolling(); }
   if(n===3)  buildWSTechBank();
   if(n===4)  buildWSRTWPanels();
   if(n!==25)  stopVotePolling();
@@ -7857,8 +7857,8 @@ function wsSubmitNeeds(){
     time: ts,
     submitter,
     fullRanking,
-    platformIdx: currentPlatform,
-    platformLabel: (platforms[currentPlatform] ? `#${platforms[currentPlatform].rank} ${platforms[currentPlatform].name}` : 'Unknown platform')
+    platformIdx: wsSelectedPlatform,
+    platformLabel: (platforms[wsSelectedPlatform] ? `#${platforms[wsSelectedPlatform].rank} ${platforms[wsSelectedPlatform].name}` : 'Unknown platform')
   });
   syncNeedsToStorage();
   wsUnlockStep(2);
@@ -7975,13 +7975,14 @@ function buildWSCalibration(){
   renderCalibCustomBox();
   renderCalibRankingList();
 
-  // Respondents list
+  // Respondents list — only show submissions for the currently selected platform
   const respEl = document.getElementById('calib-respondents');
   if(respEl){
-    if(!wsNeedsResponses.length){
+    const platformResponses = wsNeedsResponses.filter(r => r.platformIdx === wsSelectedPlatform);
+    if(!platformResponses.length){
       respEl.innerHTML = '<em style="font-size:10.5px;color:var(--muted)">No submissions yet. Be the first to rank your needs in Step 2.</em>';
     } else {
-      respEl.innerHTML = wsNeedsResponses.map(r => {
+      respEl.innerHTML = platformResponses.map(r => {
         const need = allNeeds.find(n=>n.id===r.needId);
         return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f5f5f5">
           <span style="font-size:10.5px;font-weight:600;color:var(--text);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.submitter||'Anonymous'}</span>
@@ -9029,9 +9030,11 @@ async function wsClearTracker(){
   wsNeedsOrder = [];
   toAnswers = {};
   toScores = {};
+  toMatchups = [];
   cjVotes = {};
   cjPairs = [];
   cjIdx = 0;
+  wsConfirmedTopNeedIds = [];
 
   // Clear Supabase
   if(_sbConfigured()){
@@ -9039,10 +9042,8 @@ async function wsClearTracker(){
     try { await _sbSet(NEEDS_KEY, '[]'); } catch(e){}
   }
 
-  // Rebuild whichever panel is currently visible
-  buildWSCalibration();
-  buildWSTracker();
-  if(document.getElementById('action-plan-area')) buildWSActionPlan();
+  // Reset UI back to Step 1 so all indicators and panels are consistent
+  wsGoStep(1);
 }
 
 function buildWSExecSummary(){
