@@ -704,7 +704,7 @@ body.user-mode .rtw-notes-ta{pointer-events:none;background:#f9f9f9;color:#666}
 .cj-card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s,transform .1s;text-align:left;font-family:inherit;color:var(--text)}
 .cj-card:hover{border-color:#888;background:#f8f8f5;box-shadow:0 3px 12px rgba(0,0,0,.08);transform:translateY(-1px)}
 .cj-card.sel{border:2.5px solid #534AB7;background:#f6f5ff;box-shadow:0 4px 16px rgba(83,74,183,.15)}
-.cj-card-title{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:14px;letter-spacing:.06em;text-transform:uppercase}
+.cj-card-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:14px;letter-spacing:.06em;text-transform:uppercase}
 .cj-vs{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#bbb;letter-spacing:.5px}
 .cj-needs-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
 .cj-need-row{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.4}
@@ -714,7 +714,7 @@ body.user-mode .rtw-notes-ta{pointer-events:none;background:#f9f9f9;color:#666}
 .cj-no{background:#555;color:#fff}
 .cj-unclear{background:#888;color:#fff}
 .cj-need-text{flex:1;color:var(--text)}
-.cj-need-text.faded{color:#999}
+.cj-need-text.faded{color:var(--text)}
 .cj-controls{display:flex;justify-content:space-between;align-items:center;margin-top:1.2rem;gap:8px}
 .cj-nav-btn{font-size:12px;font-weight:600;padding:9px 18px;border-radius:7px;border:1.5px solid var(--border);background:#fff;color:var(--text);cursor:pointer;font-family:inherit;transition:all .15s}
 .cj-nav-btn:hover:not(:disabled){border-color:var(--h-green);color:var(--h-green);background:#f4fced}
@@ -1138,19 +1138,19 @@ body.user-mode .rtw-notes-ta{pointer-events:none;background:#f9f9f9;color:#666}
       <div style="font-size:18px;font-weight:700;margin-bottom:4px">Technologies to Assess</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Based on your top-ranked consumer needs, these technologies have been highlighted. Drag any you want to score into the selection box — you can add others too.</div>
       <div class="tech-cards" id="ws-tech-cards" style="margin-bottom:8px"></div>
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;padding:7px 12px;background:#f7f7f5;border-radius:5px;width:fit-content">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;padding:7px 12px;background:#f7f7f5;border-radius:5px;width:fit-content;flex-wrap:wrap">
         <span style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px">Maturity:</span>
         <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:#333">
-          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot"></span><span class="maturity-dot"></span><span class="maturity-dot"></span></span>Low
+          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot"></span><span class="maturity-dot"></span><span class="maturity-dot"></span></span>Emerging · preclinical or analytical evidence
         </span>
         <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:#333">
-          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot"></span><span class="maturity-dot"></span></span>Emerging
+          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot"></span><span class="maturity-dot"></span></span>Developing · early validation
         </span>
         <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:#333">
-          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot"></span></span>High
+          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot"></span></span>Deployed · prototype or products launched backed by RCTs
         </span>
         <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:#333">
-          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span></span>Fully matured
+          <span style="display:flex;gap:2px"><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span><span class="maturity-dot filled"></span></span>Established · dominant market position with long-term real-world evidence
         </span>
       </div>
       <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px">
@@ -7975,20 +7975,35 @@ function buildWSCalibration(){
   renderCalibCustomBox();
   renderCalibRankingList();
 
-  // Respondents list — only show submissions for the currently selected platform
+  // Respondents list — filter by selected platform when one is chosen; show all when none selected
   const respEl = document.getElementById('calib-respondents');
   if(respEl){
-    const platformResponses = wsNeedsResponses.filter(r => r.platformIdx === wsSelectedPlatform);
+    const platformFiltered = wsSelectedPlatform !== null
+      ? wsNeedsResponses.filter(r => r.platformIdx === wsSelectedPlatform)
+      : wsNeedsResponses;
+    // Secondary fallback: if strict index filter returns nothing but there ARE responses,
+    // match by platformLabel string so old/cross-device submissions aren't silently dropped
+    const platformResponses = (platformFiltered.length === 0 && wsSelectedPlatform !== null && wsNeedsResponses.length > 0)
+      ? (() => {
+          const lbl = platforms[wsSelectedPlatform] ? `#${platforms[wsSelectedPlatform].rank} ${platforms[wsSelectedPlatform].name}` : null;
+          return lbl ? wsNeedsResponses.filter(r => r.platformLabel === lbl) : wsNeedsResponses;
+        })()
+      : platformFiltered;
+    const showingAll = wsSelectedPlatform === null;
     if(!platformResponses.length){
       respEl.innerHTML = '<em style="font-size:10.5px;color:var(--muted)">No submissions yet. Be the first to rank your needs in Step 2.</em>';
     } else {
       respEl.innerHTML = platformResponses.map(r => {
         const need = allNeeds.find(n=>n.id===r.needId);
-        return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f5f5f5">
-          <span style="font-size:10.5px;font-weight:600;color:var(--text);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.submitter||'Anonymous'}</span>
-          <span style="font-size:10px;color:var(--muted);width:48px;flex-shrink:0">${r.time||'--:--'}</span>
+        const platTag = showingAll && r.platformLabel
+          ? `<span style="background:#e8f0fb;color:#185FA5;border-radius:3px;padding:1px 6px;font-size:8.5px;font-weight:600;flex-shrink:0;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.platformLabel}">${r.platformLabel}</span>`
+          : '';
+        return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f5f5f5;flex-wrap:wrap">
+          <span style="font-size:10.5px;font-weight:600;color:var(--text);width:100px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.submitter||'Anonymous'}</span>
+          <span style="font-size:10px;color:var(--muted);width:40px;flex-shrink:0">${r.time||'--:--'}</span>
           <span style="background:var(--h-green);color:#fff;border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;flex-shrink:0">Top pick</span>
-          <span style="font-size:10.5px;color:var(--text)">${need?need.label:r.needId}</span>
+          ${platTag}
+          <span style="font-size:10.5px;color:var(--text);flex:1;min-width:0">${need?need.label:r.needId}</span>
         </div>`;
       }).join('');
     }
@@ -8888,8 +8903,10 @@ async function syncNeedsToStorage(){
 
 async function loadVotesFromStorage(){
   if(!_sbConfigured()){ _setSyncStatus('off'); return; }
+  const _gen = wsLoadGeneration;
   try {
     const val = await _sbGet(VOTES_KEY);
+    if(_gen !== wsLoadGeneration) return; // clear happened while fetch was in-flight — discard
     if(val){
       const remote = JSON.parse(val);
       const localKeys = new Set(wsTracker.map(r=>r.time+'|'+r.tech.id+'|'+r.platform));
@@ -8913,8 +8930,10 @@ async function loadVotesFromStorage(){
 
 async function loadNeedsFromStorage(){
   if(!_sbConfigured()){ _setSyncStatus('off'); return; }
+  const _gen = wsLoadGeneration;
   try {
     const val = await _sbGet(NEEDS_KEY);
+    if(_gen !== wsLoadGeneration) return; // clear happened while fetch was in-flight — discard
     if(val){
       const remote = JSON.parse(val);
       const localKeys = new Set(wsNeedsResponses.map(r=>r.time+'|'+r.needId));
@@ -8931,6 +8950,9 @@ async function loadNeedsFromStorage(){
 
 // Poll for new votes every 5 seconds when on Step 5
 let votePoller = null;
+// Generation counter — incremented on every clear so that in-flight Supabase
+// fetches started before the clear know to discard their stale results.
+let wsLoadGeneration = 0;
 function startVotePolling(){
   if(votePoller) return;
   _setSyncStatus(_sbConfigured() ? 'ok' : 'off');
@@ -9005,7 +9027,19 @@ async function wsClearTracker(){
   if(!window.FACILITATOR_MODE) return;
   if(!confirm('Clear ALL session data for all participants?\n\nThis will delete:\n• All RTW scores\n• All consumer needs submissions\n• All action plan entries\n\nThis cannot be undone and affects everyone in the session.')) return;
 
-  // Clear all in-memory state that feeds into any export
+  // Stop the poll interval and invalidate any in-flight Supabase fetches BEFORE
+  // doing anything else — prevents the race where a poll fires mid-await and
+  // reloads old data from Supabase back into the just-cleared in-memory arrays.
+  stopVotePolling();
+  wsLoadGeneration++;
+
+  // Clear Supabase first so that any participants still polling get empty results
+  if(_sbConfigured()){
+    try { await _sbSet(VOTES_KEY, '[]'); } catch(e){}
+    try { await _sbSet(NEEDS_KEY, '[]'); } catch(e){}
+  }
+
+  // Now safely clear all in-memory state
   wsTracker = [];
   wsNeedsResponses = [];
   wsNeedsRanking = [];
@@ -9035,12 +9069,6 @@ async function wsClearTracker(){
   cjPairs = [];
   cjIdx = 0;
   wsConfirmedTopNeedIds = [];
-
-  // Clear Supabase
-  if(_sbConfigured()){
-    try { await _sbSet(VOTES_KEY, '[]'); } catch(e){}
-    try { await _sbSet(NEEDS_KEY, '[]'); } catch(e){}
-  }
 
   // Reset UI back to Step 1 so all indicators and panels are consistent
   wsGoStep(1);
