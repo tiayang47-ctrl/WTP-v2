@@ -1088,6 +1088,7 @@ body.user-mode .rtw-notes-ta{pointer-events:none;background:#f9f9f9;color:#666}
 
       <div class="ws-nav-btns">
         <button class="ws-btn" onclick="wsGoStep(1)">← Back</button>
+        <button class="ws-btn fac-only" style="display:none" onclick="wsGoStep(25)">View Group Calibration →</button>
         <button class="ws-btn primary" id="ws-next-2" onclick="wsSubmitNeeds()" disabled>Submit & Continue →</button>
       </div>
     </div>
@@ -1096,7 +1097,10 @@ body.user-mode .rtw-notes-ta{pointer-events:none;background:#f9f9f9;color:#666}
     <div id="ws-panel-25" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
         <div style="font-size:18px;font-weight:700">Group Calibration</div>
-        <div style="display:flex;gap:8px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="ws-refresh-calib-btn" class="ws-btn" onclick="wsRefreshCalibration()" style="font-size:10px;padding:5px 12px;display:flex;align-items:center;gap:5px">
+            <span id="ws-refresh-calib-icon" style="font-size:13px;display:inline-block">↻</span> Refresh
+          </button>
           <button class="ws-btn fac-only" onclick="wsExportNeedsXLSX()" style="font-size:10px;padding:5px 12px;color:#fff;background:var(--h-green);border-color:var(--h-green);display:none">⬇ Download Excel</button>
         </div>
       </div>
@@ -7049,7 +7053,7 @@ function wsGoStep(n){
   if(n===2){
     wsActivateNeedsPanel();
   }
-  if(n===25){ buildWSCalibration(); loadNeedsFromStorage().then(()=>buildWSCalibration()); startVotePolling(); }
+  if(n===25){ wsMaybeAutoSelectPlatform(); buildWSCalibration(); loadNeedsFromStorage().then(()=>{ wsMaybeAutoSelectPlatform(); buildWSCalibration(); }); startVotePolling(); }
   if(n===3)  buildWSTechBank();
   if(n===4)  buildWSRTWPanels();
   if(n!==25)  stopVotePolling();
@@ -7061,6 +7065,24 @@ function wsGoStep(n){
     buildWSActionPlan();
   }
   if(n===7)  buildWSExecSummary();
+}
+
+// If no platform has been selected yet (facilitator jumped straight to Step 25),
+// infer the platform from the most common platformIdx in loaded responses so that
+// consumerNeeds, wsCustomNeeds and all filtering work correctly without requiring
+// the facilitator to manually go back to Step 1 first.
+function wsMaybeAutoSelectPlatform(){
+  if(wsSelectedPlatform !== null) return; // already chosen — respect manual selection
+  if(wsNeedsResponses.length > 0){
+    const counts = {};
+    wsNeedsResponses.forEach(r => {
+      if(typeof r.platformIdx === 'number') counts[r.platformIdx] = (counts[r.platformIdx]||0) + 1;
+    });
+    const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+    if(sorted.length){ wsSelectPlatform(parseInt(sorted[0][0])); return; }
+  }
+  // No responses yet — default to platform 0 so consumerNeeds is at least populated
+  wsSelectPlatform(0);
 }
 
 // Unlock the step that follows the given step number, so forward navigation becomes available.
@@ -7808,6 +7830,8 @@ function wsAddCustomNeed(){
   input.value = '';
   // Custom needs do not appear in the tech profile cards — no need to regenerate pairs.
   // They will appear in the purple holding box on the Group Calibration page (Step 2.5).
+  // Sync immediately so all other participants see this new need in real time.
+  syncCustomNeedsToStorage();
 }
 
 function wsRemoveCustomNeed(id){
@@ -7837,7 +7861,7 @@ function wsSubmitNeeds(){
   const resolvedTopId = wsNeedsOrder[0];
   const topNeed = allNeeds.find(n=>n.id===resolvedTopId);
   if(!topNeed) return;
-  const ts = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const ts = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false});
   const submitter = window.PARTICIPANT_NAME || 'Anonymous';
   // Store full ranked order (all needs in priority order), including the conjoint
   // score that produced the rank — so downstream exports can aggregate by intensity,
@@ -7858,7 +7882,8 @@ function wsSubmitNeeds(){
     submitter,
     fullRanking,
     platformIdx: wsSelectedPlatform,
-    platformLabel: (platforms[wsSelectedPlatform] ? `#${platforms[wsSelectedPlatform].rank} ${platforms[wsSelectedPlatform].name}` : 'Unknown platform')
+    platformLabel: (platforms[wsSelectedPlatform] ? `#${platforms[wsSelectedPlatform].rank} ${platforms[wsSelectedPlatform].name}` : 'Unknown platform'),
+    customNeeds: wsCustomNeeds.map(n => ({id: n.id, label: n.label, roman: n.roman || '★', techs: n.techs || {}}))
   });
   syncNeedsToStorage();
   wsUnlockStep(2);
@@ -7939,7 +7964,33 @@ let wsCalibManualOrder = false;  // true once facilitator has dragged the calibr
 let wsNeedsRanking = [];   // ordered need IDs; wsNeedsRanking[0] = top/confirmed need
 let _calibDragSrc = null;
 
+// Scan wsNeedsResponses for any customNeeds embedded in submissions and merge
+// them into wsCustomNeedsByPlatform so every browser sees every user's custom needs.
+function wsReconstructCustomNeeds(){
+  wsNeedsResponses.forEach(r => {
+    const platIdx = typeof r.platformIdx === 'number' ? r.platformIdx : null;
+    if(platIdx === null) return;
+    const customs = r.customNeeds;
+    if(!Array.isArray(customs) || !customs.length) return;
+    if(!wsCustomNeedsByPlatform[platIdx]) wsCustomNeedsByPlatform[platIdx] = [];
+    const existing    = wsCustomNeedsByPlatform[platIdx];
+    const existingIds = new Set(existing.map(n => n.id));
+    customs.forEach(n => {
+      if(!existingIds.has(n.id)){
+        existing.push({id: n.id, label: n.label, roman: n.roman || '★', techs: n.techs || {}});
+        existingIds.add(n.id);
+      }
+    });
+  });
+  // Re-link the live reference so mutations by wsAddCustomNeed/wsRemoveCustomNeed stay in sync
+  if(typeof wsSelectedPlatform === 'number' && wsSelectedPlatform !== null){
+    if(!wsCustomNeedsByPlatform[wsSelectedPlatform]) wsCustomNeedsByPlatform[wsSelectedPlatform] = [];
+    wsCustomNeeds = wsCustomNeedsByPlatform[wsSelectedPlatform];
+  }
+}
+
 function buildWSCalibration(){
+  wsReconstructCustomNeeds();
   const allNeeds = [...consumerNeeds, ...wsCustomNeeds];
   if(!document.getElementById('calib-ranking-list')) return;
 
@@ -8736,8 +8787,9 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const SUPABASE_TABLE = 'workshop_submissions';
 // ────────────────────────────────────────────────────────────────────────────
 
-const VOTES_KEY = 'workshop_votes_v1';
-const NEEDS_KEY = 'workshop_needs_v1';
+const VOTES_KEY        = 'workshop_votes_v1';
+const NEEDS_KEY        = 'workshop_needs_v1';
+const CUSTOM_NEEDS_KEY = 'workshop_custom_needs_v1';
 
 // ── DEBUG TEST ──
 async function sbDebugTest(){
@@ -8893,12 +8945,50 @@ async function syncVotesToStorage(){
   } catch(e){ console.warn('Votes sync failed', e); _setSyncStatus('error'); }
 }
 
+// Unique dedup key per submission — includes submitter so two people picking the
+// same need at the same minute are not collapsed into one entry.
+function _needsKey(r){ return (r.submitter||'anon')+'|'+r.time+'|'+r.needId; }
+
 async function syncNeedsToStorage(){
   if(!_sbConfigured()){ _setSyncStatus('off'); return; }
   try {
-    await _sbSet(NEEDS_KEY, JSON.stringify(wsNeedsResponses));
+    // Read-modify-write: fetch the current shared list, merge our local entries in,
+    // then write the combined result back. Prevents each client overwriting everyone else.
+    const existing = await _sbGet(NEEDS_KEY);
+    const remote   = (existing && existing !== '[]') ? JSON.parse(existing) : [];
+    const remoteKeys = new Set(remote.map(_needsKey));
+    let changed = false;
+    wsNeedsResponses.forEach(r => {
+      const k = _needsKey(r);
+      if(!remoteKeys.has(k)){ remote.push(r); remoteKeys.add(k); changed = true; }
+    });
+    if(changed) await _sbSet(NEEDS_KEY, JSON.stringify(remote));
+    // Bring local state up to the merged truth so this browser also sees everyone
+    wsNeedsResponses = remote;
     _setSyncStatus('ok');
   } catch(e){ console.warn('Needs sync failed', e); _setSyncStatus('error'); }
+}
+
+async function syncCustomNeedsToStorage(){
+  if(!_sbConfigured()) return;
+  try {
+    const existing = await _sbGet(CUSTOM_NEEDS_KEY);
+    const remote   = existing ? JSON.parse(existing) : {};   // { platIdx: [{id,label,roman,techs}] }
+    let changed = false;
+    Object.entries(wsCustomNeedsByPlatform).forEach(([platIdx, needs]) => {
+      if(!needs || !needs.length) return;
+      if(!remote[platIdx]) remote[platIdx] = [];
+      const remoteIds = new Set(remote[platIdx].map(n => n.id));
+      needs.forEach(n => {
+        if(!remoteIds.has(n.id)){
+          remote[platIdx].push({id:n.id, label:n.label, roman:n.roman||'★', techs:n.techs||{}});
+          remoteIds.add(n.id);
+          changed = true;
+        }
+      });
+    });
+    if(changed) await _sbSet(CUSTOM_NEEDS_KEY, JSON.stringify(remote));
+  } catch(e){ console.warn('Custom needs sync failed', e); }
 }
 
 async function loadVotesFromStorage(){
@@ -8933,19 +9023,104 @@ async function loadNeedsFromStorage(){
   const _gen = wsLoadGeneration;
   try {
     const val = await _sbGet(NEEDS_KEY);
-    if(_gen !== wsLoadGeneration) return; // clear happened while fetch was in-flight — discard
+    if(_gen !== wsLoadGeneration) return;
     if(val){
       const remote = JSON.parse(val);
-      const localKeys = new Set(wsNeedsResponses.map(r=>r.time+'|'+r.needId));
+      const localKeys = new Set(wsNeedsResponses.map(_needsKey));
       let added = false;
       remote.forEach(r=>{
-        const k = r.time+'|'+r.needId;
-        if(!localKeys.has(k)){ wsNeedsResponses.push(r); added=true; }
+        if(!localKeys.has(_needsKey(r))){ wsNeedsResponses.push(r); added=true; }
       });
-      if(added){ buildWSCalibration(); buildWSTracker(); }
+      if(added){ wsMaybeAutoSelectPlatform(); wsReconstructCustomNeeds(); buildWSCalibration(); buildWSTracker(); }
     }
     _setSyncStatus('ok');
   } catch(e){ console.warn('Needs load failed', e); _setSyncStatus('error'); }
+}
+
+async function loadCustomNeedsFromStorage(){
+  if(!_sbConfigured()) return;
+  const _gen = wsLoadGeneration;
+  try {
+    const val = await _sbGet(CUSTOM_NEEDS_KEY);
+    if(_gen !== wsLoadGeneration) return;
+    if(!val) return;
+    const remote = JSON.parse(val);   // { platIdx: [{id,label,roman,techs}] }
+    let added = false;
+    Object.entries(remote).forEach(([platIdxStr, needs]) => {
+      const platIdx = parseInt(platIdxStr);
+      if(!wsCustomNeedsByPlatform[platIdx]) wsCustomNeedsByPlatform[platIdx] = [];
+      const existing    = wsCustomNeedsByPlatform[platIdx];
+      const existingIds = new Set(existing.map(n => n.id));
+      needs.forEach(n => {
+        if(!existingIds.has(n.id)){
+          existing.push({id:n.id, label:n.label, roman:n.roman||'★', techs:n.techs||{}});
+          existingIds.add(n.id);
+          added = true;
+        }
+      });
+    });
+    if(added){
+      if(typeof wsSelectedPlatform === 'number' && wsSelectedPlatform !== null){
+        if(!wsCustomNeedsByPlatform[wsSelectedPlatform]) wsCustomNeedsByPlatform[wsSelectedPlatform] = [];
+        wsCustomNeeds = wsCustomNeedsByPlatform[wsSelectedPlatform];
+      }
+      buildWSCalibration();
+    }
+  } catch(e){ console.warn('Custom needs load failed', e); }
+}
+
+async function wsRefreshCalibration(){
+  const btn  = document.getElementById('ws-refresh-calib-btn');
+  const icon = document.getElementById('ws-refresh-calib-icon');
+  if(btn){ btn.disabled = true; }
+  if(icon){ icon.style.transition='transform .6s linear'; icon.style.transform='rotate(360deg)'; }
+
+  if(_sbConfigured()){
+    const _gen = wsLoadGeneration;
+    try {
+      // Full replace (not additive) so every stale, missing or out-of-order
+      // entry is corrected — this is what the manual refresh needs.
+      const [needsVal, votesVal, customVal] = await Promise.all([_sbGet(NEEDS_KEY), _sbGet(VOTES_KEY), _sbGet(CUSTOM_NEEDS_KEY)]);
+      if(_gen !== wsLoadGeneration){ restoreRefreshBtn(); return; } // clear fired mid-fetch
+      if(needsVal){
+        const remote = JSON.parse(needsVal);
+        // Full replace from Supabase (which is now a merged truth), preserve local-only
+        const remoteKeys = new Set(remote.map(_needsKey));
+        const localOnly  = wsNeedsResponses.filter(r => !remoteKeys.has(_needsKey(r)));
+        wsNeedsResponses = [...remote, ...localOnly];
+      }
+      if(votesVal){
+        const remote = JSON.parse(votesVal);
+        const remoteKeys = new Set(remote.map(r=>r.time+'|'+r.tech.id+'|'+r.platform));
+        const localOnly  = wsTracker.filter(r=>!r.tech || !remoteKeys.has(r.time+'|'+r.tech.id+'|'+r.platform));
+        wsTracker = [...remote, ...localOnly];
+      }
+      if(customVal){
+        const remote = JSON.parse(customVal);
+        Object.entries(remote).forEach(([platIdxStr, needs]) => {
+          const platIdx = parseInt(platIdxStr);
+          if(!wsCustomNeedsByPlatform[platIdx]) wsCustomNeedsByPlatform[platIdx] = [];
+          const existing    = wsCustomNeedsByPlatform[platIdx];
+          const existingIds = new Set(existing.map(n => n.id));
+          needs.forEach(n => {
+            if(!existingIds.has(n.id)){ existing.push({id:n.id,label:n.label,roman:n.roman||'★',techs:n.techs||{}}); existingIds.add(n.id); }
+          });
+        });
+      }
+      _setSyncStatus('ok');
+    } catch(e){ console.warn('Refresh failed', e); _setSyncStatus('error'); }
+  }
+
+  wsMaybeAutoSelectPlatform();
+  wsReconstructCustomNeeds();
+  buildWSCalibration();
+  buildWSTracker();
+  restoreRefreshBtn();
+
+  function restoreRefreshBtn(){
+    if(icon){ icon.style.transition=''; icon.style.transform=''; }
+    if(btn){ btn.disabled = false; }
+  }
 }
 
 // Poll for new votes every 5 seconds when on Step 5
@@ -8956,7 +9131,7 @@ let wsLoadGeneration = 0;
 function startVotePolling(){
   if(votePoller) return;
   _setSyncStatus(_sbConfigured() ? 'ok' : 'off');
-  votePoller = setInterval(()=>{ loadVotesFromStorage(); loadNeedsFromStorage(); }, 5000);
+  votePoller = setInterval(()=>{ loadVotesFromStorage(); loadNeedsFromStorage(); loadCustomNeedsFromStorage(); }, 5000);
 }
 function stopVotePolling(){
   if(votePoller){ clearInterval(votePoller); votePoller=null; }
@@ -9035,8 +9210,9 @@ async function wsClearTracker(){
 
   // Clear Supabase first so that any participants still polling get empty results
   if(_sbConfigured()){
-    try { await _sbSet(VOTES_KEY, '[]'); } catch(e){}
-    try { await _sbSet(NEEDS_KEY, '[]'); } catch(e){}
+    try { await _sbSet(VOTES_KEY,        '[]'); } catch(e){}
+    try { await _sbSet(NEEDS_KEY,        '[]'); } catch(e){}
+    try { await _sbSet(CUSTOM_NEEDS_KEY, '{}'); } catch(e){}
   }
 
   // Now safely clear all in-memory state
