@@ -7830,8 +7830,6 @@ function wsAddCustomNeed(){
   input.value = '';
   // Custom needs do not appear in the tech profile cards — no need to regenerate pairs.
   // They will appear in the purple holding box on the Group Calibration page (Step 2.5).
-  // Sync immediately so all other participants see this new need in real time.
-  syncCustomNeedsToStorage();
 }
 
 function wsRemoveCustomNeed(id){
@@ -8937,17 +8935,36 @@ async function _sbGet(key){
 }
 
 // ── Sync functions ──
+// Unique dedup keys per submission — include submitter so two people voting on
+// the same need/tech in the same minute are not collapsed into one entry.
+function _needsKey(r){ return (r.submitter||'anon')+'|'+r.time+'|'+r.needId; }
+function _votesKey(r){ return (r.submitter||'anon')+'|'+r.time+'|'+(r.tech&&r.tech.id)+'|'+r.platform; }
+
 async function syncVotesToStorage(){
   if(!_sbConfigured()){ _setSyncStatus('off'); return; }
   try {
-    await _sbSet(VOTES_KEY, JSON.stringify(wsTracker));
+    // Read-modify-write: fetch the current shared list, merge our local entries in,
+    // then write the combined result back. Prevents each client overwriting everyone else.
+    const existing = await _sbGet(VOTES_KEY);
+    const remote   = (existing && existing !== '[]') ? JSON.parse(existing) : [];
+    const remoteKeys = new Set(remote.map(_votesKey));
+    let changed = false;
+    wsTracker.forEach(r => {
+      if(!r.tech) return;
+      const k = _votesKey(r);
+      if(!remoteKeys.has(k)){ remote.push(r); remoteKeys.add(k); changed = true; }
+    });
+    if(changed) await _sbSet(VOTES_KEY, JSON.stringify(remote));
+    // Bring local state up to the merged truth so this browser also sees everyone
+    wsTracker = remote.map(r => {
+      const platformIdx = platforms.findIndex(p=>`#${p.rank} ${p.name}` === r.platform);
+      const techOpts = platformTechOptions[platformIdx] || platformTechOptions[0];
+      const fullTech = (r.tech && techOpts.find(t=>t.id === r.tech.id)) || r.tech;
+      return {...r, tech: fullTech};
+    });
     _setSyncStatus('ok');
   } catch(e){ console.warn('Votes sync failed', e); _setSyncStatus('error'); }
 }
-
-// Unique dedup key per submission — includes submitter so two people picking the
-// same need at the same minute are not collapsed into one entry.
-function _needsKey(r){ return (r.submitter||'anon')+'|'+r.time+'|'+r.needId; }
 
 async function syncNeedsToStorage(){
   if(!_sbConfigured()){ _setSyncStatus('off'); return; }
@@ -8999,10 +9016,11 @@ async function loadVotesFromStorage(){
     if(_gen !== wsLoadGeneration) return; // clear happened while fetch was in-flight — discard
     if(val){
       const remote = JSON.parse(val);
-      const localKeys = new Set(wsTracker.map(r=>r.time+'|'+r.tech.id+'|'+r.platform));
+      const localKeys = new Set(wsTracker.filter(r=>r.tech).map(_votesKey));
       let added = false;
       remote.forEach(r=>{
-        const k = r.time+'|'+r.tech.id+'|'+r.platform;
+        if(!r.tech) return;
+        const k = _votesKey(r);
         if(!localKeys.has(k)){
           // Rehydrate tech object from platformTechOptions in case it lost methods
           const platformIdx = platforms.findIndex(p=>`#${p.rank} ${p.name}` === r.platform);
@@ -9023,50 +9041,19 @@ async function loadNeedsFromStorage(){
   const _gen = wsLoadGeneration;
   try {
     const val = await _sbGet(NEEDS_KEY);
-    if(_gen !== wsLoadGeneration) return;
+    if(_gen !== wsLoadGeneration) return; // clear happened while fetch was in-flight — discard
     if(val){
       const remote = JSON.parse(val);
       const localKeys = new Set(wsNeedsResponses.map(_needsKey));
       let added = false;
       remote.forEach(r=>{
-        if(!localKeys.has(_needsKey(r))){ wsNeedsResponses.push(r); added=true; }
+        const k = _needsKey(r);
+        if(!localKeys.has(k)){ wsNeedsResponses.push(r); added=true; }
       });
       if(added){ wsMaybeAutoSelectPlatform(); wsReconstructCustomNeeds(); buildWSCalibration(); buildWSTracker(); }
     }
     _setSyncStatus('ok');
   } catch(e){ console.warn('Needs load failed', e); _setSyncStatus('error'); }
-}
-
-async function loadCustomNeedsFromStorage(){
-  if(!_sbConfigured()) return;
-  const _gen = wsLoadGeneration;
-  try {
-    const val = await _sbGet(CUSTOM_NEEDS_KEY);
-    if(_gen !== wsLoadGeneration) return;
-    if(!val) return;
-    const remote = JSON.parse(val);   // { platIdx: [{id,label,roman,techs}] }
-    let added = false;
-    Object.entries(remote).forEach(([platIdxStr, needs]) => {
-      const platIdx = parseInt(platIdxStr);
-      if(!wsCustomNeedsByPlatform[platIdx]) wsCustomNeedsByPlatform[platIdx] = [];
-      const existing    = wsCustomNeedsByPlatform[platIdx];
-      const existingIds = new Set(existing.map(n => n.id));
-      needs.forEach(n => {
-        if(!existingIds.has(n.id)){
-          existing.push({id:n.id, label:n.label, roman:n.roman||'★', techs:n.techs||{}});
-          existingIds.add(n.id);
-          added = true;
-        }
-      });
-    });
-    if(added){
-      if(typeof wsSelectedPlatform === 'number' && wsSelectedPlatform !== null){
-        if(!wsCustomNeedsByPlatform[wsSelectedPlatform]) wsCustomNeedsByPlatform[wsSelectedPlatform] = [];
-        wsCustomNeeds = wsCustomNeedsByPlatform[wsSelectedPlatform];
-      }
-      buildWSCalibration();
-    }
-  } catch(e){ console.warn('Custom needs load failed', e); }
 }
 
 async function wsRefreshCalibration(){
@@ -9080,32 +9067,20 @@ async function wsRefreshCalibration(){
     try {
       // Full replace (not additive) so every stale, missing or out-of-order
       // entry is corrected — this is what the manual refresh needs.
-      const [needsVal, votesVal, customVal] = await Promise.all([_sbGet(NEEDS_KEY), _sbGet(VOTES_KEY), _sbGet(CUSTOM_NEEDS_KEY)]);
+      const [needsVal, votesVal] = await Promise.all([_sbGet(NEEDS_KEY), _sbGet(VOTES_KEY)]);
       if(_gen !== wsLoadGeneration){ restoreRefreshBtn(); return; } // clear fired mid-fetch
       if(needsVal){
         const remote = JSON.parse(needsVal);
-        // Full replace from Supabase (which is now a merged truth), preserve local-only
+        // Merge: keep any local-only entries (not yet synced), add/update all remote
         const remoteKeys = new Set(remote.map(_needsKey));
-        const localOnly  = wsNeedsResponses.filter(r => !remoteKeys.has(_needsKey(r)));
+        const localOnly  = wsNeedsResponses.filter(r=>!remoteKeys.has(_needsKey(r)));
         wsNeedsResponses = [...remote, ...localOnly];
       }
       if(votesVal){
         const remote = JSON.parse(votesVal);
-        const remoteKeys = new Set(remote.map(r=>r.time+'|'+r.tech.id+'|'+r.platform));
-        const localOnly  = wsTracker.filter(r=>!r.tech || !remoteKeys.has(r.time+'|'+r.tech.id+'|'+r.platform));
+        const remoteKeys = new Set(remote.filter(r=>r.tech).map(_votesKey));
+        const localOnly  = wsTracker.filter(r=>!r.tech || !remoteKeys.has(_votesKey(r)));
         wsTracker = [...remote, ...localOnly];
-      }
-      if(customVal){
-        const remote = JSON.parse(customVal);
-        Object.entries(remote).forEach(([platIdxStr, needs]) => {
-          const platIdx = parseInt(platIdxStr);
-          if(!wsCustomNeedsByPlatform[platIdx]) wsCustomNeedsByPlatform[platIdx] = [];
-          const existing    = wsCustomNeedsByPlatform[platIdx];
-          const existingIds = new Set(existing.map(n => n.id));
-          needs.forEach(n => {
-            if(!existingIds.has(n.id)){ existing.push({id:n.id,label:n.label,roman:n.roman||'★',techs:n.techs||{}}); existingIds.add(n.id); }
-          });
-        });
       }
       _setSyncStatus('ok');
     } catch(e){ console.warn('Refresh failed', e); _setSyncStatus('error'); }
@@ -9131,7 +9106,7 @@ let wsLoadGeneration = 0;
 function startVotePolling(){
   if(votePoller) return;
   _setSyncStatus(_sbConfigured() ? 'ok' : 'off');
-  votePoller = setInterval(()=>{ loadVotesFromStorage(); loadNeedsFromStorage(); loadCustomNeedsFromStorage(); }, 5000);
+  votePoller = setInterval(()=>{ loadVotesFromStorage(); loadNeedsFromStorage(); }, 5000);
 }
 function stopVotePolling(){
   if(votePoller){ clearInterval(votePoller); votePoller=null; }
@@ -9210,9 +9185,8 @@ async function wsClearTracker(){
 
   // Clear Supabase first so that any participants still polling get empty results
   if(_sbConfigured()){
-    try { await _sbSet(VOTES_KEY,        '[]'); } catch(e){}
-    try { await _sbSet(NEEDS_KEY,        '[]'); } catch(e){}
-    try { await _sbSet(CUSTOM_NEEDS_KEY, '{}'); } catch(e){}
+    try { await _sbSet(VOTES_KEY, '[]'); } catch(e){}
+    try { await _sbSet(NEEDS_KEY, '[]'); } catch(e){}
   }
 
   // Now safely clear all in-memory state
