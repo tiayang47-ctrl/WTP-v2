@@ -451,13 +451,13 @@ document.addEventListener("DOMContentLoaded",function(){
 <script>
 window.PARTICIPANT_NAME='';
 function pwCheck(){var i=document.getElementById('pw-input'),e=document.getElementById('pw-error'),v=i.value.trim();
-  if(v==='ARGO'||v==='HaleonxBCG2026'){document.getElementById('pw-gate').style.display='none';var n=document.getElementById('name-gate');n.style.display='flex';setTimeout(function(){document.getElementById('name-input').focus();},100);}
+  if(v==='ARGO'||v==='HaleonxBCG2026'){try{localStorage.setItem('pwOk','1');}catch(_){}document.getElementById('pw-gate').style.display='none';var n=document.getElementById('name-gate');n.style.display='flex';setTimeout(function(){document.getElementById('name-input').focus();},100);}
   else{e.style.opacity='1';i.value='';i.style.borderColor='#e05050';setTimeout(function(){e.style.opacity='0';i.style.borderColor='rgba(255,255,255,.18)';},2500);}}
 function nameCheck(){var i=document.getElementById('name-input'),e=document.getElementById('name-error'),v=i.value.trim();
   if(v.length>=2){window.PARTICIPANT_NAME=v;try{localStorage.setItem('participantName',v);}catch(_){}document.getElementById('name-gate').style.display='none';document.body.style.overflow='';}
   else{e.style.opacity='1';i.style.borderColor='#e05050';setTimeout(function(){e.style.opacity='0';i.style.borderColor='rgba(255,255,255,.18)';},2500);}}
-try{var sn=localStorage.getItem('participantName');if(sn)window.PARTICIPANT_NAME=sn;}catch(_){}
-document.body.style.overflow='hidden';
+try{var sn=localStorage.getItem('participantName');if(sn)window.PARTICIPANT_NAME=sn;var pwOk=localStorage.getItem('pwOk');if(pwOk==='1'&&sn){document.getElementById('pw-gate').style.display='none';document.getElementById('name-gate').style.display='none';}else if(pwOk==='1'){document.getElementById('pw-gate').style.display='none';var ng=document.getElementById('name-gate');ng.style.display='flex';setTimeout(function(){document.getElementById('name-input').focus();},100);}}catch(_){}
+document.body.style.overflow=(localStorage.getItem('pwOk')==='1'&&localStorage.getItem('participantName'))?'':'hidden';
 </script>
 
 <!-- MAIN -->
